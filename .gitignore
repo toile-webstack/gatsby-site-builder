@@ -1,0 +1,7 @@
+public
+.cache
+node_modules
+.env
+.env.production
+.env.development
+src/utils/siteSettings.json

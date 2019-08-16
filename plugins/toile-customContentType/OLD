@@ -1,0 +1,296 @@
+const _ = require(`lodash`)
+const Promise = require(`bluebird`)
+const path = require(`path`)
+const parseFilepath = require(`parse-filepath`)
+const fs = require(`fs-extra`)
+const slash = require(`slash`)
+const slugify = require("slugify")
+// const {
+//   GraphQLObjectType,
+//   GraphQLList,
+//   GraphQLString,
+//   GraphQLInt,
+//   GraphQLEnumType
+// } = require(`graphql`)
+
+// const destFile = "src/utils/siteSettings.json"
+
+const createPath = path => {
+  const splitted = path.split("/")
+  const slugged = splitted.map(split => slugify(split.toLowerCase()))
+  const sluggified = slugify(path, {
+    replacement: "-",
+    remove: /[$*_+~.()'"!\-:@]/g,
+    lower: true
+  })
+  console.log("SLUGDIF", slugged.join("/"), sluggified)
+  return slugged.join("/")
+}
+
+// GENERATE JSON SETTINGS & CREATE PAGES
+exports.createPages = ({ graphql, boundActionCreators }) => {
+  const { createPage } = boundActionCreators
+  return new Promise((resolve, reject) => {
+    const pageTemplate = path.resolve(`src/templates/template-page.js`)
+    const listPageTemplate = path.resolve(`src/templates/template-list-page.js`)
+    const itemPageTemplate = path.resolve(`src/templates/template-item-page.js`)
+    resolve(
+      graphql(
+        `
+        {
+          locales: allContentfulSettings {
+            edges {
+              node{
+                node_locale
+                fields {
+                  defaultLocale
+                }
+              }
+            }
+          }
+
+          contentTypes: allContentfulCustomContentType (
+            filter: {name: {ne: "IGNORE"}}
+          ) {
+        	  edges {
+        	    node {
+                id
+                name
+                options {
+                  _json_
+                }
+                itemPageStyle {
+                  _json_
+                }
+                listPageStyle {
+                  _json_
+                }
+                node_locale
+        	    }
+        	  }
+        	}
+        }
+        `
+      ).then(result => {
+        if (result.errors) {
+          reject(result.errors)
+        }
+
+        if (
+          typeof result.data === "undefined" ||
+          typeof result.data.contentTypes === "undefined" ||
+          !result.data.contentTypes
+        ) {
+          return
+        }
+
+        const defaultLocale =
+          result.data.locales.edges[0].node.fields.defaultLocale
+        const locales = result.data.locales.edges.map(({ node }) => {
+          return node.node_locale
+        })
+
+        result.data.contentTypes.edges.forEach(({ node }) => {
+          const contentType = node
+          const options = JSON.parse(contentType.options._json_)
+
+          if (
+            typeof options.itemPage === `undefined` &&
+            typeof options.listPage === `undefined`
+          ) {
+            return
+          }
+
+          const listPagePath = options.listPage.path
+          const listPageMenuName = options.listPage.menuName
+          const itemPagePath = options.itemPage.path
+
+          let gqlName = _.camelCase(contentType.name)
+          gqlName = gqlName.charAt(0).toUpperCase() + gqlName.slice(1)
+          gqlName = `allContentful${gqlName}`
+          console.log(gqlName)
+          graphql(
+            `
+              {
+                ${gqlName} (
+                  filter: {name: {ne: "IGNORE"}}
+                ) {
+                  edges {
+                    node {
+                      id
+                      name
+                      node_locale
+                    }
+                  }
+                }
+              }
+              `
+          ).then(result => {
+            if (result.errors) {
+              reject(result.errors)
+            }
+            if (!result || !result.data || !result.data[gqlName]) {
+              return
+            }
+
+            // All entries of 1 custom content type
+            result.data[gqlName].edges.forEach(({ node }) => {
+              // node === { id: 'c4ntfX9obfa8KQuquSSoqSO',
+              // name: 'Test Song',
+              // node_locale: 'en-BE' }
+              console.log(node)
+
+              const locale = node.node_locale
+
+              // Create List page
+              // if (listPagePath) {
+              //   createPage({
+              //     path: listPagePath, // required
+              //     component: slash(listPageTemplate),
+              //     menuName: listPageMenuName,
+              //     locale,
+              //     defaultLocale,
+              //     context: {
+              //       id: node.id
+              //     }
+              //   })
+              // }
+            })
+          })
+        })
+
+        // // Localized data
+        // if (locales.length === 1) {
+        //   // Create Custom type Page without locales
+        //   createPage({
+        //     path: `/blog/`, // required
+        //     component: slash(blogPageTemplate),
+        //     context: {
+        //       locale: defaultLocale,
+        //       locales
+        //     }
+        //   })
+        //   // Create Blog Posts Pages without locales
+        //   result.data.contentfulBlogPosts.edges.forEach(({ node }) => {
+        //     const path = createPath(node.name)
+        //     createPage({
+        //       path: `/blog/${path}/`, // required
+        //       component: slash(blogPostTemplate),
+        //       context: {
+        //         id: node.id
+        //       }
+        //     })
+        //   })
+        //   // If at least one blog post. Add Blog page to menu
+        //   // if (result.data.contentfulBlogPosts.edges) {
+        //   //   settings.menu[defaultLocale].push({
+        //   //     path: `/blog/`,
+        //   //     name: `Blog`
+        //   //   })
+        //   // }
+        //
+        //   // Check if we query the blogposts
+        //   if (
+        //     typeof result.data.contentfulBlogPosts !== "undefined" &&
+        //     result.data.contentfulBlogPosts
+        //   ) {
+        //   }
+
+        //   // Create pages with localized paths
+        //   result.data.contentfulPages.edges.forEach(edge => {
+        //     const locale = edge.node.node_locale
+        //     const path = createPath(edge.node.path)
+        //     if (path !== "index") {
+        //       createPage({
+        //         path: `/${locale}/${path}/`, // required
+        //         component: slash(pageTemplate),
+        //         context: {
+        //           id: edge.node.id
+        //         }
+        //       })
+        //     } else if (path === `index`) {
+        //       createPage({
+        //         path: `/${locale}/`, // required
+        //         component: slash(pageTemplate),
+        //         context: {
+        //           id: edge.node.id
+        //         }
+        //       })
+        //     }
+        //     // Create index page
+        //     if (locale === defaultLocale && path === `index`) {
+        //       createPage({
+        //         path: `/`, // required
+        //         component: slash(pageTemplate),
+        //         context: {
+        //           id: edge.node.id
+        //         }
+        //       })
+        //     }
+        //   })
+        //   // Create menu with locales in paths
+        //   result.data.settings.edges.forEach(({ node }) => {
+        //     const locale = node.node_locale
+        //     settings.menu[locale] =
+        //       node.menu.map(pageInfo => {
+        //         const path = createPath(pageInfo.path)
+        //         const pageMetadata = JSON.parse(pageInfo.metadata._json_)
+        //         let backupName = pageInfo.path.split("/")
+        //         backupName = backupName[backupName.length - 1]
+        //         const name = pageMetadata.name || backupName
+        //         if (path === "index") {
+        //           return {
+        //             path: `/${locale}/`,
+        //             name
+        //           }
+        //         } else {
+        //           return {
+        //             path: `/${locale}/${path}/`,
+        //             name
+        //           }
+        //         }
+        //       }) || []
+        //     // Check if we query the blogposts
+        //     if (
+        //       typeof result.data.contentfulBlogPosts !== "undefined" &&
+        //       result.data.contentfulBlogPosts
+        //     ) {
+        //       // Create Blog Page with locales
+        //       locales.forEach(locale => {
+        //         createPage({
+        //           path: `/${locale}/blog/`, // required
+        //           component: slash(blogPageTemplate),
+        //           context: {
+        //             locale,
+        //             locales
+        //           }
+        //         })
+        //       })
+        //       // Create blog post pages with localized paths
+        //       result.data.contentfulBlogPosts.edges.forEach(({ node }) => {
+        //         const locale = node.node_locale
+        //         const path = createPath(node.name)
+        //         createPage({
+        //           path: `/${locale}/blog/${path}/`, // required
+        //           component: slash(blogPostTemplate),
+        //           context: {
+        //             id: node.id
+        //           }
+        //         })
+        //       })
+        //       // If at least one blog post. Add Blog page to menu
+        //       if (result.data.contentfulBlogPosts.edges) {
+        //         settings.menu[locale].push({
+        //           path: `/${locale}/blog/`,
+        //           name: `Blog`
+        //         })
+        //       }
+        //     }
+        //   })
+        // }
+
+        return
+      })
+    )
+  })
+}
