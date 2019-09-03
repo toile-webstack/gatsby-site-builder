@@ -83,6 +83,235 @@ In 'Space settings' > 'Webhooks', add 2 webhooks:
 
 A couple of minutes after you triggered the build on Netlify, your site should be ready. You can visit it on your Netlify url.
 
-Next you will want to fill it with your content, change colors and build your pages as you see fit.
+Next you will want to fill it with your content, change colors and build your pages.
 
 ## The content model
+
+It is composed of the following content Types:
+
+- [Settings](#Settings): An unique entry to define common settings for the whole site
+- [Page](#Page)
+- [Collection Item](#Collection Item): create collections for blog posts, portfolio projets, testimonials, recipes, ... toile will create a page for each item and you can reference items inside pages in `Block - Reference`s
+- Section: To arrange blocks in columns and rows
+- Blocks: There are multiple types of blocks
+  - Free Text: The most common type of block. Use it to create blocks of text written in Markdown. You can also write HTML in there.
+  - Form: Create Netlify forms with a JSON configuration object
+  - Gallery: Display one or more images
+  - References: display one or more internal links to `Page`s or `Collection Item`s
+- Script: if you want to dynamicaly embed external scripts in the `<head>`
+
+- [ ] TODO: Explain Each field of each content type
+- [ ] TODO: don't forget to explain how free text is processed. emails, links, ...
+
+### Settings
+
+#### Website Name
+
+The website name will be used in meta titles and is showed on the left of the menu
+
+#### Menu
+
+Link pages in the order you want them to appear in the menu
+
+#### Favicon
+
+Will be resized
+
+#### Default Facebook Image
+
+Social media image
+
+#### Metadata
+
+A JSON object.
+
+Example:
+
+```json
+{
+  "url": "https://www.toile.io/",
+  "name": "toile.io",
+  "title": "Affordable Professional Website for Entrepreneurs and Artists",
+  "description": "toile.io makes designer websites accessible and affordable"
+}
+```
+
+For now, these are the only keys that will be taken into consideration by toile.
+
+#### Colors
+
+A JSON object.
+
+See [Colors and Styles](#Colors and Styles) for more details about how color palettes are handled in toile.
+
+```json
+{
+  "palettes": [
+    {
+      "name": "blue",
+      "neutral": "#FFF",
+      "primary": "rgb(0, 38, 100)",
+      "secondary": "rgb(255, 121, 0)"
+    },
+    {
+      "name": "grey",
+      "neutral": "rgb(255, 255, 255)",
+      "primary": "rgb(92, 106, 113)",
+      "secondary": "rgb(255, 121, 0)"
+    }
+  ],
+  "mainCombo": "classic",
+  "menuCombo": "classic",
+  "footerCombo": "contrast"
+}
+```
+
+#### Fonts
+
+A JSON object
+
+```json
+{
+  "body": ["Cuprum"],
+  "header": ["Lekton"]
+}
+```
+
+You can provide a list of fonts to be used for each key.
+
+Don't forget to specify the google fonts you want to import in the options below
+
+#### Contact
+
+A JSON object.
+
+Will be used in the footer as icons, texts or links. Blank or undefined values are not displayed.
+
+```json
+{
+  "name": "",
+  "email": "info@toile.io",
+  "phone": "+32987654321",
+  "facebook": "toile.io",
+  "linkedin": "",
+  "instagram": ""
+}
+```
+
+Attention: `facebook` has to be the id of the page, not the full url
+
+#### Google Analytics Teacking ID
+
+Not in use at the moment!!!
+
+Instead, define an environment variable in Netlify named `analyticsTrackingId`
+
+#### Options
+
+A JSON object
+
+The only key used at the moment is for [typographyJS](https://kyleamathews.github.io/typography.js/) options
+
+```json
+{
+  "typography": {
+    "scaleRatio": 3,
+    "googleFonts": [
+      {
+        "name": "Lekton",
+        "styles": ["400", "700"]
+      },
+      {
+        "name": "Cuprum",
+        "styles": ["400", "400i", "700", "700i"]
+      }
+    ],
+    "baseFontSize": "20px"
+  }
+}
+```
+
+#### Style
+
+A JSON object
+
+Global styles to be applied to the whole site
+
+```json
+{
+  "ul": {
+    "listStyleType": "square"
+  },
+  "@media only screen and (max-width:768px)": {
+    "html": {
+      "fontSize": "calc(16 / 16 * 100%)"
+    }
+  }
+}
+```
+
+#### scripts
+
+Dynamicaly embed external scripts in the `<head>` of every page
+
+### Page
+
+#### Path
+
+A string to be canonized as the URL path (the part of the URL after https://www.your-domain.com/) of the page. 'Slash' ('/') characters can be used to create 'sub-pages'.
+
+If no `name` key is defined in the `Metadata`, this will be used as the name of the page in the menu.
+
+#### Metadata
+
+Use this field to overwrite the necessary values defined in the Settings. The value for `name` defined here will be used in the menu.
+
+#### Blocks
+
+A list of Blocks and Sections that will form the content of the page
+
+#### Options
+
+Mainly used to change colors of the whole page.
+
+```json
+{
+  "colorCombo": "classic",
+  "colorPalettes": [1]
+}
+```
+
+See [Colors and Styles](#Colors and Styles) for more details about how color palettes are handled in toile.
+
+#### Style
+
+Customize the page CSS (see [Colors and Styles](#Colors and Styles)).
+
+#### Scripts
+
+Dynamicaly embed external scripts in the `<head>` of this page only.
+
+### Collection Item
+
+Collection Items have similar fields as Pages. However, at the moment, they can't be composed of Sections and Blocks. The main content is a Free Text field.
+
+They also get a few more fields:
+
+## Colors and Styles
+
+- [ ] TODO: Explain how color palettes and combos work + nesting
+- [ ] TODO: Explain styles in doc Glamor
+- [ ] TODO: Explain rhythm and scale for styles BUT warning for deprecation
+
+## Creating and managing multiple Collections
+
+## Special Sections
+
+- Footer
+- Sidebar
+
+## Multiple locales
+
+## Quirks and caveats
+
+- [ ] TODO: Explain IGNORE contents
