@@ -1,12 +1,16 @@
 # Gatsby Site Builder
 
+_Warning_: This is a prototype. There will be a lot of breaking changes when V1 comes out. We probably won't be able to create a migration tool for your content so you will have to copy/paste manually your content to the next content model. However, be assured that everything that is possible in the prototype (and a lot more) will be ported to version 1.
+
 ## Intro
 
-This repo holds the code for a free and open source JAMstack website builder (prototype). It creates blazing fast experiences with zero coding skills required (even though you can edit and customize CSS extensively).
+This repo holds the code for a free and open source JAMstack website builder. It creates blazing fast experiences with zero coding skills required (but you can edit and customize CSS extensively if you enjoy that).
 
-It was built primarily as a proof of concept because we wanted a way of quickly bootstrapping small websites for clients. We wanted the websites to be fast, lightweight and extremely cheap (who said free) for us to operate.
+It was built primarily as a proof of concept because we wanted a way of quickly bootstrapping small to medium websites for clients. We wanted the websites to be fast, lightweight and extremely cheap (who said free?) for us to operate.
 
-The system is currently working with GatsbyJS (V1 for now), Contentful CMS and Netlify. After the initial setup, everything is handled from Contentful.
+The system is currently working with GatsbyJS (V1 for now), Contentful CMS and Netlify. After the initial setup, everything is handled from Contentful. It is a bit hacky here and there but hey... it is a prototype!
+
+If you like the idea, please show us any mark of interest. That will certainly boost our productivity to work towards V1!
 
 > Note:
 >
@@ -16,15 +20,16 @@ The system is currently working with GatsbyJS (V1 for now), Contentful CMS and N
 
 You will need to setup 3 different services for this to work. Unfortunately, some terminal magic will be needed to setup Contentful but follow along and you will be fine.
 
-### Easy setup
+### Easy first step
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/toile-webstack/gatsby-site-builder)
 
-This will handle the Github fork and Netlify deploy for you. You still need to configure Contentful and the webhooks and environment variables in Netlify
+This will handle the Github fork and Netlify deploy for you. You still need to configure Contentful and the webhooks and environment variables in Netlify.
 
 ### Github
 
-Create a Github account and fork this repo.
+- Create a Github account
+- Fork this repo (if you did not use the Easy first step)
 
 ### Contentful
 
