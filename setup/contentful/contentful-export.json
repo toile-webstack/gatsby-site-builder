@@ -2070,10 +2070,10 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "index - dummy content"
+          "en-US": "index - dummy content"
         },
         "main": {
-          "fr-BE": "# Bienvenu"
+          "en-US": "# Bienvenu"
         }
       }
     },
@@ -2133,10 +2133,10 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         },
         "form": {
-          "fr-BE": {
+          "en-US": {
           }
         }
       }
@@ -2197,10 +2197,10 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         },
         "references": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2275,7 +2275,7 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         }
       }
     },
@@ -2335,13 +2335,13 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         },
         "type": {
-          "fr-BE": "None"
+          "en-US": "None"
         },
         "featuredImage": {
-          "fr-BE": {
+          "en-US": {
             "sys": {
               "type": "Link",
               "linkType": "Asset",
@@ -2350,13 +2350,13 @@
           }
         },
         "datePublished": {
-          "fr-BE": "2018-10-01"
+          "en-US": "2018-10-01"
         },
         "dateLastEdit": {
-          "fr-BE": "2018-10-04"
+          "en-US": "2018-10-04"
         },
         "gallery": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2367,7 +2367,7 @@
           ]
         },
         "scripts": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2435,17 +2435,17 @@
       },
       "fields": {
         "path": {
-          "fr-BE": "index"
+          "en-US": "index"
         },
         "metadata": {
-          "fr-BE": {
+          "en-US": {
             "name": "Accueil",
             "title": "",
             "description": ""
           }
         },
         "blocks": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2513,10 +2513,10 @@
       },
       "fields": {
         "path": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         },
         "blocks": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2555,7 +2555,7 @@
           ]
         },
         "scripts": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2623,10 +2623,10 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         },
         "gallery": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2694,10 +2694,10 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         },
         "blocks": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2786,10 +2786,10 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "Website Name"
+          "en-US": "Website Name"
         },
         "menu": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2800,7 +2800,7 @@
           ]
         },
         "favicon": {
-          "fr-BE": {
+          "en-US": {
             "sys": {
               "type": "Link",
               "linkType": "Asset",
@@ -2809,7 +2809,7 @@
           }
         },
         "facebookImage": {
-          "fr-BE": {
+          "en-US": {
             "sys": {
               "type": "Link",
               "linkType": "Asset",
@@ -2818,7 +2818,7 @@
           }
         },
         "metadata": {
-          "fr-BE": {
+          "en-US": {
             "url": "https://www.mon-site.be/",
             "name": "",
             "title": "",
@@ -2826,7 +2826,7 @@
           }
         },
         "colors": {
-          "fr-BE": {
+          "en-US": {
             "palettes": [
               {
                 "name": "blue",
@@ -2859,7 +2859,7 @@
           }
         },
         "fonts": {
-          "fr-BE": {
+          "en-US": {
             "body": [
               "Cuprum"
             ],
@@ -2869,7 +2869,7 @@
           }
         },
         "contact": {
-          "fr-BE": {
+          "en-US": {
             "name": "",
             "email": "",
             "phone": "",
@@ -2879,7 +2879,7 @@
           }
         },
         "options": {
-          "fr-BE": {
+          "en-US": {
             "typography": {
               "scaleRatio": 3,
               "googleFonts": [
@@ -2905,7 +2905,7 @@
           }
         },
         "scripts": {
-          "fr-BE": [
+          "en-US": [
             {
               "sys": {
                 "type": "Link",
@@ -2973,7 +2973,7 @@
       },
       "fields": {
         "name": {
-          "fr-BE": "IGNORE"
+          "en-US": "IGNORE"
         }
       }
     }
@@ -3028,10 +3028,10 @@
       },
       "fields": {
         "title": {
-          "fr-BE": "ARCHIVE-MOI"
+          "en-US": "ARCHIVE-MOI"
         },
         "file": {
-          "fr-BE": {
+          "en-US": {
             "url": "//images.ctfassets.net/x45zda3tjgl0/67vMk1cAFykikY2ageS08e/32eb7d68eb3c3c44328aa51ec651f51c/ARCHIVE-MOI.jpg",
             "details": {
               "size": 149630,
@@ -3095,10 +3095,10 @@
       },
       "fields": {
         "title": {
-          "fr-BE": "favicon-2"
+          "en-US": "favicon-2"
         },
         "file": {
-          "fr-BE": {
+          "en-US": {
             "url": "//images.ctfassets.net/x45zda3tjgl0/7oPlVWIfLBKwd2iYL7u7DZ/5f7082c62e048c8d8cbb73d740d4045e/favicon-2.png",
             "details": {
               "size": 444,
@@ -3116,8 +3116,8 @@
   ],
   "locales": [
     {
-      "name": "French (Belgium)",
-      "code": "fr-BE",
+      "name": "English (United States)",
+      "code": "en-US",
       "fallbackCode": null,
       "default": true,
       "contentManagementApi": true,
@@ -3126,7 +3126,7 @@
       "sys": {
         "type": "Locale",
         "id": "6r5tcFDy2neLSxOz0alOXX",
-        "version": 2,
+        "version": 3,
         "space": {
           "sys": {
             "type": "Link",
@@ -3156,7 +3156,7 @@
             "id": "3ks6NmuL0I3k2clc833V3w"
           }
         },
-        "updatedAt": "2018-10-16T19:12:59Z"
+        "updatedAt": "2019-08-17T09:27:56Z"
       }
     }
   ],
