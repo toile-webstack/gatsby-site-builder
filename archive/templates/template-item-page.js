@@ -1,42 +1,40 @@
-import React from "react";
-import Img from "gatsby-image";
-import Helmet from "react-helmet";
-import moment from "moment";
-import Moment from "react-moment";
+import React from 'react'
+import Img from 'gatsby-image'
+import Helmet from 'react-helmet'
+import moment from 'moment'
+import Moment from 'react-moment'
 
-import { mapStyle } from "../utils/processCss";
-import { metadata as siteMetadata } from "../utils/siteSettings.json";
-import { rhythm, scale } from "../utils/typography";
-import colors from "../utils/colors";
+import { mapStyle } from '../utils/processCss'
+import { metadata as siteMetadata } from '../utils/siteSettings.json'
+import { rhythm, scale } from '../utils/typography'
+import colors from '../utils/colors'
 import {
   addLayoutOptions,
   gridLayout,
-  listItemStyle
-} from "../utils/computeGrid";
+  listItemStyle,
+} from '../utils/computeGrid'
 
-import BlockFreeText from "../blocks/FreeText";
-import BlockGallery from "../blocks/Gallery";
-import Html from "../atoms/Html";
+import BlockFreeText from '../blocks/FreeText'
+import BlockGallery from '../blocks/Gallery'
+import Html from '../atoms/Html'
 // import TextNode from "../molecules/TextNode"
 
 class ItemPageTemplate extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     // _json_ fields
-    this.metadata = JSON.parse(props.data.collectionItem.metadata._json_);
-    this.optionsData = JSON.parse(props.data.collectionItem.options._json_);
+    this.metadata = JSON.parse(props.data.collectionItem.metadata._json_)
+    this.optionsData = JSON.parse(props.data.collectionItem.options._json_)
     // console.log(this.optionsData)
     this.styleData = mapStyle(
-      JSON.parse(props.data.collectionItem.style._json_)
-    );
+      JSON.parse(props.data.collectionItem.style._json_),
+    )
     // Colors
-    let { colorPalettes, colorCombo } = this.optionsData;
+    let { colorPalettes, colorCombo } = this.optionsData
     // colorCombo = colorCombo && colors[`${colorCombo}Combo`]
-    colorCombo = colorCombo
-      ? colors[`${colorCombo}Combo`]
-      : colors.classicCombo;
-    const newColors = colors.computeColors(colorPalettes, colorCombo);
-    this.colors = { ...colors, ...newColors };
+    colorCombo = colorCombo ? colors[`${colorCombo}Combo`] : colors.classicCombo
+    const newColors = colors.computeColors(colorPalettes, colorCombo)
+    this.colors = { ...colors, ...newColors }
   }
 
   render() {
@@ -44,13 +42,13 @@ class ItemPageTemplate extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo
-    } = this.colors;
-    const collectionItem = this.props.data.collectionItem;
-    const metadata = this.metadata;
+      funkyContrastCombo,
+    } = this.colors
+    const collectionItem = this.props.data.collectionItem
+    const metadata = this.metadata
 
     if (!collectionItem.featuredImage || !collectionItem.name) {
-      return null;
+      return null
     }
 
     // const locale = collectionItem.node_locale
@@ -66,22 +64,22 @@ class ItemPageTemplate extends React.Component {
       hideFeaturedImage,
       hideTitle,
       hideDate,
-      hideGallery
-    } = this.optionsData;
+      hideGallery,
+    } = this.optionsData
 
-    let galleryOptions = this.optionsData.gallery || {};
+    let galleryOptions = this.optionsData.gallery || {}
     // console.log(galleryOptions)
-    galleryOptions.layout = galleryOptions.layout || {};
+    galleryOptions.layout = galleryOptions.layout || {}
     galleryOptions.layout.columns = galleryOptions.layout.columns ||
-      galleryOptions.columns || ["1/3"];
+      galleryOptions.columns || ['1/3']
 
     const blockGallery = {
       gallery: collectionItem.gallery,
       options: galleryOptions,
-      style: {}
-    };
+      style: {},
+    }
 
-    const { scripts } = this.props.data.collectionItem;
+    const { scripts } = this.props.data.collectionItem
 
     return (
       <div
@@ -92,15 +90,15 @@ class ItemPageTemplate extends React.Component {
           //   color: `inherit`,
           //   marginBottom: 0
           // }
-          "> div": {
+          '> div': {
             width: `100%`,
             maxWidth: `1000px`,
             margin: `auto`,
             padding: rhythm(1),
-            flexGrow: 1
+            flexGrow: 1,
           },
           ...this.colors[classicCombo].style,
-          ...this.styleData
+          ...this.styleData,
         }}
       >
         <Helmet>
@@ -137,27 +135,27 @@ class ItemPageTemplate extends React.Component {
               ({
                 id,
                 name,
-                type = "text/javascript",
+                type = 'text/javascript',
                 content: { content },
                 // charset, // src,
                 ...srcAndCharset
               }) => {
-                const scriptProps = { id: name, type };
+                const scriptProps = { id: name, type }
                 Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                  if (a) scriptProps[attr] = a;
-                });
+                  if (a) scriptProps[attr] = a
+                })
                 return (
                   <script
                     defer
                     {...{
                       key: id,
-                      ...scriptProps
+                      ...scriptProps,
                     }}
                   >
                     {`${content}`}
                   </script>
-                );
-              }
+                )
+              },
             )}
         </Helmet>
         <div
@@ -165,9 +163,9 @@ class ItemPageTemplate extends React.Component {
             display: `flex`,
             flexFlow: `column`,
             alignItems: `flex-start`,
-            " .gatsby-image-outer-wrapper": {
-              width: `100%`
-            }
+            ' .gatsby-image-outer-wrapper': {
+              width: `100%`,
+            },
           }}
         >
           {collectionItem.featuredImage && !hideFeaturedImage && (
@@ -175,7 +173,7 @@ class ItemPageTemplate extends React.Component {
               css={{
                 // width: `1000px`,
                 // maxWidth: `400px`,
-                maxHeight: `300px`
+                maxHeight: `300px`,
               }}
               title={collectionItem.featuredImage.title}
               sizes={collectionItem.featuredImage.responsiveSizes}
@@ -183,7 +181,7 @@ class ItemPageTemplate extends React.Component {
           )}
           <h1
             css={{
-              marginBottom: 0
+              marginBottom: 0,
             }}
           >
             {collectionItem.name}
@@ -208,14 +206,14 @@ class ItemPageTemplate extends React.Component {
             css={{
               width: `100%`,
               height: 2,
-              background: colors[funkyCombo].border
+              background: colors[funkyCombo].border,
               // margin: `${rhythm(2)}`
             }}
           />
           <div
             css={{
               display: `flex`,
-              flexFlow: `row wrap`
+              flexFlow: `row wrap`,
             }}
           >
             {collectionItem.categories &&
@@ -227,12 +225,12 @@ class ItemPageTemplate extends React.Component {
                     css={{
                       margin: `${rhythm(1 / 4)} ${rhythm(1 / 8)}`,
                       padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
-                      ...colors[funkyContrastCombo].style
+                      ...colors[funkyContrastCombo].style,
                     }}
                   >
                     {cat}
                   </div>
-                );
+                )
               })}
           </div>
         </div>
@@ -249,11 +247,11 @@ class ItemPageTemplate extends React.Component {
           />
         )}
       </div>
-    );
+    )
   }
 }
 
-export default ItemPageTemplate;
+export default ItemPageTemplate
 
 // TODO: query for metadata, style, options
 
@@ -267,7 +265,7 @@ export const itemPageQuery = graphql`
         id
         title
         description
-        responsiveSizes(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+        fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
           base64
           aspectRatio
           src
@@ -289,7 +287,7 @@ export const itemPageQuery = graphql`
         id
         title
         description
-        responsiveSizes(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+        fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
           base64
           aspectRatio
           src
@@ -298,13 +296,22 @@ export const itemPageQuery = graphql`
         }
       }
       metadata {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       options {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       style {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       node_locale
       fields {
@@ -326,4 +333,4 @@ export const itemPageQuery = graphql`
       }
     }
   }
-`;
+`

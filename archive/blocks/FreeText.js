@@ -1,26 +1,26 @@
-import React from 'react';
+import React from 'react'
 
-import { mapStyle } from '../utils/processCss';
-import { rhythm, scale } from '../utils/typography';
+import { mapStyle } from '../utils/processCss'
+import { rhythm, scale } from '../utils/typography'
 // import colors from "../utils/colors"
 
-import Html from '../atoms/Html';
+import Html from '../atoms/Html'
 
 class BlockFreeText extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     // _json_ fields
-    this.optionsData = JSON.parse(props.block.options._json_);
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_));
+    this.optionsData = JSON.parse(props.block.options._json_)
+    this.styleData = mapStyle(JSON.parse(props.block.style._json_))
     // Colors
-    let { colorPalettes, colorCombo } = this.optionsData;
-    this.isColored = !!colorPalettes || !!colorCombo;
+    let { colorPalettes, colorCombo } = this.optionsData
+    this.isColored = !!colorPalettes || !!colorCombo
     colorCombo = colorCombo
       ? props.colors[`${colorCombo}Combo`]
-      : props.colors.classicCombo;
-    colorPalettes = colorPalettes || props.colors.colorPalettes;
-    const newColors = props.colors.computeColors(colorPalettes, colorCombo);
-    this.colors = { ...props.colors, ...newColors };
+      : props.colors.classicCombo
+    colorPalettes = colorPalettes || props.colors.colorPalettes
+    const newColors = props.colors.computeColors(colorPalettes, colorCombo)
+    this.colors = { ...props.colors, ...newColors }
   }
 
   render() {
@@ -30,15 +30,15 @@ class BlockFreeText extends React.Component {
       contrastCombo,
       funkyCombo,
       funkyContrastCombo,
-    } = this.colors;
+    } = this.colors
 
-    const block = this.props.block;
+    const block = this.props.block
     if (Object.keys(block).length < 1) {
-      return null;
+      return null
     }
 
-    const { shortCodeMatchees } = this.props;
-    const { id: htmlId, name: htmlName } = this.optionsData;
+    const { shortCodeMatchees } = this.props
+    const { id: htmlId, name: htmlName } = this.optionsData
 
     return block.main ? (
       <div
@@ -71,11 +71,11 @@ class BlockFreeText extends React.Component {
         {this.props.cookieButton &&
           this.props.cookieButton({ style: this.colors[classicCombo].style })}
       </div>
-    ) : null;
+    ) : null
   }
 }
 
-export default BlockFreeText;
+export default BlockFreeText
 
 export const blockFreeTextFragment = graphql`
   fragment BlockFreeText on ContentfulBlockFreeText {
@@ -94,15 +94,21 @@ export const blockFreeTextFragment = graphql`
       }
     }
     options {
-      _json_
+      # _json_
+      internal {
+        content
+      }
       # colorPalettes
       # colorCombo
     }
     style {
-      _json_
+      # _json_
+      internal {
+        content
+      }
     }
   }
-`;
+`
 // blocks {
 //   id
 //   name

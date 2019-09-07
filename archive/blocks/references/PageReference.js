@@ -1,10 +1,10 @@
-import React from "react"
-import Link from "gatsby-link"
-import moment from "moment"
+import React from 'react'
+import Link from 'gatsby-link'
+import moment from 'moment'
 
-import { createPath } from "../../../utils/utils"
-import { locales, pages } from "../../utils/siteSettings.json"
-import { rhythm, scale } from "../../utils/typography"
+import { createPath } from '../../../utils/utils'
+import { locales, pages } from '../../utils/siteSettings.json'
+import { rhythm, scale } from '../../utils/typography'
 // import {
 //   defaultLocale,
 //   locales,
@@ -17,8 +17,8 @@ import { rhythm, scale } from "../../utils/typography"
 import {
   replaceShortCodes,
   withSimpleLineBreaks,
-  protectEmail
-} from "../../utils/processHtml"
+  protectEmail,
+} from '../../utils/processHtml'
 
 class PageReference extends React.Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class PageReference extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo
+      funkyContrastCombo,
     } = this.colors
 
     let page = this.props.page
@@ -69,19 +69,28 @@ export const pageReferenceFragment = graphql`
     internal {
       type
     }
-    fields {
-      menuName
-      shortPath
-      localizedPath
-    }
+    # fields {
+    #   menuName
+    #   shortPath
+    #   localizedPath
+    # }
     metadata {
-      _json_
+      # _json_
+      internal {
+        content
+      }
     }
     options {
-      _json_
+      # _json_
+      internal {
+        content
+      }
     }
     style {
-      _json_
+      # _json_
+      internal {
+        content
+      }
     }
     node_locale
   }

@@ -1,18 +1,18 @@
-import React from "react";
-import Link from "gatsby-link";
-import Helmet from "react-helmet";
-import _ from "lodash";
+import React from 'react'
+import Link from 'gatsby-link'
+import Helmet from 'react-helmet'
+import _ from 'lodash'
 // Load font CSS
-import "typeface-open-sans";
-import "typeface-montserrat";
-import "typeface-bellefair";
-import "typeface-quicksand";
-import "typeface-yanone-kaffeesatz";
-import "typeface-dosis";
-import "typeface-josefin-sans";
-import "typeface-noto-sans";
-import "typeface-raleway";
-import "typeface-didact-gothic";
+import 'typeface-open-sans'
+import 'typeface-montserrat'
+import 'typeface-bellefair'
+import 'typeface-quicksand'
+import 'typeface-yanone-kaffeesatz'
+import 'typeface-dosis'
+import 'typeface-josefin-sans'
+import 'typeface-noto-sans'
+import 'typeface-raleway'
+import 'typeface-didact-gothic'
 
 // import * as themes from "./typography-themes"
 // importAll themes from
@@ -23,24 +23,24 @@ import "typeface-didact-gothic";
 // )
 // const typographyTheme = require("./typography-themes/typography-theme-alton/src/index.js")
 // console.log(themes)
-import { mapStyle } from "../utils/processCss";
-import { rhythm, scale } from "../utils/typography";
+import { mapStyle } from '../utils/processCss'
+import { rhythm, scale } from '../utils/typography'
 import {
   defaultLocale,
   locales,
   metadata,
   favicon,
   pages,
-  menu
-} from "../utils/siteSettings.json";
+  menu,
+} from '../utils/siteSettings.json'
 
-import Menu from "../molecules/Menu";
-import ColorPalettesDemo from "../molecules/ColorPalettesDemo";
-import ContactInfos from "../molecules/ContactInfos";
-import FooterFeed from "../molecules/FooterFeed";
-import Footer from "../molecules/Footer";
-import CookieAlert from "../atoms/CookieAlert";
-import Sidebar from "../molecules/Sidebar";
+import Menu from '../molecules/Menu'
+import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
+import ContactInfos from '../molecules/ContactInfos'
+import FooterFeed from '../molecules/FooterFeed'
+import Footer from '../molecules/Footer'
+import CookieAlert from '../atoms/CookieAlert'
+import Sidebar from '../molecules/Sidebar'
 
 // TODO: Handle Contact page differently
 // siteMapping.push({
@@ -51,15 +51,15 @@ import Sidebar from "../molecules/Sidebar";
 class DefaultLayout extends React.Component {
   constructor(props) {
     // console.log(props)
-    super(props);
+    super(props)
     // _json_ fields
     // this.metadata = JSON.parse(props.data.contentfulPage.metadata._json_)
     this.optionsData = JSON.parse(
-      props.data.settings.edges[0].node.options._json_
-    );
+      props.data.settings.edges[0].node.options._json_,
+    )
     this.styleData = mapStyle(
-      JSON.parse(props.data.settings.edges[0].node.style._json_)
-    );
+      JSON.parse(props.data.settings.edges[0].node.style._json_),
+    )
     // menu is like {
     //   en-BE: [
     //     {name: 'Homepage', path: '/en-BE/'},
@@ -70,40 +70,40 @@ class DefaultLayout extends React.Component {
     //     {name: 'Contacte-moi', path: '/fr-BE/contact/'}
     //   ]
     // }
-    this.landingRE = new RegExp(/\/landing\//);
+    this.landingRE = new RegExp(/\/landing\//)
 
     this.state = {
       defaultLocale: defaultLocale,
       currentLocale: defaultLocale,
-      isLandingPage: Boolean(props.location.pathname.match(this.landingRE))
-    };
+      isLandingPage: Boolean(props.location.pathname.match(this.landingRE)),
+    }
   }
   componentWillMount() {
-    this.updateState();
+    this.updateState()
   }
   componentWillReceiveProps(nextProps) {
-    this.updateState(nextProps);
+    this.updateState(nextProps)
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.setState({
-        isLandingPage: !!nextProps.location.pathname.match(this.landingRE)
-      });
+        isLandingPage: !!nextProps.location.pathname.match(this.landingRE),
+      })
     }
   }
   updateState(props = this.props) {
     // TODO: Problem if a locale name happend to be in the page slug itself
     locales.forEach(locale => {
-      const re = new RegExp(locale, "gi");
+      const re = new RegExp(locale, 'gi')
       if (props.location.pathname.match(re)) {
-        this.setState({ currentLocale: locale });
+        this.setState({ currentLocale: locale })
       }
-    });
+    })
   }
   render() {
-    const { isLandingPage } = this.state;
-    const { footer, cookieAlert, settings } = this.props.data;
+    const { isLandingPage } = this.state
+    const { footer, cookieAlert, settings } = this.props.data
 
-    const { scripts } = this.props.data.settings.edges[0].node;
-    const isSSR = typeof window === "undefined";
+    const { scripts } = this.props.data.settings.edges[0].node
+    const isSSR = typeof window === 'undefined'
 
     return (
       <div
@@ -114,7 +114,7 @@ class DefaultLayout extends React.Component {
           minHeight: `100vh`,
           width: `100%`,
           // paddingTop: rhythm(1.6)
-          ...this.styleData
+          ...this.styleData,
         }}
       >
         <Helmet
@@ -136,31 +136,31 @@ class DefaultLayout extends React.Component {
               ({
                 id,
                 name,
-                type = "text/javascript",
+                type = 'text/javascript',
                 content: { content },
                 // charset, // src,
                 ...srcAndCharset
               }) => {
                 const scriptProps = {
                   id: `${name}`,
-                  type
-                };
+                  type,
+                }
                 Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                  if (a) scriptProps[attr] = a;
-                });
+                  if (a) scriptProps[attr] = a
+                })
                 return (
                   <script
                     // defer
                     async
                     {...{
                       key: id,
-                      ...scriptProps
+                      ...scriptProps,
                     }}
                   >
                     {`${content}`}
                   </script>
-                );
-              }
+                )
+              },
             )}
         </Helmet>
 
@@ -174,7 +174,7 @@ class DefaultLayout extends React.Component {
             passCss={{
               position: `fixed`,
               top: 0,
-              left: 0
+              left: 0,
             }}
           />
         )}
@@ -187,8 +187,8 @@ class DefaultLayout extends React.Component {
             passCss={{ visibility: `hidden` }}
           />
         )}
-        {process.env.NODE_ENV === "development" ||
-        (typeof window !== "undefined" &&
+        {process.env.NODE_ENV === 'development' ||
+        (typeof window !== 'undefined' &&
           window.location.href.match(/localhost|dev--.*netlify.com/gi)) ? (
           <ColorPalettesDemo />
         ) : null}
@@ -199,7 +199,7 @@ class DefaultLayout extends React.Component {
             flexGrow: 1,
             flexFlow: `column`,
             justifyContent: `center`,
-            width: `100%`
+            width: `100%`,
             // for sidebar layout
             // "@media(min-width: 800px)": {
             //   flexFlow: `row`,
@@ -229,7 +229,7 @@ class DefaultLayout extends React.Component {
               display: `flex`,
               flexFlow: `column`,
               width: `100%`,
-              "> div": {
+              '> div': {
                 // pages
                 flexGrow: `1`,
                 display: `flex`,
@@ -238,16 +238,16 @@ class DefaultLayout extends React.Component {
                 padding: 0,
                 // padding: `${rhythm(1)} ${rhythm(1 / 2)}`,
                 position: `relative`,
-                "> div": {
+                '> div': {
                   // 1st line blocks OR blog article
-                  ":first-child": {
-                    paddingTop: rhythm(2)
+                  ':first-child': {
+                    paddingTop: rhythm(2),
                   },
-                  ":last-child": {
-                    paddingBottom: rhythm(2)
-                  }
-                }
-              }
+                  ':last-child': {
+                    paddingBottom: rhythm(2),
+                  },
+                },
+              },
             }}
           >
             {this.props.children()}
@@ -256,11 +256,11 @@ class DefaultLayout extends React.Component {
         {isLandingPage ? null : <Footer section={footer} />}
         {!cookieAlert ? null : <CookieAlert section={cookieAlert} />}
       </div>
-    );
+    )
   }
 }
 
-export default DefaultLayout;
+export default DefaultLayout
 
 // TODO: query for global styles and options in settings
 export const pageQuery = graphql`
@@ -271,10 +271,16 @@ export const pageQuery = graphql`
           id
           name
           style {
-            _json_
+            # _json_
+            internal {
+              content
+            }
           }
           options {
-            _json_
+            # _json_
+            internal {
+              content
+            }
           }
           node_locale
           scripts {
@@ -304,10 +310,16 @@ export const pageQuery = graphql`
         ...BlockReferences
       }
       options {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       style {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
     }
     cookieAlert: contentfulSection(name: { eq: "--cookie" }) {
@@ -323,11 +335,17 @@ export const pageQuery = graphql`
         ...BlockReferences
       }
       options {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       style {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
     }
   }
-`;
+`

@@ -1,18 +1,19 @@
-import React, { Fragment } from "react";
-import Helmet from "react-helmet";
+import React, { Fragment } from 'react'
+import { graphql } from 'gatsby'
+import Helmet from 'react-helmet'
 
-import { mapStyle } from "../utils/processCss";
-import { metadata as siteMetadata } from "../utils/siteSettings.json";
-import { rhythm, scale } from "../utils/typography";
-import colors from "../utils/colors";
+import { mapStyle } from '../utils/processCss'
+import { metadata as siteMetadata } from '../utils/siteSettings.json'
+import { rhythm, scale } from '../utils/typography'
+import colors from '../utils/colors'
 
-import BlockFreeText from "../blocks/FreeText";
-import BlockForm from "../blocks/Form";
-import BlockGallery from "../blocks/Gallery";
-import BlockReferences from "../blocks/References";
-import Section from "../blocks/Section";
+import BlockFreeText from '../blocks/FreeText'
+import BlockForm from '../blocks/Form'
+import BlockGallery from '../blocks/Gallery'
+import BlockReferences from '../blocks/References'
+import Section from '../blocks/Section'
 
-const randomNumber = () => Math.round(Math.random() * 10000);
+const randomNumber = () => Math.round(Math.random() * 10000)
 
 // const Script = ({ script }) => {
 //   const {
@@ -75,22 +76,24 @@ const randomNumber = () => Math.round(Math.random() * 10000);
 
 class PageTemplate extends React.Component {
   constructor(props) {
-    super(props);
-    if (!props.data) return;
+    super(props)
+    if (!props.data) return
     // _json_ fields
-    this.metadata = JSON.parse(props.data.contentfulPage.metadata._json_);
-    this.optionsData = JSON.parse(props.data.contentfulPage.options._json_);
+    // this.metadata = JSON.parse(props.data.contentfulPage.metadata._json_)
+    this.metadata = JSON.parse(
+      props.data.contentfulPage.metadata.internal.content,
+    )
+    console.log(this.metadata)
+    this.optionsData = JSON.parse(props.data.contentfulPage.options._json_)
     this.styleData = mapStyle(
-      JSON.parse(props.data.contentfulPage.style._json_)
-    );
+      JSON.parse(props.data.contentfulPage.style._json_),
+    )
     // Colors
-    let { colorPalettes, colorCombo } = this.optionsData;
-    colorCombo = colorCombo
-      ? colors[`${colorCombo}Combo`]
-      : colors.classicCombo;
-    colorPalettes = colorPalettes || colors.colorPalettes;
-    const newColors = colors.computeColors(colorPalettes, colorCombo);
-    this.colors = { ...colors, ...newColors };
+    let { colorPalettes, colorCombo } = this.optionsData
+    colorCombo = colorCombo ? colors[`${colorCombo}Combo`] : colors.classicCombo
+    colorPalettes = colorPalettes || colors.colorPalettes
+    const newColors = colors.computeColors(colorPalettes, colorCombo)
+    this.colors = { ...colors, ...newColors }
   }
 
   render() {
@@ -99,22 +102,22 @@ class PageTemplate extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo
-    } = this.colors;
+      funkyContrastCombo,
+    } = this.colors
     // console.log(this.colors[classicCombo].style)
-    const page = this.props.data.contentfulPage;
-    const metadata = this.metadata;
+    const page = this.props.data.contentfulPage
+    const metadata = this.metadata
     // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
-    const { scripts } = page;
+    const { scripts } = page
 
-    const isSSR = typeof window === "undefined";
+    const isSSR = typeof window === 'undefined'
 
     return (
       <div
         className="page"
         css={{
           ...this.colors[classicCombo].style,
-          ...this.styleData
+          ...this.styleData,
         }}
       >
         <Helmet>
@@ -156,7 +159,7 @@ class PageTemplate extends React.Component {
               ({
                 id,
                 name,
-                type = "text/javascript",
+                type = 'text/javascript',
                 content: { content },
                 // charset, // src,
                 ...srcAndCharset
@@ -164,31 +167,31 @@ class PageTemplate extends React.Component {
                 const scriptProps = {
                   // id: name,
                   id: `${page.path}-${name}-${randomNumber()}`,
-                  type
-                };
+                  type,
+                }
                 Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                  if (a) scriptProps[attr] = a;
-                });
+                  if (a) scriptProps[attr] = a
+                })
                 return (
                   <script
                     // defer
                     async
                     {...{
                       key: id,
-                      ...scriptProps
+                      ...scriptProps,
                     }}
                   >
                     {`${content}`}
                   </script>
-                );
-              }
+                )
+              },
             )}
         </Helmet>
 
         {page.blocks &&
           page.blocks.map((block, i) => {
             if (Object.keys(block).length < 1) {
-              return null;
+              return null
             }
 
             switch (block.internal.type) {
@@ -201,8 +204,8 @@ class PageTemplate extends React.Component {
                     colors={this.colors}
                     location={this.props.location}
                   />
-                );
-                break;
+                )
+                break
               case `ContentfulBlockFreeText`:
                 return (
                   <BlockFreeText
@@ -211,8 +214,8 @@ class PageTemplate extends React.Component {
                     colors={this.colors}
                     location={this.props.location}
                   />
-                );
-                break;
+                )
+                break
               case `ContentfulBlockForm`:
                 return (
                   <BlockForm
@@ -221,8 +224,8 @@ class PageTemplate extends React.Component {
                     colors={this.colors}
                     location={this.props.location}
                   />
-                );
-                break;
+                )
+                break
               case `ContentfulBlockGallery`:
                 return (
                   <BlockGallery
@@ -231,8 +234,8 @@ class PageTemplate extends React.Component {
                     colors={this.colors}
                     location={this.props.location}
                   />
-                );
-                break;
+                )
+                break
               case `ContentfulBlockReferences`:
                 return (
                   <BlockReferences
@@ -241,8 +244,8 @@ class PageTemplate extends React.Component {
                     colors={this.colors}
                     location={this.props.location}
                   />
-                );
-                break;
+                )
+                break
               default:
             }
           })}
@@ -250,11 +253,11 @@ class PageTemplate extends React.Component {
         {/* {scripts &&
           scripts.map(script => <Script {...{ key: script.id, script }} />)} */}
       </div>
-    );
+    )
   }
 }
 
-export default PageTemplate;
+export default PageTemplate
 
 export const pageQuery = graphql`
   query PageTemplate($id: String!) {
@@ -263,7 +266,10 @@ export const pageQuery = graphql`
       node_locale
       path
       metadata {
-        _json_
+        # _json_
+        internal {
+          content
+        }
         # name
         # title
         # description
@@ -276,12 +282,18 @@ export const pageQuery = graphql`
         ...Section
       }
       options {
-        _json_
+        # _json_
+        internal {
+          content
+        }
         # colorPalettes
         # colorCombo
       }
       style {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       scripts {
         id
@@ -296,7 +308,7 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`
 
 // blocks {
 //   id

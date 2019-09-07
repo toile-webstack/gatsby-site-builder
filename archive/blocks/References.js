@@ -1,17 +1,17 @@
-import React from "react";
-import Img from "gatsby-image";
-import _ from "lodash";
-import MdClose from "react-icons/lib/md/close";
+import React from 'react'
+import Img from 'gatsby-image'
+import _ from 'lodash'
+import MdClose from 'react-icons/lib/md/close'
 
-import Carousel from "../atoms/Carousel";
+import Carousel from '../atoms/Carousel'
 
-import { mapStyle } from "../utils/processCss";
-import { rhythm, scale } from "../utils/typography";
+import { mapStyle } from '../utils/processCss'
+import { rhythm, scale } from '../utils/typography'
 import {
   addLayoutOptions,
   gridLayout,
-  listItemStyle
-} from "../utils/computeGrid";
+  listItemStyle,
+} from '../utils/computeGrid'
 // import colors from "../utils/colors"
 // import {
 //   replaceShortCodes,
@@ -19,40 +19,40 @@ import {
 //   protectEmail
 // } from "../utils/processHtml"
 
-import CollectionItem from "./references/CollectionItem";
-import PageReference from "./references/PageReference";
+import CollectionItem from './references/CollectionItem'
+import PageReference from './references/PageReference'
 
 class BlockReferences extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     // _json_ fields
-    this.optionsData = JSON.parse(props.block.options._json_);
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_));
+    this.optionsData = JSON.parse(props.block.options._json_)
+    this.styleData = mapStyle(JSON.parse(props.block.style._json_))
     // Colors
-    let { colorPalettes, colorCombo, hideCategories } = this.optionsData;
+    let { colorPalettes, colorCombo, hideCategories } = this.optionsData
     colorCombo = colorCombo
       ? props.colors[`${colorCombo}Combo`]
-      : props.colors.classicCombo;
-    colorPalettes = colorPalettes || props.colors.colorPalettes;
-    const newColors = props.colors.computeColors(colorPalettes, colorCombo);
-    this.colors = { ...props.colors, ...newColors };
+      : props.colors.classicCombo
+    colorPalettes = colorPalettes || props.colors.colorPalettes
+    const newColors = props.colors.computeColors(colorPalettes, colorCombo)
+    this.colors = { ...props.colors, ...newColors }
 
-    this.categories = [""];
+    this.categories = ['']
 
     if (hideCategories !== true) {
       props.block.references.forEach(reference => {
         reference.categories.forEach(cat => {
-          if (cat !== "" && _.indexOf(this.categories, cat) === -1) {
-            this.categories.push(cat);
+          if (cat !== '' && _.indexOf(this.categories, cat) === -1) {
+            this.categories.push(cat)
           }
-        });
-      });
-      this.categories = _.sortBy(this.categories);
+        })
+      })
+      this.categories = _.sortBy(this.categories)
     }
 
     this.state = {
-      selectedCategory: ""
-    };
+      selectedCategory: '',
+    }
   }
 
   render() {
@@ -60,35 +60,35 @@ class BlockReferences extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo
-    } = this.colors;
+      funkyContrastCombo,
+    } = this.colors
 
-    const block = this.props.block;
+    const block = this.props.block
     if (Object.keys(block).length < 1) {
-      return null;
+      return null
     }
-    const { node_locale } = block;
+    const { node_locale } = block
 
     const parentMaxWidth =
-      (this.props.passCSS && this.props.passCSS.maxWidth) || 1000;
+      (this.props.passCSS && this.props.passCSS.maxWidth) || 1000
 
     // let layout = gridLayout(this.optionsData, parentMaxWidth, block.references)
     const { layout, list } = addLayoutOptions(
       this.optionsData,
       parentMaxWidth,
-      block.references
-    );
+      block.references,
+    )
 
     const carouselDisplay =
-      this.optionsData.mode && this.optionsData.mode === `carousel`;
+      this.optionsData.mode && this.optionsData.mode === `carousel`
 
     const inner = list.map((column, key) => {
       // if (Object.keys(reference).length < 1) {
       //   return null
       // }
       // const itemStyle = listItemStyle(layout, key)
-      const itemStyle = column[0].itemStyle;
-      const imageStyle = column[0].imageStyle;
+      const itemStyle = column[0].itemStyle
+      const imageStyle = column[0].imageStyle
 
       const ColumnWrapper = props => (
         <div
@@ -99,7 +99,7 @@ class BlockReferences extends React.Component {
             display: `flex`,
             flexFlow: `column`,
             width: `100%`,
-            maxWidth: itemStyle.maxWidth
+            maxWidth: itemStyle.maxWidth,
             // "> div": {
             //   ...this.colors[classicCombo].style,
             //   ":hover": {
@@ -110,15 +110,15 @@ class BlockReferences extends React.Component {
         >
           {props.children}
         </div>
-      );
+      )
 
       return column.map((reference, key) => {
-        const { selectedCategory } = this.state;
+        const { selectedCategory } = this.state
         if (
           selectedCategory &&
           _.indexOf(reference.categories, selectedCategory) === -1
         ) {
-          return null;
+          return null
         }
         switch (reference.internal.type) {
           case `ContentfulCollectionItem`:
@@ -134,8 +134,8 @@ class BlockReferences extends React.Component {
                   passCSS={imageStyle}
                 />
               </ColumnWrapper>
-            );
-            break;
+            )
+            break
           case `ContentfulPage`:
             return (
               <ColumnWrapper>
@@ -149,11 +149,11 @@ class BlockReferences extends React.Component {
                   passCSS={imageStyle}
                 />
               </ColumnWrapper>
-            );
-            break;
+            )
+            break
           default:
         }
-      });
+      })
 
       // return (
       //   <div
@@ -165,9 +165,9 @@ class BlockReferences extends React.Component {
       //     {reference.id}
       //   </div>
       // )
-    });
+    })
 
-    const { id: htmlId, name: htmlName } = this.optionsData;
+    const { id: htmlId, name: htmlName } = this.optionsData
 
     return (
       <div
@@ -180,7 +180,7 @@ class BlockReferences extends React.Component {
           margin: `auto`,
           flexGrow: 1,
           display: `flex`,
-          flexFlow: `column`
+          flexFlow: `column`,
         }}
       >
         {this.categories.length > 1 && (
@@ -189,7 +189,7 @@ class BlockReferences extends React.Component {
             css={{
               display: `flex`,
               flexFlow: `row wrap`,
-              justifyContent: `center`
+              justifyContent: `center`,
             }}
           >
             {this.categories &&
@@ -197,39 +197,39 @@ class BlockReferences extends React.Component {
                 const combo =
                   this.state.selectedCategory === cat
                     ? funkyContrastCombo
-                    : funkyCombo;
+                    : funkyCombo
                 // const combo = funkyContrastCombo
-                let category = cat;
-                if (cat === "")
-                  switch (node_locale.split("-")[0]) {
-                    case "fr":
-                      category = "Tout";
-                      break;
-                    case "en":
-                      category = "All";
-                      break;
-                    case "nl":
-                      category = "Alles";
-                      break;
+                let category = cat
+                if (cat === '')
+                  switch (node_locale.split('-')[0]) {
+                    case 'fr':
+                      category = 'Tout'
+                      break
+                    case 'en':
+                      category = 'All'
+                      break
+                    case 'nl':
+                      category = 'Alles'
+                      break
                     default:
                   }
                 return (
                   <div
                     key={i}
                     onClick={() => {
-                      this.setState({ selectedCategory: cat });
+                      this.setState({ selectedCategory: cat })
                     }}
                     css={{
                       margin: `${rhythm(1 / 4)} ${rhythm(1 / 4)}`,
                       padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
                       cursor: `pointer`,
                       border: `solid 1px`,
-                      ...this.colors[combo].style
+                      ...this.colors[combo].style,
                     }}
                   >
                     {category}
                   </div>
-                );
+                )
               })}
           </div>
         )}
@@ -252,15 +252,15 @@ class BlockReferences extends React.Component {
             //   // margin: `auto`,
             //   padding: `${rhythm(1 / 2)} ${rhythm(1 / 8)}`
             // },
-            " .image": {
+            ' .image': {
               // height: `200px` // TODO: check if it does not scew up block references but wes posing problem for Testimonials
             },
-            " h3": {
-              marginTop: 0
+            ' h3': {
+              marginTop: 0,
             },
             ...this.props.passCSS,
             ...this.colors[classicCombo].style,
-            ...this.styleData
+            ...this.styleData,
             // " a.button:hover": {
             //   ...this.colors[funkyContrastCombo].style,
             //   borderColor: this.colors[classicCombo].border
@@ -270,11 +270,11 @@ class BlockReferences extends React.Component {
           {carouselDisplay ? <Carousel>{inner}</Carousel> : inner}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default BlockReferences;
+export default BlockReferences
 
 export const blockReferencesFragment = graphql`
   fragment BlockReferences on ContentfulBlockReferences {
@@ -289,12 +289,18 @@ export const blockReferencesFragment = graphql`
       ...PageReference
     }
     options {
-      _json_
+      # _json_
+      internal {
+        content
+      }
       # colorPalettes
       # colorCombo
     }
     style {
-      _json_
+      # _json_
+      internal {
+        content
+      }
     }
   }
-`;
+`

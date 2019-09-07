@@ -1,9 +1,12 @@
-require("dotenv").config();
+// require('dotenv').config({
+//   path: `.env.${process.env.NODE_ENV}`,
+// })
+require('dotenv').config()
 // const settings = require("./src/utils/siteSettings.json");
 
 module.exports = {
   siteMetadata: {
-    siteUrl: process.env.URL
+    siteUrl: process.env.URL,
   },
   plugins: [
     // {
@@ -14,11 +17,11 @@ module.exports = {
     //   },
     // },
     {
-      resolve: `gatsby-source-contentful-mod`,
+      resolve: `gatsby-source-contentful`,
       options: {
         spaceId: process.env.contentfulSpaceID,
-        accessToken: process.env.contentfulAccessToken
-      }
+        accessToken: process.env.contentfulAccessToken,
+      },
     },
     {
       resolve: `gatsby-plugin-nprogress`,
@@ -27,7 +30,7 @@ module.exports = {
         // color: `tomato`,
         // Disable the loading spinner.
         // showSpinner: false,
-      }
+      },
     },
     `gatsby-transformer-sharp`,
     {
@@ -59,32 +62,33 @@ module.exports = {
           // `gatsby-remark-autolink-headers`,
           `gatsby-remark-emoji`,
           {
-            resolve: "gatsby-remark-external-links"
+            resolve: 'gatsby-remark-external-links',
             // options: {
             //   target: "_blank",
             //   rel: "nofollow noopener noreferrer"
             // }
-          }
-        ]
-      }
+          },
+        ],
+      },
     },
     `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-glamor`,
+    'gatsby-plugin-emotion',
     `gatsby-plugin-sharp`,
     `gatsby-plugin-catch-links`,
     {
-      resolve: `gatsby-plugin-sitemap`
+      resolve: `gatsby-plugin-sitemap`,
     },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: process.env.analyticsTrackingId
-      }
+        trackingId: process.env.analyticsTrackingId,
+      },
     },
-    `toile-ignores`,
-    `toile-siteSettings`,
-    `toile-pages`,
-    `toile-customContentType`,
-    `gatsby-plugin-netlify`
-  ]
-};
+    // `toile-ignores`,
+    // `toile-siteSettings`,
+    // `toile-pages`,
+    // `toile-customContentType`,
+    'schema-modeling',
+    `gatsby-plugin-netlify`,
+  ],
+}
