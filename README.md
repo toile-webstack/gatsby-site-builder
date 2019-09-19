@@ -584,13 +584,13 @@ With a classic combo, the "neutral" color is used for the background, "primary" 
 
 Changing the combo provides an easy way of changing how the same colors are applied without having to define too many palettes.
 
-2 keywords are in use to invert colors and usage. The "contrast" keyword inverts the neutral and primary colors. The "funky" keyword inverts the primary and secundary colors. It means you have 4 combos at your disposal: "classic" (the default), "contrast", "funky" and "funkyContrast".
+2 keywords are in use to invert colors and usage. The "contrast" keyword inverts the neutral and primary colors. The "funky" keyword inverts the primary and secondary colors. It means you have 4 combos at your disposal: "classic" (the default), "contrast", "funky" and "funkyContrast".
 
 > Tip
 >
-> Define your palettes with a light "neutral", dark "primary" and colorful but contrasted "secundary". Then play with the combos if you want a dark or colorful background. It will make thinking about your colors easier.
+> Define your palettes with a light "neutral", dark "primary" and colorful but contrasted "secondary". Then play with the combos if you want a dark or colorful background. It will make thinking about your colors and changing palettes easier.
 
-#### A word of warning
+### Nesting (and a word of warning)
 
 Nested children are aware of their parent's combo. Whatever that combo is, it becomes the "classic" combo of the child...
 
