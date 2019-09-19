@@ -8,7 +8,7 @@
     "develop": "gatsby develop",
     "dev": "gatsby clean && gatsby develop",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "gatsby clean"
+    "clean": "rm -rf .cache public"
   },
   "repository": {
     "type": "git",

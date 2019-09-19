@@ -253,6 +253,9 @@ const options = {
       td: {
         borderBottom: `none`
       },
+      iframe: {
+        maxWidth: "100%"
+      },
       ...style
     };
   }
