@@ -132,6 +132,7 @@ class BlockGallery extends React.Component {
                     css={{
                       ...imageStyle,
                       display: "block",
+                      // cursor: `pointer`,
                       " .gatsby-image-wrapper": {
                         cursor: to ? `pointer` : "auto"
                       }
@@ -159,7 +160,7 @@ class BlockGallery extends React.Component {
                       className="image"
                       title={image.title}
                       sizes={image.responsiveSizes}
-                      css={{
+                      style={{
                         cursor: this.optionsData.popup ? `pointer` : `auto`
                       }}
                     />
