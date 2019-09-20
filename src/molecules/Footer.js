@@ -17,8 +17,9 @@ if (process.env.NODE_ENV === "development") {
   contact.email =
     contact.email || "alphonse.bertelan@ohlalongueadressemail.com";
   contact.facebook = contact.facebook || "monchat";
-  contact.linkedin = contact.linkedin || "http://www.linkedin.com/";
-  contact.instagram = contact.instagram || "http://www.instagram.com/";
+  contact.linkedin = contact.linkedin || "https://www.linkedin.com/";
+  contact.instagram = contact.instagram || "https://www.instagram.com/";
+  contact.twitter = contact.twitter || "https://twitter.com/";
 }
 
 let phone = null;

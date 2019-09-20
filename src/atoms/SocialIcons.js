@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
 import FaFacebookSquare from "react-icons/lib/fa/facebook-square";
 import FaLinkedinSquare from "react-icons/lib/fa/linkedin-square";
 import FaInstagram from "react-icons/lib/fa/instagram";
 import FaYoutubeSquare from "react-icons/lib/fa/youtube-square";
 import FaSoundcloud from "react-icons/lib/fa/soundcloud";
+import FaTwitterSquare from "react-icons/lib/fa/twitter-square";
 
 import IconBandcamp from "../atoms/bandcamp-button-circle-whiteblack-32.png";
 
@@ -16,6 +17,11 @@ export default ({ contact }) => (
         rel="me noopener"
       >
         <FaFacebookSquare />
+      </a>
+    )}
+    {contact.twitter && (
+      <a href={contact.twitter} target="_blank" rel="me noopener">
+        <FaTwitterSquare />
       </a>
     )}
     {contact.linkedin && (
@@ -44,4 +50,4 @@ export default ({ contact }) => (
       </a>
     )} */}
   </p>
-)
+);
