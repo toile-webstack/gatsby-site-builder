@@ -92,7 +92,7 @@ class DefaultLayout extends React.Component {
   updateState(props = this.props) {
     // TODO: Problem if a locale name happend to be in the page slug itself
     locales.forEach(locale => {
-      const re = new RegExp(locale, "gi");
+      const re = new RegExp(`/${locale}/`, "gi");
       if (props.location.pathname.match(re)) {
         this.setState({ currentLocale: locale });
       }

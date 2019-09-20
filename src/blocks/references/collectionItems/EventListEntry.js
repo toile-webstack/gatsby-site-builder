@@ -51,6 +51,8 @@ export default ({
   const { itemStyle: dateStyle } = childrenList[0][0];
   const { itemStyle } = childrenList[1][0];
 
+  console.log(image);
+
   const inner = [
     <div
       key="leftCol"
