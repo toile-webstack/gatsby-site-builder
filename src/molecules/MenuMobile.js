@@ -1,13 +1,13 @@
-import React from "react"
-import Link from "gatsby-link"
-import _ from "lodash"
+import React from "react";
+import Link from "gatsby-link";
+import _ from "lodash";
 
-import { rhythm, scale } from "../utils/typography"
-import colors from "../utils/colors"
+import { rhythm, scale } from "../utils/typography";
+import colors from "../utils/colors";
 
-import MenuLocale from "../atoms/MenuLocaleSideBySide"
-import MenuBurgerIcon from "../atoms/MenuBurgerIcon"
-import MenuDrawer from "../atoms/MenuDrawerTop"
+import MenuLocale from "../atoms/MenuLocaleSideBySide";
+import MenuBurgerIcon from "../atoms/MenuBurgerIcon";
+import MenuDrawer from "../atoms/MenuDrawerTop";
 
 // menu is like {
 //   en-BE: [
@@ -23,28 +23,28 @@ import MenuDrawer from "../atoms/MenuDrawerTop"
 class Menu extends React.Component {
   // PROPS: icon, name, menu, passCss, currentLocale
   constructor(props) {
-    super(props)
-    const colorCombo = colors.menuCombo
-    const newColors = colors.computeColors([1], colorCombo)
-    this.colors = { ...colors, ...newColors }
+    super(props);
+    const colorCombo = colors.menuCombo;
+    const newColors = colors.computeColors([1], colorCombo);
+    this.colors = { ...colors, ...newColors };
 
     this.state = {
       open: false
-    }
+    };
   }
 
   render() {
     // const locale = window.location.href.split("/")[3].substring(0, 2)
-    const { currentLocale } = this.props
-    const currentMenu = this.props.menu && this.props.menu[currentLocale]
-    const homepage = _.find(currentMenu, `homepage`)
-    const homepageLink = (homepage && homepage.path) || `/`
+    const { currentLocale } = this.props;
+    const currentMenu = this.props.menu && this.props.menu[currentLocale];
+    const homepage = _.find(currentMenu, `homepage`);
+    const homepageLink = (homepage && homepage.path) || `/`;
     const {
       classicCombo,
       contrastCombo,
       funkyCombo,
       funkyContrastCombo
-    } = this.colors
+    } = this.colors;
     // const locale =
     //   (currentLocale &&
     //     currentLocale.substring(0, 2).match(/fr|en/gi) &&
@@ -100,14 +100,13 @@ class Menu extends React.Component {
             </h4>
           </Link>
           <span css={{ flexGrow: 1 }} />
-          {this.props.menu &&
-          Object.keys(this.props.menu).length > 1 && (
+          {this.props.menu && Object.keys(this.props.menu).length > 1 && (
             <MenuLocale
               menu={this.props.menu}
               currentLocale={this.props.currentLocale}
               location={this.props.location}
               onClick={() => {
-                this.setState({ open: false })
+                this.setState({ open: false });
               }}
             />
           )}
@@ -116,7 +115,7 @@ class Menu extends React.Component {
               open={this.state.open}
               colors={this.colors}
               toggleOpen={() => {
-                this.setState({ open: !this.state.open })
+                this.setState({ open: !this.state.open });
               }}
             />
           )}
@@ -127,14 +126,14 @@ class Menu extends React.Component {
             open={this.state.open}
             colors={this.colors}
             close={() => {
-              this.setState({ open: false })
+              this.setState({ open: false });
             }}
           />
         )}
         {this.state.open && (
           <div
             onClick={() => {
-              this.setState({ open: false })
+              this.setState({ open: false });
             }}
             css={{
               position: `fixed`,
@@ -148,8 +147,8 @@ class Menu extends React.Component {
           />
         )}
       </div>
-    )
+    );
   }
 }
 
-export default Menu
+export default Menu;

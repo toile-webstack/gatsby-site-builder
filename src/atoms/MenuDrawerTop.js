@@ -1,7 +1,7 @@
-import React from "react"
-import Link from "gatsby-link"
+import React from "react";
+import Link from "gatsby-link";
 
-import { rhythm, scale } from "../utils/typography"
+import { rhythm, scale } from "../utils/typography";
 
 export default props => {
   const {
@@ -9,15 +9,16 @@ export default props => {
     contrastCombo,
     funkyCombo,
     funkyContrastCombo
-  } = props.colors
+  } = props.colors;
   return (
     <nav
       css={{
         ...props.colors[funkyCombo].style,
         position: `fixed`,
-        top: rhythm(1.8),
+        top: rhythm(1.7),
         right: rhythm(1),
         border: `solid 1px`,
+        borderTop: "none",
         listStyleType: `none`,
         margin: 0,
         // padding: `0 ${rhythm(1)}`,
@@ -42,7 +43,7 @@ export default props => {
             key={page.path}
             className="unstyledLink"
             onClick={() => {
-              props.close()
+              props.close();
             }}
             to={page.path}
           >
@@ -58,8 +59,8 @@ export default props => {
               {page.name}
             </li>
           </Link>
-        )
+        );
       })}
     </nav>
-  )
-}
+  );
+};
