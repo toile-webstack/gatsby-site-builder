@@ -6,7 +6,7 @@ exports.createSchemaCustomization = ({ actions }) => {
   // path: `typedefs.graphql`,
   // exclude: { types: [`TypeWeDontWant`] },
   //   }
-
+  //
   //   actions.printTypeDefinitions({})
-  actions.createTypes(fs.readFileSync(`schema.gql`, { encoding: `utf-8` }))
+  // actions.createTypes(fs.readFileSync(`schema.gql`, { encoding: `utf-8` }))
 }

@@ -1,18 +1,18 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import { StaticQuery, graphql } from 'gatsby'
 import Helmet from 'react-helmet'
 import _ from 'lodash'
 // Load font CSS
-import 'typeface-open-sans'
-import 'typeface-montserrat'
-import 'typeface-bellefair'
-import 'typeface-quicksand'
-import 'typeface-yanone-kaffeesatz'
-import 'typeface-dosis'
-import 'typeface-josefin-sans'
-import 'typeface-noto-sans'
-import 'typeface-raleway'
-import 'typeface-didact-gothic'
+// import 'typeface-open-sans'
+// import 'typeface-montserrat'
+// import 'typeface-bellefair'
+// import 'typeface-quicksand'
+// import 'typeface-yanone-kaffeesatz'
+// import 'typeface-dosis'
+// import 'typeface-josefin-sans'
+// import 'typeface-noto-sans'
+// import 'typeface-raleway'
+// import 'typeface-didact-gothic'
 
 // import * as themes from "./typography-themes"
 // importAll themes from
@@ -33,14 +33,15 @@ import {
   pages,
   menu,
 } from '../utils/siteSettings.json'
+import internalJson from '../utils/internalJson'
 
 import Menu from '../molecules/Menu'
 import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
-import ContactInfos from '../molecules/ContactInfos'
-import FooterFeed from '../molecules/FooterFeed'
+// import ContactInfos from '../molecules/ContactInfos'
+// import FooterFeed from '../molecules/FooterFeed'
 import Footer from '../molecules/Footer'
 import CookieAlert from '../atoms/CookieAlert'
-import Sidebar from '../molecules/Sidebar'
+// import Sidebar from '../molecules/Sidebar'
 
 // TODO: Handle Contact page differently
 // siteMapping.push({
@@ -54,12 +55,9 @@ class DefaultLayout extends React.Component {
     super(props)
     // _json_ fields
     // this.metadata = JSON.parse(props.data.contentfulPage.metadata._json_)
-    this.optionsData = JSON.parse(
-      props.data.settings.edges[0].node.options._json_,
-    )
-    this.styleData = mapStyle(
-      JSON.parse(props.data.settings.edges[0].node.style._json_),
-    )
+    const { options, style } = props.data.settings.edges[0].node
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
     // menu is like {
     //   en-BE: [
     //     {name: 'Homepage', path: '/en-BE/'},
@@ -73,14 +71,16 @@ class DefaultLayout extends React.Component {
     this.landingRE = new RegExp(/\/landing\//)
 
     this.state = {
-      defaultLocale: defaultLocale,
+      defaultLocale,
       currentLocale: defaultLocale,
       isLandingPage: Boolean(props.location.pathname.match(this.landingRE)),
     }
   }
-  componentWillMount() {
+
+  componentDidMount() {
     this.updateState()
   }
+
   componentWillReceiveProps(nextProps) {
     this.updateState(nextProps)
     if (nextProps.location.pathname !== this.props.location.pathname) {
@@ -89,6 +89,7 @@ class DefaultLayout extends React.Component {
       })
     }
   }
+
   updateState(props = this.props) {
     // TODO: Problem if a locale name happend to be in the page slug itself
     locales.forEach(locale => {
@@ -98,6 +99,7 @@ class DefaultLayout extends React.Component {
       }
     })
   }
+
   render() {
     const { isLandingPage } = this.state
     const { footer, cookieAlert, settings } = this.props.data
@@ -250,7 +252,7 @@ class DefaultLayout extends React.Component {
               },
             }}
           >
-            {this.props.children()}
+            {this.props.children}
           </main>
         </div>
         {isLandingPage ? null : <Footer section={footer} />}
@@ -260,10 +262,8 @@ class DefaultLayout extends React.Component {
   }
 }
 
-export default DefaultLayout
-
 // TODO: query for global styles and options in settings
-export const pageQuery = graphql`
+const QUERY = graphql`
   query IndexLayout {
     settings: allContentfulSettings(limit: 2) {
       edges {
@@ -349,3 +349,10 @@ export const pageQuery = graphql`
     }
   }
 `
+
+export default props => (
+  <StaticQuery
+    query={QUERY}
+    render={data => <DefaultLayout {...{ ...props, data }} />}
+  />
+)

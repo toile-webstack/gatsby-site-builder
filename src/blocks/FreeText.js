@@ -1,17 +1,20 @@
 import React from 'react'
+import { graphql } from 'gatsby'
 
 import { mapStyle } from '../utils/processCss'
 import { rhythm, scale } from '../utils/typography'
 // import colors from "../utils/colors"
+import internalJson from '../utils/internalJson'
 
 import Html from '../atoms/Html'
 
 class BlockFreeText extends React.Component {
   constructor(props) {
     super(props)
-    // _json_ fields
-    this.optionsData = JSON.parse(props.block.options._json_)
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_))
+    // internal.content fields
+    const { options, style } = props.block
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData
     this.isColored = !!colorPalettes || !!colorCombo
@@ -94,7 +97,6 @@ export const blockFreeTextFragment = graphql`
       }
     }
     options {
-      # _json_
       internal {
         content
       }
@@ -102,7 +104,6 @@ export const blockFreeTextFragment = graphql`
       # colorCombo
     }
     style {
-      # _json_
       internal {
         content
       }

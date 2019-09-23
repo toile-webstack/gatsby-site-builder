@@ -1,11 +1,11 @@
-const _ = require(`lodash`);
-const Promise = require(`bluebird`);
-const path = require(`path`);
-const parseFilepath = require(`parse-filepath`);
-const fs = require(`fs-extra`);
-const slash = require(`slash`);
-const slugify = require("slugify");
-const { createPath } = require(`../../utils/utils.js`);
+const _ = require(`lodash`)
+const Promise = require(`bluebird`)
+const path = require(`path`)
+// const parseFilepath = require(`parse-filepath`);
+// const fs = require(`fs-extra`);
+const slash = require(`slash`)
+// const slugify = require("slugify");
+const { createPath } = require(`../../utils/utils.js`)
 // const {
 //   GraphQLObjectType,
 //   GraphQLList,
@@ -103,51 +103,48 @@ const { createPath } = require(`../../utils/utils.js`);
 //   // MarkdownRemark
 // }
 
-exports.onCreateNode = ({ node, boundActionCreators }) => {
-  const { createNode, createNodeField } = boundActionCreators;
+exports.onCreateNode = ({ node, actions }) => {
+  const { createNodeField } = actions
   // Add menuName field to contentfulPages
   if (node.internal.type.match(/ContentfulCollectionItem/)) {
-    const locale = node.node_locale.split("-")[0];
-    const path = createPath(`${node.type}/${node.name}`);
-    const shortPath = `/${path}/`;
-    const localizedPath = `/${locale}/${path}/`;
-    const metadata = JSON.parse(node.metadata._json_);
-    const menuName = metadata.name || node.name || ``;
+    const locale = node.node_locale.split('-')[0]
+    const nodePath = createPath(`${node.type}/${node.name}`)
+    const shortPath = `/${nodePath}/`
+    const localizedPath = `/${locale}/${nodePath}/`
+    const metadata =
+      (node.metadata && JSON.parse(node.metadata.internal.content)) || {}
+    const menuName = metadata.name || node.name || ``
 
     createNodeField({
       node,
       name: `menuName`,
-      value: menuName
-    });
+      value: menuName,
+    })
     createNodeField({
       node,
       name: `shortPath`,
-      value: shortPath
-    });
+      value: shortPath,
+    })
     createNodeField({
       node,
       name: `localizedPath`,
-      value: localizedPath
-    });
+      value: localizedPath,
+    })
     createNodeField({
       node,
       name: `locale`,
-      value: locale
-    });
+      value: locale,
+    })
   }
-};
+}
 
 // CREATE PAGES for collection items
 exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage } = boundActionCreators;
+  const { createPage } = boundActionCreators
   return new Promise((resolve, reject) => {
-    const pageTemplate = path.resolve(`src/templates/template-page.js`);
-    const listPageTemplate = path.resolve(
-      `src/templates/template-list-page.js`
-    );
-    const itemPageTemplate = path.resolve(
-      `src/templates/template-item-page.js`
-    );
+    // const pageTemplate = path.resolve(`src/templates/template-page.js`)
+    // const listPageTemplate = path.resolve(`src/templates/template-list-page.js`)
+    const itemPageTemplate = path.resolve(`src/templates/template-item-page.js`)
     resolve(
       graphql(
         `
@@ -178,61 +175,63 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
                     locale
                   }
                   options {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   node_locale
                 }
               }
             }
           }
-        `
+        `,
       ).then(result => {
         if (result.errors) {
-          reject(result.errors);
+          reject(result.errors)
         }
 
         if (
-          typeof result.data === "undefined" ||
-          typeof result.data.collectionItems === "undefined" ||
+          typeof result.data === 'undefined' ||
+          typeof result.data.collectionItems === 'undefined' ||
           !result.data.collectionItems
         ) {
-          console.log("PROBLEM WITH customContentType QUERY");
-          return;
+          console.log('PROBLEM WITH customContentType QUERY')
+          return
         }
-        console.log("customContentType QUERY SUCCESSFUL");
+        console.log('customContentType QUERY SUCCESSFUL')
 
         const defaultLocale =
-          result.data.locales.edges[0].node.fields.defaultLocale;
+          result.data.locales.edges[0].node.fields.defaultLocale
         const locales = result.data.locales.edges.map(({ node }) => {
-          return node.fields.locale;
-        });
+          return node.fields.locale
+        })
 
         result.data.collectionItems.edges.forEach(({ node }) => {
-          const collectionItem = node;
+          const collectionItem = node
           const {
             menuName,
             shortPath,
             localizedPath,
-            locale
-          } = collectionItem.fields;
-          const path = locales.length === 1 ? shortPath : localizedPath;
-          // const options = JSON.parse(collectionItem.options._json_)
+            locale,
+          } = collectionItem.fields
+          const selectedPath = locales.length === 1 ? shortPath : localizedPath
+          // const options = JSON.parse(collectionItem.options.internal.content)
           // TODO: 'Master' option to determine styles and options for the whole collection
-          const pageContext = { id: collectionItem.id };
-          const pageComponent = slash(itemPageTemplate);
+          const pageContext = { id: collectionItem.id }
+          const pageComponent = slash(itemPageTemplate)
 
           createPage({
-            path, // required
+            path: selectedPath, // required
             component: pageComponent,
             menuName,
             locale,
             defaultLocale,
-            context: pageContext
-          });
-        });
+            context: pageContext,
+          })
+        })
 
-        return;
-      })
-    );
-  });
-};
+        // return
+      }),
+    )
+  })
+}

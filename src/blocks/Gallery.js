@@ -14,6 +14,7 @@ import {
 //   withSimpleLineBreaks,
 //   protectEmail
 // } from "../utils/processHtml"
+import internalJson from '../utils/internalJson'
 
 import Modal from '../atoms/Modal'
 import Link from '../atoms/Link'
@@ -22,14 +23,12 @@ class BlockGallery extends React.Component {
   constructor(props) {
     super(props)
     // _json_ fields
-    this.optionsData = props.block.options
-    this.optionsData = this.optionsData._json_
-      ? JSON.parse(props.block.options._json_)
-      : this.optionsData
-    this.styleData = props.block.style
-    this.styleData = this.styleData._json_
-      ? mapStyle(JSON.parse(props.block.style._json_))
-      : this.styleData
+    const { options, style } = props.block
+    this.optionsData = internalJson(options)
+    this.styleData =
+      style && style.internal && style.internal.content
+        ? mapStyle(internalJson(style))
+        : this.styleData
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData
     this.isColored = !!colorPalettes || !!colorCombo
@@ -85,8 +84,7 @@ class BlockGallery extends React.Component {
           padding: rhythm(1),
           display: `flex`,
           flexFlow: `row wrap`,
-          justifyContent: `space-around`,
-          justifyContent: `space-evenly`,
+          justifyContent: [`space-around`, `space-evenly`],
           alignItems: layout.align || `baseline`,
           width: `100%`,
           maxWidth: `1000px`,
@@ -151,14 +149,14 @@ class BlockGallery extends React.Component {
                         <Img
                           className="image"
                           title={image.title}
-                          sizes={image.responsiveSizes}
+                          fluid={image.fluid}
                         />
                       </Modal>
                     ) : null}
                     <Img
                       className="image"
                       title={image.title}
-                      sizes={image.responsiveSizes}
+                      sizes={image.fluid}
                       css={{
                         cursor: this.optionsData.popup ? `pointer` : `auto`,
                       }}
@@ -199,7 +197,6 @@ export const blockGalleryFragment = graphql`
       }
     }
     options {
-      # _json_
       internal {
         content
       }
@@ -207,7 +204,6 @@ export const blockGalleryFragment = graphql`
       # colorCombo
     }
     style {
-      # _json_
       internal {
         content
       }

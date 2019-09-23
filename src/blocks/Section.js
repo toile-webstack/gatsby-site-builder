@@ -1,4 +1,5 @@
 import React from 'react'
+import { graphql } from 'gatsby'
 import Helmet from 'react-helmet'
 
 import { mapStyle } from '../utils/processCss'
@@ -8,6 +9,7 @@ import {
   gridLayout,
   listItemStyle,
 } from '../utils/computeGrid'
+import internalJson from '../utils/internalJson'
 
 import BlockFreeText from './FreeText'
 import BlockForm from './Form'
@@ -18,8 +20,9 @@ class Section extends React.Component {
   constructor(props) {
     super(props)
     // _json_ fields
-    this.optionsData = JSON.parse(props.block.options._json_)
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_))
+    const { options, style } = props.block
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData
     this.isColored = !!colorPalettes || !!colorCombo
@@ -193,13 +196,11 @@ export const sectionFragment = graphql`
       ...BlockReferences
     }
     options {
-      # _json_
       internal {
         content
       }
     }
     style {
-      # _json_
       internal {
         content
       }

@@ -1,34 +1,36 @@
 const _ = require(`lodash`)
 const Promise = require(`bluebird`)
 const path = require(`path`)
-const parseFilepath = require(`parse-filepath`)
-const fs = require(`fs-extra`)
+// const parseFilepath = require(`parse-filepath`)
+// const fs = require(`fs-extra`)
 const slash = require(`slash`)
-const slugify = require("slugify")
+// const slugify = require("slugify")
 const { createPath } = require(`../../utils/utils.js`)
 
-function camelize(str) {
-  return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
-      return index == 0 ? letter.toLowerCase() : letter.toUpperCase()
-    })
-    .replace(/\s+/g, "")
-}
-// TODO: si / dans nom, menuName is the last part
-exports.onCreateNode = ({ node, boundActionCreators }) => {
-  const { createNode, createNodeField } = boundActionCreators
+// function camelize(str) {
+//   return str
+//     .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+//       return index == 0 ? letter.toLowerCase() : letter.toUpperCase()
+//     })
+//     .replace(/\s+/g, "")
+// }
+
+// TODO: if / in name, menuName is the last part
+exports.onCreateNode = ({ node, actions }) => {
+  const { createNode, createNodeField } = actions
   // Add menuName field to contentfulPages
   if (node.internal.type.match(/ContentfulPage/)) {
-    const locale = node.node_locale.split("-")[0]
+    const locale = node.node_locale.split('-')[0]
     // console.log(node)
-    const path = createPath(node.path)
-    const shortPath = node.path === `index` ? `/` : `/${path}/`
+    const nodePath = createPath(node.path)
+    const shortPath = node.path === `index` ? `/` : `/${nodePath}/`
     const localizedPath =
-      node.path === `index` ? `/${locale}/` : `/${locale}/${path}/`
-    const metadata = JSON.parse(node.metadata._json_)
+      node.path === `index` ? `/${locale}/` : `/${locale}/${nodePath}/`
+    const metadata =
+      (node.metadata && JSON.parse(node.metadata.internal.content)) || {}
     // to account for pages created with subpaths
     const childLevel = node.path.split(`/`).length - 1
-    const menuName = metadata.name || node.path.split("/")[childLevel] || ``
+    const menuName = metadata.name || node.path.split('/')[childLevel] || ``
 
     createNodeField({
       node,
@@ -54,34 +56,34 @@ exports.onCreateNode = ({ node, boundActionCreators }) => {
 
   // Add fields to sitePages
   if (node.internal.type.match(/SitePage/)) {
-    const { menuName, locale, defaultLocale, path } = node
+    const { menuName, locale, defaultLocale, path: sitePagePath } = node
 
     createNodeField({
       node,
       name: `menuName`,
-      value: menuName || "",
+      value: menuName || '',
     })
     createNodeField({
       node,
       name: `locale`,
-      value: locale || "",
+      value: locale || '',
     })
     createNodeField({
       node,
       name: `defaultLocale`,
-      value: defaultLocale || "",
+      value: defaultLocale || '',
     })
     createNodeField({
       node,
       name: `fullPath`,
-      value: path,
+      value: sitePagePath,
     })
   }
 }
 
 // CREATE NORMAL PAGES
-exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage, createRedirect } = boundActionCreators
+exports.createPages = ({ graphql, actions }) => {
+  const { createPage, createRedirect } = actions
   return new Promise((resolve, reject) => {
     const pageTemplate = path.resolve(`src/templates/template-page.js`)
     resolve(
@@ -108,7 +110,9 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
                   path
                   node_locale
                   metadata {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   fields {
                     menuName
@@ -126,10 +130,10 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
           reject(result.errors)
         }
         if (!result.data || !result.data.contentfulPages) {
-          console.log("PROBLEM WITH pages QUERY")
+          console.log('PROBLEM WITH pages QUERY')
           return
         }
-        console.log("pages QUERY SUCCESSFUL")
+        console.log('pages QUERY SUCCESSFUL')
 
         const defaultLocale =
           result.data.locales.edges[0].node.fields.defaultLocale
@@ -145,13 +149,13 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
             localizedPath,
             locale,
           } = contentfulPage.fields
-          const path = locales.length === 1 ? shortPath : localizedPath
+          const chosenPath = locales.length === 1 ? shortPath : localizedPath
 
           const pageContext = { id: contentfulPage.id }
           const pageComponent = slash(pageTemplate)
 
           createPage({
-            path, // required
+            path: chosenPath, // required
             component: pageComponent,
             menuName,
             locale,
@@ -166,7 +170,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
             contentfulPage.path === `index`
           ) {
             createRedirect({
-              fromPath: "/",
+              fromPath: '/',
               toPath: `/${defaultLocale}/`,
               isPermanent: true,
               redirectInBrowser: true,
@@ -185,7 +189,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
           }
         })
 
-        return
+        // return
       }),
     )
   })

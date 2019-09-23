@@ -1,7 +1,6 @@
 import React from 'react'
-import Img from 'gatsby-image'
+import { graphql } from 'gatsby'
 import _ from 'lodash'
-import MdClose from 'react-icons/lib/md/close'
 
 import Carousel from '../atoms/Carousel'
 
@@ -18,6 +17,7 @@ import {
 //   withSimpleLineBreaks,
 //   protectEmail
 // } from "../utils/processHtml"
+import internalJson from '../utils/internalJson'
 
 import CollectionItem from './references/CollectionItem'
 import PageReference from './references/PageReference'
@@ -26,8 +26,9 @@ class BlockReferences extends React.Component {
   constructor(props) {
     super(props)
     // _json_ fields
-    this.optionsData = JSON.parse(props.block.options._json_)
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_))
+    const { options, style } = props.block
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
     // Colors
     let { colorPalettes, colorCombo, hideCategories } = this.optionsData
     colorCombo = colorCombo
@@ -41,6 +42,7 @@ class BlockReferences extends React.Component {
 
     if (hideCategories !== true) {
       props.block.references.forEach(reference => {
+        console.log(reference)
         reference.categories.forEach(cat => {
           if (cat !== '' && _.indexOf(this.categories, cat) === -1) {
             this.categories.push(cat)
@@ -289,7 +291,6 @@ export const blockReferencesFragment = graphql`
       ...PageReference
     }
     options {
-      # _json_
       internal {
         content
       }
@@ -297,7 +298,6 @@ export const blockReferencesFragment = graphql`
       # colorCombo
     }
     style {
-      # _json_
       internal {
         content
       }

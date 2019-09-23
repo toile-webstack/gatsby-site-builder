@@ -18,6 +18,7 @@
     "import/no-extraneous-dependencies": "off",
     "react/jsx-filename-extension": "off",
     "jsx-a11y/anchor-is-valid": "off",
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "react/jsx-props-no-spreading": 0
   }
 }

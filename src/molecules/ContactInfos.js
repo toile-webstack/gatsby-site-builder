@@ -1,9 +1,7 @@
-import React from "react"
-import { rhythm, scale } from "../utils/typography"
-import { contact } from "../utils/siteSettings.json"
-import FaFacebookSquare from "react-icons/lib/fa/facebook-square"
-import FaLinkedinSquare from "react-icons/lib/fa/linkedin-square"
-import FaInstagram from "react-icons/lib/fa/instagram"
+import React from 'react'
+import { FaFacebookSquare, FaLinkedin, FaInstagram } from 'react-icons/fa'
+import { rhythm, scale } from '../utils/typography'
+import { contact } from '../utils/siteSettings.json'
 
 export default () => {
   let phone = null
@@ -28,54 +26,56 @@ export default () => {
         margin: `auto`,
         display: `flex`,
         flexFlow: `column`,
-        "> div": {
+        '> div': {
           display: `flex`,
           flexFlow: `row wrap`,
           justifyContent: `center`,
-          " > *": {
-            margin: `0 5px`
-          }
-        }
+          ' > *': {
+            margin: `0 5px`,
+          },
+        },
       }}
     >
-      {contact.name &&
+      {contact.name && (
         <div
           css={{
-            fontWeight: `bold`
+            fontWeight: `bold`,
           }}
         >
           {contact.name}
-        </div>}
+        </div>
+      )}
       <div>
         {phone}
-        <span>
-          {email && phone && " • "}
-        </span>
+        <span>{email && phone && ' • '}</span>
         {email}
       </div>
       <div
         css={{
           ...scale(0.2),
-          "> a": {
-            textDecoration: `none`
-          }
+          '> a': {
+            textDecoration: `none`,
+          },
         }}
       >
-        {contact.facebook &&
+        {contact.facebook && (
           <a
             href={`https://www.facebook.com/${contact.facebook}/`}
             target="_blank"
           >
             <FaFacebookSquare />
-          </a>}
-        {contact.linkedin &&
+          </a>
+        )}
+        {contact.linkedin && (
           <a href={contact.linkedin} target="_blank">
-            <FaLinkedinSquare />
-          </a>}
-        {contact.instagram &&
+            <FaLinkedin />
+          </a>
+        )}
+        {contact.instagram && (
           <a href={contact.instagram} target="_blank">
             <FaInstagram />
-          </a>}
+          </a>
+        )}
       </div>
     </div>
   )

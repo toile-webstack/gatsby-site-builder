@@ -1,7 +1,7 @@
-import React from "react"
-import MdClose from "react-icons/lib/md/close"
+import React from 'react'
+import { MdClose } from 'react-icons/md'
 
-import { rhythm, scale } from "../utils/typography"
+import { rhythm, scale } from '../utils/typography'
 
 export default props => {
   return (
@@ -25,7 +25,7 @@ export default props => {
         alignItems: `center`,
         zIndex: 100,
         cursor: `pointer`,
-        "> div": {
+        '> div': {
           position: `relative`,
           backgroundColor: `inherit`,
           width: `80vw`,
@@ -36,7 +36,7 @@ export default props => {
           cursor: `auto`,
           backgroundColor: `rgb(255, 255, 255)`,
         },
-        " .image, img": {
+        ' .image, img': {
           // width: `auto`,
           maxWidth: `75vw`,
           height: `auto`,
@@ -64,7 +64,7 @@ export default props => {
             fontSize: rhythm(2),
             textAlign: `right`,
             cursor: `pointer`,
-            ":hover": {
+            ':hover': {
               // color: props.colors[props.colors.classicCombo].linkHover
             },
           }}

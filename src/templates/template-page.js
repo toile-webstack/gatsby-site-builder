@@ -6,7 +6,9 @@ import { mapStyle } from '../utils/processCss'
 import { metadata as siteMetadata } from '../utils/siteSettings.json'
 import { rhythm, scale } from '../utils/typography'
 import colors from '../utils/colors'
+import internalJson from '../utils/internalJson'
 
+import Layout from '../layouts'
 import BlockFreeText from '../blocks/FreeText'
 import BlockForm from '../blocks/Form'
 import BlockGallery from '../blocks/Gallery'
@@ -77,17 +79,14 @@ const randomNumber = () => Math.round(Math.random() * 10000)
 class PageTemplate extends React.Component {
   constructor(props) {
     super(props)
+    const { metadata, options, style } = props.data.contentfulPage
     if (!props.data) return
     // _json_ fields
     // this.metadata = JSON.parse(props.data.contentfulPage.metadata._json_)
-    this.metadata = JSON.parse(
-      props.data.contentfulPage.metadata.internal.content,
-    )
-    console.log(this.metadata)
-    this.optionsData = JSON.parse(props.data.contentfulPage.options._json_)
-    this.styleData = mapStyle(
-      JSON.parse(props.data.contentfulPage.style._json_),
-    )
+    this.metadata = internalJson(metadata)
+
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData
     colorCombo = colorCombo ? colors[`${colorCombo}Combo`] : colors.classicCombo
@@ -113,146 +112,148 @@ class PageTemplate extends React.Component {
     const isSSR = typeof window === 'undefined'
 
     return (
-      <div
-        className="page"
-        css={{
-          ...this.colors[classicCombo].style,
-          ...this.styleData,
-        }}
-      >
-        <Helmet>
-          <html lang={page.node_locale} />
-          {metadata.title && <title>{metadata.title}</title>}
-          {metadata.title && (
-            <meta
-              property="og:title"
-              content={`${metadata.title} | ${siteMetadata.name}`}
-            />
-          )}
-          {metadata.description && (
-            <meta name="description" content={metadata.description} />
-          )}
-          {metadata.description && (
-            <meta property="og:description" content={metadata.description} />
-          )}
-          {this.props.location && (
-            <link
-              rel="canonical"
-              href={siteMetadata.url + this.props.location.pathname}
-            />
-          )}
-          {this.props.location && (
-            <meta
-              property="og:url"
-              content={siteMetadata.url + this.props.location.pathname}
-            />
-          )
-          // IDEA: use fullPath in sitePage fields for canonical url
-          }
-          {// Object type: https://developers.facebook.com/docs/reference/opengraph#object-type
-          metadata.ogType && (
-            <meta property="og:type" content={metadata.ogType} />
-          )}
-          {scripts &&
-            !isSSR &&
-            scripts.map(
-              ({
-                id,
-                name,
-                type = 'text/javascript',
-                content: { content },
-                // charset, // src,
-                ...srcAndCharset
-              }) => {
-                const scriptProps = {
-                  // id: name,
-                  id: `${page.path}-${name}-${randomNumber()}`,
-                  type,
-                }
-                Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                  if (a) scriptProps[attr] = a
-                })
-                return (
-                  <script
-                    // defer
-                    async
-                    {...{
-                      key: id,
-                      ...scriptProps,
-                    }}
-                  >
-                    {`${content}`}
-                  </script>
-                )
-              },
+      <Layout location={this.props.location}>
+        <div
+          className="page"
+          css={{
+            ...this.colors[classicCombo].style,
+            ...this.styleData,
+          }}
+        >
+          <Helmet>
+            <html lang={page.node_locale} />
+            {metadata.title && <title>{metadata.title}</title>}
+            {metadata.title && (
+              <meta
+                property="og:title"
+                content={`${metadata.title} | ${siteMetadata.name}`}
+              />
             )}
-        </Helmet>
-
-        {page.blocks &&
-          page.blocks.map((block, i) => {
-            if (Object.keys(block).length < 1) {
-              return null
+            {metadata.description && (
+              <meta name="description" content={metadata.description} />
+            )}
+            {metadata.description && (
+              <meta property="og:description" content={metadata.description} />
+            )}
+            {this.props.location && (
+              <link
+                rel="canonical"
+                href={siteMetadata.url + this.props.location.pathname}
+              />
+            )}
+            {this.props.location && (
+              <meta
+                property="og:url"
+                content={siteMetadata.url + this.props.location.pathname}
+              />
+            )
+            // IDEA: use fullPath in sitePage fields for canonical url
             }
+            {// Object type: https://developers.facebook.com/docs/reference/opengraph#object-type
+            metadata.ogType && (
+              <meta property="og:type" content={metadata.ogType} />
+            )}
+            {scripts &&
+              !isSSR &&
+              scripts.map(
+                ({
+                  id,
+                  name,
+                  type = 'text/javascript',
+                  content: { content },
+                  // charset, // src,
+                  ...srcAndCharset
+                }) => {
+                  const scriptProps = {
+                    // id: name,
+                    id: `${page.path}-${name}-${randomNumber()}`,
+                    type,
+                  }
+                  Object.entries(srcAndCharset).forEach(([attr, a]) => {
+                    if (a) scriptProps[attr] = a
+                  })
+                  return (
+                    <script
+                      // defer
+                      async
+                      {...{
+                        key: id,
+                        ...scriptProps,
+                      }}
+                    >
+                      {`${content}`}
+                    </script>
+                  )
+                },
+              )}
+          </Helmet>
 
-            switch (block.internal.type) {
-              case `ContentfulSection`:
-                return (
-                  <Section
-                    key={i}
-                    block={block}
-                    // customContentTypeList={this.props.data.customContentType}
-                    colors={this.colors}
-                    location={this.props.location}
-                  />
-                )
-                break
-              case `ContentfulBlockFreeText`:
-                return (
-                  <BlockFreeText
-                    key={block.id || i}
-                    block={block}
-                    colors={this.colors}
-                    location={this.props.location}
-                  />
-                )
-                break
-              case `ContentfulBlockForm`:
-                return (
-                  <BlockForm
-                    key={block.id || i}
-                    block={block}
-                    colors={this.colors}
-                    location={this.props.location}
-                  />
-                )
-                break
-              case `ContentfulBlockGallery`:
-                return (
-                  <BlockGallery
-                    key={block.id || i}
-                    block={block}
-                    colors={this.colors}
-                    location={this.props.location}
-                  />
-                )
-                break
-              case `ContentfulBlockReferences`:
-                return (
-                  <BlockReferences
-                    key={block.id || i}
-                    block={block}
-                    colors={this.colors}
-                    location={this.props.location}
-                  />
-                )
-                break
-              default:
-            }
-          })}
+          {page.blocks &&
+            page.blocks.map((block, i) => {
+              if (Object.keys(block).length < 1) {
+                return null
+              }
 
-        {/* {scripts &&
+              switch (block.internal.type) {
+                case `ContentfulSection`:
+                  return (
+                    <Section
+                      key={i}
+                      block={block}
+                      // customContentTypeList={this.props.data.customContentType}
+                      colors={this.colors}
+                      location={this.props.location}
+                    />
+                  )
+                  break
+                case `ContentfulBlockFreeText`:
+                  return (
+                    <BlockFreeText
+                      key={block.id || i}
+                      block={block}
+                      colors={this.colors}
+                      location={this.props.location}
+                    />
+                  )
+                  break
+                case `ContentfulBlockForm`:
+                  return (
+                    <BlockForm
+                      key={block.id || i}
+                      block={block}
+                      colors={this.colors}
+                      location={this.props.location}
+                    />
+                  )
+                  break
+                case `ContentfulBlockGallery`:
+                  return (
+                    <BlockGallery
+                      key={block.id || i}
+                      block={block}
+                      colors={this.colors}
+                      location={this.props.location}
+                    />
+                  )
+                  break
+                case `ContentfulBlockReferences`:
+                  return (
+                    <BlockReferences
+                      key={block.id || i}
+                      block={block}
+                      colors={this.colors}
+                      location={this.props.location}
+                    />
+                  )
+                  break
+                default:
+              }
+            })}
+
+          {/* {scripts &&
           scripts.map(script => <Script {...{ key: script.id, script }} />)} */}
-      </div>
+        </div>
+      </Layout>
     )
   }
 }
@@ -266,7 +267,6 @@ export const pageQuery = graphql`
       node_locale
       path
       metadata {
-        # _json_
         internal {
           content
         }
@@ -282,7 +282,6 @@ export const pageQuery = graphql`
         ...Section
       }
       options {
-        # _json_
         internal {
           content
         }
@@ -290,7 +289,6 @@ export const pageQuery = graphql`
         # colorCombo
       }
       style {
-        # _json_
         internal {
           content
         }

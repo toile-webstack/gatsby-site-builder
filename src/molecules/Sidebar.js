@@ -1,12 +1,11 @@
-import React from "react"
-import FaFacebookSquare from "react-icons/lib/fa/facebook-square"
-import FaInstagram from "react-icons/lib/fa/instagram"
-import FaYoutubeSquare from "react-icons/lib/fa/youtube-square"
-import typography, { rhythm, scale } from "../utils/typography"
-import colors from "../utils/colors"
-import { metadata, contact } from "../utils/siteSettings.json"
+import React from 'react'
+import { FaFacebookSquare, FaInstagram, FaYoutubeSquare } from 'react-icons/fa'
 
-import Section from "../blocks/Section"
+import typography, { rhythm, scale } from '../utils/typography'
+import colors from '../utils/colors'
+import { metadata, contact } from '../utils/siteSettings.json'
+
+import Section from '../blocks/Section'
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -30,12 +29,12 @@ class Sidebar extends React.Component {
         css={{
           ...colors[classicCombo].style,
           width: `100%`,
-          "> .section": {
+          '> .section': {
             paddingBottom: 0,
-            "> div": {
+            '> div': {
               padding: 0,
-              " .blockGallery": {
-                "> .column": {
+              ' .blockGallery': {
+                '> .column': {
                   maxWidth: 250,
                 },
               },
