@@ -25,10 +25,8 @@ class BlockGallery extends React.Component {
     // _json_ fields
     const { options, style } = props.block
     this.optionsData = internalJson(options)
-    this.styleData =
-      style && style.internal && style.internal.content
-        ? mapStyle(internalJson(style))
-        : this.styleData
+    this.styleData = mapStyle(internalJson(style))
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData
     this.isColored = !!colorPalettes || !!colorCombo
