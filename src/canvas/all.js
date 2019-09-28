@@ -1,6 +1,71 @@
 import React from 'react'
-import { Stack } from '../../libs/layout-primitives'
+import { For } from 'react-loops'
+
+import { Stack, Sidebar, Switcher } from '../../libs/layout-primitives'
 import { rhythm, scale } from '../utils/typography'
+
+// A View associates data with a layout definition
+export const View = ({ data, layout }) => {
+  return null
+}
+
+// It can represent a full page, a simple block of text, a button, ...
+// The data structure it can receive is fixed but it can be mapped
+// anyhow through a markup definition
+export const LayoutUniversal = ({
+  // The markup below is a default Layout definition but other markups could be
+  // provided to arrange a layout in another way
+  // markup,
+  children,
+  menu,
+  header,
+  main,
+  aside,
+  asides,
+  //
+  logo,
+  shortName,
+  links,
+  langs, // ???
+  featuredImage,
+  heading,
+  introduction,
+}) => {
+  // const {logo, text, links, langs} = menu
+  return (
+    <Stack>
+      <Menu {...{ logo, shortName, links, langs }} />
+      <Header {...{ featuredImage, heading, introduction }} />
+      <Sidebar>
+        <Main {...main}>
+          <For of={sections}>
+            {section => (
+              <Section>
+                <For of={columns}>
+                  {column => (
+                    <Column>
+                      <For of={blocks}>{block => <Block />}</For>
+                    </Column>
+                  )}
+                </For>
+              </Section>
+            )}
+          </For>
+        </Main>
+        <Aside {...aside}>
+          <For of={asides}>
+            {layout => (
+              <LayoutUniversal>
+                A layout with its dta and definition
+              </LayoutUniversal>
+            )}
+          </For>
+        </Aside>
+      </Sidebar>
+      <Footer></Footer>
+    </Stack>
+  )
+}
 
 export const Page = ({ children, ...props }) => (
   <Stack {...{ children, ...props }} />
@@ -10,11 +75,44 @@ export const Layout = ({ children }) => {
   return children
 }
 
-export const Menu = () => {
-  return null
+export const Menu = ({ children, logo, shortName, links, langs }) => {
+  return (
+    <Sidebar>
+      <div>
+        <span>Logo</span>
+        <span>Text</span>
+      </div>
+      <div>
+        <Switcher as="nav">
+          <For of={links}>{link => <a>Link</a>}</For>
+        </Switcher>
+        <nav>
+          <For of={langs}>{lang => <a>Langs</a>}</For>
+        </nav>
+      </div>
+    </Sidebar>
+  )
+}
+
+export const Header = ({ children, featuredImage, heading, introduction }) => {
+  return (
+    <Stack>
+      <span>Featured Image</span>
+      <h1>Heading</h1>
+      <p>Introduction</p>
+    </Stack>
+  )
 }
 
 export const Footer = () => {
+  return null
+}
+
+export const Aside = () => {
+  return null
+}
+
+export const AsidePage = () => {
   return null
 }
 

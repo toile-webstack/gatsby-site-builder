@@ -364,12 +364,23 @@ export const Cluster = ({ justify, align, space, ...rest }) =>
     ...rest,
   })
 
-export const Sidebar = ({ children, contentMin, sideWidth, ...rest }) =>
+export const Sidebar = ({
+  children,
+  side,
+  sideWidth,
+  contentMin,
+  space,
+  noStretch,
+  ...rest
+}) =>
   jsxHelper({
     layoutComp: 'sidebar',
     layoutProps: {
-      contentMin,
+      side,
       sideWidth,
+      contentMin,
+      space,
+      noStretch,
     },
     children: <div>{children}</div>,
     ...rest,

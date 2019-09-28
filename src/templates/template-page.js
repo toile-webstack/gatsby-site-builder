@@ -15,7 +15,17 @@ import BlockGallery from '../blocks/Gallery'
 import BlockReferences from '../blocks/References'
 import Section from '../blocks/Section'
 
-import { SEO, Scripts, Layout, Main } from '../canvas'
+import {
+  SEO,
+  Scripts,
+  Layout,
+  Page,
+  Menu,
+  Footer,
+  Sidebar,
+  AsidePage,
+  MainPage,
+} from '../canvas'
 import { useColors } from '../logic'
 
 const TemplatePage = ({
@@ -38,6 +48,32 @@ const TemplatePage = ({
 
   const colors = useColors({ options, colorsLib })
   const { classicCombo } = colors
+
+  // TODO: process page blocks to group blocks that are not in a setion
+  const sections = page.blocks
+
+  return (
+    <Page>
+      <Menu />
+      <Sidebar>
+        <Main>
+          <HeaderOfMain></HeaderOfMain>
+          <Sections>
+          <For of={sections}>
+            {section => (
+              <Section>
+                <HeaderSection></HeaderSection>
+
+              </Section>
+            )}
+          </For>
+          </Sections>
+        </Main>
+        <Aside></Aside>
+      </Sidebar>
+      <Footer />
+    </Page>
+  )
 
   return (
     <Layout>
@@ -88,7 +124,7 @@ const TemplatePage = ({
             }
           }}
         />
-      </Main>
+      </MainPa>
     </Layout>
   )
 }
