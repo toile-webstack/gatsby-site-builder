@@ -41,7 +41,24 @@ export const LayoutUniversal = ({
           <For of={sections}>
             {section => (
               <Section>
-                <For of={columns}>
+                <HeaderOfSection></HeaderOfSection>
+                <For of={articles}>
+                  {article => (
+                    <Article>
+                      <For of={blocks}>{block => <Block />}</For>
+                    </Article>
+                  )}
+                </For>
+                <FooterOfSection></FooterOfSection>
+              </Section>
+            )}
+          </For>
+        </Main>
+        <Aside {...aside}>
+          <For of={sectionsAside}>
+            {section => (
+              <Section>
+                <For of={columnsAside}>
                   {column => (
                     <Column>
                       <For of={blocks}>{block => <Block />}</For>
@@ -49,15 +66,6 @@ export const LayoutUniversal = ({
                   )}
                 </For>
               </Section>
-            )}
-          </For>
-        </Main>
-        <Aside {...aside}>
-          <For of={asides}>
-            {layout => (
-              <LayoutUniversal>
-                A layout with its dta and definition
-              </LayoutUniversal>
             )}
           </For>
         </Aside>
@@ -120,8 +128,8 @@ export const Main = ({ children }) => {
   return children
 }
 
-export const Section = () => {
-  return null
+export const Section = ({ children }) => {
+  return <section>{children}</section>
 }
 
 export const Column = ({ children, ...props }) => {

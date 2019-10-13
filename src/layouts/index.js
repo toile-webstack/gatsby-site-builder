@@ -303,12 +303,12 @@ const QUERY = graphql`
       internal {
         type
       }
-      blocks {
-        ...BlockFreeText
-        ...BlockForm
-        ...BlockGallery
-        ...BlockReferences
-      }
+      # blocks {
+      #   ...BlockFreeText
+      #   ...BlockForm
+      #   ...BlockGallery
+      #   ...BlockReferences
+      # }
       options {
         # _json_
         internal {
@@ -328,12 +328,12 @@ const QUERY = graphql`
       internal {
         type
       }
-      blocks {
-        ...BlockFreeText
-        ...BlockForm
-        ...BlockGallery
-        ...BlockReferences
-      }
+      # blocks {
+      #   ...BlockFreeText
+      #   ...BlockForm
+      #   ...BlockGallery
+      #   ...BlockReferences
+      # }
       options {
         # _json_
         internal {

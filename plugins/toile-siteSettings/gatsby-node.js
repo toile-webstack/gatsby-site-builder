@@ -18,14 +18,15 @@ const fs = require(`fs-extra`)
 const destFile = 'src/utils/siteSettings.json'
 
 let defaultLocale = ''
-let locales = []
+// let locales = []
 
 // ADD DEFAULT LOCALE AND LOCALES ARRAY IN EACH SETTINGS NODE
 exports.onCreateNode = ({ node, actions }) => {
   const { createNode, createNodeField } = actions
 
   if (node.internal.type === `ContentfulSettings`) {
-    const locale = node.node_locale.split('-')[0]
+    // const locale = node.node_locale.split('-')[0]
+    const locale = node.node_locale
     // check if id has the locale in it
     if (node.id.match(node.node_locale)) {
     } else {
@@ -42,7 +43,7 @@ exports.onCreateNode = ({ node, actions }) => {
       name: `locale`,
       value: locale,
     })
-    locales.push(locale)
+    // locales.push(locale)
   }
 }
 
@@ -54,111 +55,125 @@ exports.createPagesStatefully = ({ graphql }) => {
       graphql(
         `
           {
-            locales: allContentfulSettings {
-              edges {
-                node {
-                  node_locale
-                  fields {
-                    defaultLocale
-                    locale
-                  }
+            localesData: allContentfulSettings {
+              nodes {
+                node_locale
+                fields {
+                  defaultLocale
+                  locale
                 }
               }
             }
             settings: allContentfulSettings(
               filter: { name: { ne: "IGNORE" } }
             ) {
-              edges {
-                node {
-                  id
-                  name
-                  menu {
-                    ...Page
-                  }
-                  metadata {
-                    internal {
-                      content
-                    }
-                  }
-                  colors {
-                    internal {
-                      content
-                    }
-                  }
-                  fonts {
-                    internal {
-                      content
-                    }
-                  }
-                  contact {
-                    internal {
-                      content
-                    }
-                  }
-                  options {
-                    internal {
-                      content
-                    }
-                  }
-                  style {
-                    internal {
-                      content
-                    }
-                  }
-                  favicon {
-                    id
-                    resize(
-                      width: 32
-                      height: 32
-                      quality: 100
-                      toFormat: PNG
-                      resizingBehavior: PAD
-                      jpegProgressive: false
-                      cropFocus: LEFT
-                    ) {
-                      src
-                    }
-                  }
-                  facebookImage {
-                    id
-                    fluid {
-                      src
-                    }
-                  }
-                  node_locale
-
-                  # gaTrackingId
+              nodes {
+                id
+                name
+                menu {
                   fields {
-                    defaultLocale
+                    menuName
+                    shortPath
+                    localizedPath
                     locale
                   }
+                }
+                metaTitle
+                metaDescription {
+                  metaDescription
+                }
+                socialImage {
+                  fluid {
+                    src
+                  }
+                }
+                metadata {
+                  internal {
+                    content
+                  }
+                }
+                mainColorPalette {
+                  name
+                  text {
+                    name
+                    colorReference
+                  }
+                  background {
+                    name
+                    colorReference
+                  }
+                  primary {
+                    name
+                    colorReference
+                  }
+                  secondary {
+                    name
+                    colorReference
+                  }
+                  accent {
+                    name
+                    colorReference
+                  }
+                  muted {
+                    name
+                    colorReference
+                  }
+                }
+                fonts {
+                  internal {
+                    content
+                  }
+                }
+                contact {
+                  internal {
+                    content
+                  }
+                }
+                options {
+                  internal {
+                    content
+                  }
+                }
+                style {
+                  internal {
+                    content
+                  }
+                }
+                favicon {
+                  id
+                  resize(
+                    width: 32
+                    height: 32
+                    quality: 100
+                    toFormat: PNG
+                    resizingBehavior: PAD
+                    jpegProgressive: false
+                    cropFocus: LEFT
+                  ) {
+                    src
+                  }
+                }
+                node_locale
+
+                # gaTrackingId
+                fields {
+                  defaultLocale
+                  locale
                 }
               }
             }
             sitePages: allSitePage(
               filter: { id: { ne: "SitePage /dev-404-page/" } }
             ) {
-              edges {
-                node {
-                  id
-                  fields {
-                    menuName
-                    locale
-                    defaultLocale
-                    fullPath
-                  }
+              nodes {
+                id
+                fields {
+                  menuName
+                  locale
+                  defaultLocale
+                  fullPath
                 }
               }
-            }
-          }
-
-          fragment Page on ContentfulPage {
-            id
-            fields {
-              menuName
-              shortPath
-              localizedPath
-              locale
             }
           }
         `,
@@ -172,50 +187,71 @@ exports.createPagesStatefully = ({ graphql }) => {
         }
         console.log('siteSettings QUERY SUCCESSFUL')
 
-        const defaultLocale =
-          result.data.locales.edges[0].node.fields.defaultLocale
-        const locales = result.data.locales.edges.map(({ node }) => {
-          return node.fields.locale
-        })
+        const { localesData, settings, sitePages } = result.data
+
+        const { defaultLocale } = localesData.nodes[0].fields
+        const locales = localesData.nodes.map(
+          ({ fields: { locale } }) => locale,
+        )
 
         // Handle Common Settings Data
-        let {
+        const {
           name,
-          metadata,
-          colors,
-          fonts,
-          contact,
-          options,
-          style,
+          favicon: icon,
+          metaTitle,
+          metaDescription: { metaDescription },
+          socialImage,
+          metadata: {
+            internal: { content: metaD },
+          },
+          // colors: {
+          //   internal: { content: colorsJSON },
+          // },
+          fonts: {
+            internal: { content: fontsJSON },
+          },
+          contact: {
+            internal: { content: contactJSON },
+          },
+          options: {
+            internal: { content: optionsJSON },
+          },
+          style: {
+            internal: { content: styleJSON },
+          },
           gaTrackingId,
-        } = result.data.settings.edges[0].node
-        const favicon = `https:${result.data.settings.edges[0].node.favicon.resize.src}`
-        const socialImageUrl = `https:${result.data.settings.edges[0].node.facebookImage.fluid.src}`
+        } = settings.nodes[0]
+        const favicon = `https:${icon.resize.src}`
+        const socialImageUrl = `https:${socialImage.fluid.src}`
 
         // Settings Name
-        let settingsName = name
+        const settingsName = name
         // Website main metadata
-        metadata = JSON.parse(metadata.internal.content)
-        metadata.url = process.env.URL
-        metadata.name = metadata.name || settingsName
-        metadata.title = metadata.title || metadata.name
-        metadata.description = metadata.description || ''
+        const metadata = {
+          name: settingsName,
+          ...JSON.parse(metaD),
+          url: process.env.URL,
+          ...(metaTitle && { title: metaTitle }),
+          ...(metaDescription && { description: metaDescription }),
+        }
         // Default colors
-        colors = JSON.parse(colors.internal.content)
-        colors.mainCombo = colors.mainCombo || 'classic'
-        colors.menuCombo = colors.menuCombo || 'classic'
-        colors.footerCombo = colors.footerCombo || 'contrast'
-        colors.sidebarCombo = colors.sidebarCombo || 'classic'
-        colors.palettes = colors.palettes || [
-          {
-            name: `B&W`,
-            neutral: `#FFF`,
-            primary: `#000`,
-            secondary: `#888`,
-          },
-        ]
+        // TODO: change system of colors
+        const colors = {
+          mainCombo: 'classic',
+          menuCombo: 'classic',
+          footerCombo: 'contrast',
+          sidebarCombo: 'classic',
+          palettes: [
+            {
+              name: `B&W`,
+              neutral: `#FFF`,
+              primary: `#000`,
+              secondary: `#888`,
+            },
+          ],
+        }
         // Default fonts
-        fonts = JSON.parse(fonts.internal.content)
+        const fonts = JSON.parse(fontsJSON)
         fonts.body = fonts.body
           ? fonts.body.concat(['Open Sans'])
           : ['Open Sans']
@@ -223,18 +259,18 @@ exports.createPagesStatefully = ({ graphql }) => {
           ? fonts.header.concat(['Open Sans'])
           : ['Open Sans']
         // contact infos
-        contact = JSON.parse(contact.internal.content)
+        const contact = JSON.parse(contactJSON)
         // Options
-        options = JSON.parse(options.internal.content)
+        const options = JSON.parse(optionsJSON)
         const { typography } = options
         // Style
-        style = JSON.parse(style.internal.content)
+        const style = JSON.parse(styleJSON)
 
         // MENU
         // Array of site pages
-        const pages = result.data.sitePages.edges.map(({ node }) => {
-          if (!node.fields) return
-          const { menuName, fullPath, locale } = node.fields
+        const pages = sitePages.nodes.map(({ fields }) => {
+          if (!fields) return null
+          const { menuName, fullPath, locale } = fields
           return {
             menuName,
             fullPath,
@@ -242,12 +278,12 @@ exports.createPagesStatefully = ({ graphql }) => {
           }
         })
         // Isolate setting according to locale
-        let settingsByLocale = {}
-        result.data.settings.edges.forEach(({ node }) => {
+        const settingsByLocale = {}
+        settings.nodes.forEach(node => {
           settingsByLocale[node.fields.locale] = node
         })
         // create menu
-        let menu = {}
+        const menu = {}
         locales.forEach(locale => {
           // first line in menu is the locale
           menu[locale] = []
@@ -287,7 +323,7 @@ exports.createPagesStatefully = ({ graphql }) => {
         })
         // TODO: if / in path, check if this is not a child menu
 
-        const settings = {
+        const settingsOutput = {
           defaultLocale,
           locales,
           favicon,
@@ -304,16 +340,16 @@ exports.createPagesStatefully = ({ graphql }) => {
         }
 
         // Write Settings to a JSON file
-        let outputString = JSON.stringify(settings)
-        fs.writeFile(destFile, outputString, function(err) {
+        const outputString = JSON.stringify(settingsOutput)
+        fs.writeFile(destFile, outputString, err => {
           if (err) {
-            return console.log(err)
+            // eslint-disable-next-line no-console
+            console.log(err)
           } else {
+            // eslint-disable-next-line no-console
             console.log('\n! Site Settings Saved !')
           }
         })
-
-        return
       }),
     )
   })

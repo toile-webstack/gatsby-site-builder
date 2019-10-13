@@ -1,5 +1,6 @@
 import React from 'react'
 import { graphql } from 'gatsby'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 import { mapStyle } from '../utils/processCss'
 // import { rhythm, scale } from '../utils/typography'
@@ -8,7 +9,7 @@ import internalJson from '../utils/internalJson'
 import { useColors } from '../logic'
 import { Block } from '../canvas'
 
-import Html from '../atoms/Html'
+// import Html from '../atoms/Html'
 
 const BlockFreeText = ({
   block,
@@ -21,32 +22,33 @@ const BlockFreeText = ({
 }) => {
   if (!block.main) return null
 
-  const { options: optionsData, style: styleData } = block
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  // const { options: optionsData, style: styleData } = block
+  // const options = internalJson(optionsData)
+  // const style = mapStyle(internalJson(styleData))
 
-  const colors = useColors({ options, colorsLib })
-  const { isColored, classicCombo } = colors
-  const { id, name } = options
+  // const colors = useColors({ options, colorsLib })
+  // const { isColored, classicCombo } = colors
+  // const { id, name } = options
 
   return (
     <Block
       {...{
-        id,
-        name,
+        // id,
+        // name,
         className: `block blockFreeText ${className}`,
       }}
-      css={{
-        // ...passCSS,
-        ...(isColored ? colors[classicCombo].style : {}),
-        ...style,
-      }}
+      css={
+        {
+          // ...(isColored ? colors[classicCombo].style : {}),
+          // ...style,
+        }
+      }
     >
-      <Html
+      {/* <Html
         html={block.main.childMarkdownRemark.html}
         shortCodeMatchees={shortCodeMatchees}
-      />
-      {cookieButton && cookieButton({ style: colors[classicCombo].style })}
+      /> */}
+      {/* {cookieButton && cookieButton({ style: colors[classicCombo].style })} */}
     </Block>
   )
 }

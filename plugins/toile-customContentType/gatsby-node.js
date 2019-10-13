@@ -107,7 +107,8 @@ exports.onCreateNode = ({ node, actions }) => {
   const { createNodeField } = actions
   // Add menuName field to contentfulPages
   if (node.internal.type.match(/ContentfulCollectionItem/)) {
-    const locale = node.node_locale.split('-')[0]
+    // const locale = node.node_locale.split('-')[0]
+    const locale = node.node_locale
     const nodePath = createPath(`${node.type}/${node.name}`)
     const shortPath = `/${nodePath}/`
     const localizedPath = `/${locale}/${nodePath}/`

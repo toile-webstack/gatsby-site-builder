@@ -1,20 +1,21 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import { graphql } from 'gatsby'
+// import Link from 'gatsby-link'
 // import moment from "moment"
-const moment = require('moment')
-const fr = require('moment/locale/fr')
+// const moment = require('moment')
+// const fr = require('moment/locale/fr')
 
-import { createPath } from '../../../utils/utils'
+// import { createPath } from '../../../utils/utils'
 import { locales } from '../../utils/siteSettings.json'
-import { rhythm, scale } from '../../utils/typography'
+// import { rhythm, scale } from '../../utils/typography'
 // import colors from "../utils/colors"
-import {
-  replaceShortCodes,
-  withSimpleLineBreaks,
-  protectEmail,
-} from '../../utils/processHtml'
+// import {
+//   replaceShortCodes,
+//   withSimpleLineBreaks,
+//   protectEmail,
+// } from '../../utils/processHtml'
 
-import MusicListEntry from './collectionItems/MusicListEntry'
+// import MusicListEntry from './collectionItems/MusicListEntry'
 import DefaultListEntry from './collectionItems/DefaultListEntry'
 import ClassicRowListEntry from './collectionItems/ClassicRowListEntry'
 import TestimonialListEntry from './collectionItems/TestimonialListEntry'
@@ -123,62 +124,62 @@ class CollectionItem extends React.Component {
 
 export default CollectionItem
 
-export const collectionItemsFragment = graphql`
-  fragment CollectionItem on ContentfulCollectionItem {
-    id
-    internal {
-      type
-    }
-    type
-    name
-    author
-    featuredImage {
-      id
-      title
-      description
-      fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
-        base64
-        aspectRatio
-        src
-        srcSet
-        sizes
-      }
-    }
-    content {
-      id
-      childMarkdownRemark {
-        id
-        excerpt(pruneLength: 200)
-        html
-      }
-    }
-    datePublished
-    dateLastEdit
-    categories
-    # metadata {
-    #   # _json_
-    #   internal {
-    #     content
-    #   }
-    # }
-    # options {
-    #   # _json_
-    #   internal {
-    #     content
-    #   }
-    # }
-    # style {
-    #   # _json_
-    #   internal {
-    #     content
-    #   }
-    # }
-    node_locale
-    # fields {
-    #   menuName
-    #   shortPath
-    #   localizedPath
-    #   locale
-    # }
-  }
-`
+// export const collectionItemsFragment = graphql`
+//   fragment CollectionItem on ContentfulCollectionItem {
+//     id
+//     internal {
+//       type
+//     }
+//     type
+//     name
+//     author
+//     featuredImage {
+//       id
+//       title
+//       description
+//       fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+//         base64
+//         aspectRatio
+//         src
+//         srcSet
+//         sizes
+//       }
+//     }
+//     content {
+//       id
+//       childMarkdownRemark {
+//         id
+//         excerpt(pruneLength: 200)
+//         html
+//       }
+//     }
+//     datePublished
+//     dateLastEdit
+//     categories
+//     # metadata {
+//     #   # _json_
+//     #   internal {
+//     #     content
+//     #   }
+//     # }
+//     # options {
+//     #   # _json_
+//     #   internal {
+//     #     content
+//     #   }
+//     # }
+//     # style {
+//     #   # _json_
+//     #   internal {
+//     #     content
+//     #   }
+//     # }
+//     node_locale
+//     # fields {
+//     #   menuName
+//     #   shortPath
+//     #   localizedPath
+//     #   locale
+//     # }
+//   }
+// `

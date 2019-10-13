@@ -1,5 +1,3 @@
-export SEO from './SEO'
-export Scripts from './Scripts'
 export {
   Layout,
   Page,

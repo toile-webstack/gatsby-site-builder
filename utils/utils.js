@@ -1,14 +1,16 @@
-const slugify = require("slugify")
+const slugify = require('slugify')
 
-const createPath = path => {
-  return slugify(path, {
-    replacement: "-",
-    remove: /[$*_+~.()'"!\:@?]/g,
-    lower: true
+const canonize = (name, camelCaseToo = false) => {
+  const str = camelCaseToo ? name.replace(/[A-Z]/g, s => `-${s}`) : name
+
+  return slugify(str, {
+    replacement: '-',
+    remove: /[$*_+~.()'"!:@?/]/g,
+    lower: true,
   })
 }
 
-module.exports = { createPath }
+module.exports = { canonize }
 
 // const mapStyle = obj => {
 //   if (Object.keys(obj).length < 1) return obj

@@ -63,35 +63,35 @@ class PageReference extends React.Component {
 
 export default PageReference
 
-export const pageReferenceFragment = graphql`
-  fragment PageReference on ContentfulPage {
-    id
-    internal {
-      type
-    }
-    # fields {
-    #   menuName
-    #   shortPath
-    #   localizedPath
-    # }
-    metadata {
-      # _json_
-      internal {
-        content
-      }
-    }
-    options {
-      # _json_
-      internal {
-        content
-      }
-    }
-    style {
-      # _json_
-      internal {
-        content
-      }
-    }
-    node_locale
-  }
-`
+// export const pageReferenceFragment = graphql`
+//   fragment PageReference on ContentfulPage {
+//     id
+//     internal {
+//       type
+//     }
+//     # fields {
+//     #   menuName
+//     #   shortPath
+//     #   localizedPath
+//     # }
+//     metadata {
+//       # _json_
+//       internal {
+//         content
+//       }
+//     }
+//     options {
+//       # _json_
+//       internal {
+//         content
+//       }
+//     }
+//     style {
+//       # _json_
+//       internal {
+//         content
+//       }
+//     }
+//     node_locale
+//   }
+// `

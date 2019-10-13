@@ -12,4 +12,4 @@ export const useColors = ({ options, colorsLib }) => {
   return colors
 }
 
-export const dumb = {}
+export useForm from './useForm'

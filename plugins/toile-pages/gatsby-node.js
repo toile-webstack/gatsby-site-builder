@@ -5,7 +5,7 @@ const path = require(`path`)
 // const fs = require(`fs-extra`)
 const slash = require(`slash`)
 // const slugify = require("slugify")
-const { createPath } = require(`../../utils/utils.js`)
+const { canonize } = require(`../../utils/utils.js`)
 
 // function camelize(str) {
 //   return str
@@ -17,15 +17,18 @@ const { createPath } = require(`../../utils/utils.js`)
 
 // TODO: if / in name, menuName is the last part
 exports.onCreateNode = ({ node, actions }) => {
-  const { createNode, createNodeField } = actions
+  const { createNodeField } = actions
   // Add menuName field to contentfulPages
-  if (node.internal.type.match(/ContentfulPage/)) {
-    const locale = node.node_locale.split('-')[0]
+  if (node.internal.type.match(/ContentfulPageInfo/)) {
+    // const locale = node.node_locale.split('-')[0]
+    const locale = node.node_locale
     // console.log(node)
-    const nodePath = createPath(node.path)
-    const shortPath = node.path === `index` ? `/` : `/${nodePath}/`
+    const nodePath = canonize(node.path)
+    const shortPath = /^index$|^\/$/.test(node.path) ? `/` : `/${nodePath}/`
     const localizedPath =
-      node.path === `index` ? `/${locale}/` : `/${locale}/${nodePath}/`
+      node.path === /^index$|^\/$/.test(node.path)
+        ? `/${locale}/`
+        : `/${locale}/${nodePath}/`
     const metadata =
       (node.metadata && JSON.parse(node.metadata.internal.content)) || {}
     // to account for pages created with subpaths
@@ -90,36 +93,42 @@ exports.createPages = ({ graphql, actions }) => {
       graphql(
         `
           {
-            locales: allContentfulSettings {
-              edges {
-                node {
-                  node_locale
-                  fields {
-                    defaultLocale
-                    locale
-                  }
+            localesData: allContentfulSettings {
+              nodes {
+                node_locale
+                fields {
+                  defaultLocale
+                  locale
                 }
               }
             }
-            contentfulPages: allContentfulPage(
+            contentfulPages: allContentfulPageInfo(
               filter: { path: { ne: "IGNORE" } }
             ) {
-              edges {
-                node {
+              nodes {
+                id
+                path
+                node_locale
+                menuName
+                metaTitle
+                metaDescription {
                   id
-                  path
-                  node_locale
-                  metadata {
-                    internal {
-                      content
-                    }
+                  metaDescription
+                }
+                socialImage {
+                  id
+                }
+                metadata {
+                  id
+                  internal {
+                    content
                   }
-                  fields {
-                    menuName
-                    shortPath
-                    localizedPath
-                    locale
-                  }
+                }
+
+                fields {
+                  shortPath
+                  localizedPath
+                  locale
                 }
               }
             }
@@ -135,59 +144,61 @@ exports.createPages = ({ graphql, actions }) => {
         }
         console.log('pages QUERY SUCCESSFUL')
 
-        const defaultLocale =
-          result.data.locales.edges[0].node.fields.defaultLocale
-        const locales = result.data.locales.edges.map(({ node }) => {
-          return node.fields.locale
-        })
+        const { localesData, contentfulPages } = result.data
 
-        result.data.contentfulPages.edges.forEach(({ node }) => {
-          const contentfulPage = node
-          const {
+        const { defaultLocale } = localesData.nodes[0].fields
+        const locales = localesData.nodes.map(
+          ({ fields: { locale } }) => locale,
+        )
+
+        contentfulPages.nodes.forEach(
+          ({
             menuName,
-            shortPath,
-            localizedPath,
-            locale,
-          } = contentfulPage.fields
-          const chosenPath = locales.length === 1 ? shortPath : localizedPath
+            path: pagePath,
+            fields: { shortPath, localizedPath, locale },
+            id,
+          }) => {
+            const chosenPath = locales.length === 1 ? shortPath : localizedPath
 
-          const pageContext = { id: contentfulPage.id }
-          const pageComponent = slash(pageTemplate)
+            const pageContext = { id }
+            const pageComponent = slash(pageTemplate)
 
-          createPage({
-            path: chosenPath, // required
-            component: pageComponent,
-            menuName,
-            locale,
-            defaultLocale,
-            context: pageContext,
-          })
-
-          // Redirect index page
-          if (
-            locales.length !== 1 &&
-            locale === defaultLocale &&
-            contentfulPage.path === `index`
-          ) {
-            createRedirect({
-              fromPath: '/',
-              toPath: `/${defaultLocale}/`,
-              isPermanent: true,
-              redirectInBrowser: true,
+            createPage({
+              path: chosenPath, // required
+              component: pageComponent,
+              menuName,
+              locale,
+              defaultLocale,
+              context: pageContext,
             })
-            // createPage({
-            //   path: `/`, // required
-            //   component: slash(pageTemplate),
-            //   menuName,
-            //   locale,
-            //   defaultLocale,
-            //   context: {
-            //     id: edge.node.id
-            //   }
-            // })
-            //   }
-          }
-        })
+
+            // Redirect index page
+            if (
+              locales.length !== 1 &&
+              locale === defaultLocale &&
+              // path === `index`
+              /index|^\/$/.test(pagePath)
+            ) {
+              createRedirect({
+                fromPath: '/',
+                toPath: `/${defaultLocale}/`,
+                isPermanent: true,
+                redirectInBrowser: true,
+              })
+              // createPage({
+              //   path: `/`, // required
+              //   component: slash(pageTemplate),
+              //   menuName,
+              //   locale,
+              //   defaultLocale,
+              //   context: {
+              //     id: edge.node.id
+              //   }
+              // })
+              //   }
+            }
+          },
+        )
 
         // return
       }),

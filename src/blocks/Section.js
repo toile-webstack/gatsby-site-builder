@@ -13,8 +13,8 @@ import internalJson from '../utils/internalJson'
 
 import BlockFreeText from './FreeText'
 import BlockForm from './Form'
-import BlockGallery from '../blocks/Gallery'
-import BlockReferences from '../blocks/References'
+import BlockGallery from './Gallery'
+import BlockReferences from './References'
 
 class Section extends React.Component {
   constructor(props) {
@@ -76,8 +76,7 @@ class Section extends React.Component {
           css={{
             display: `flex`,
             flexFlow: `row wrap`,
-            justifyContent: `space-around`,
-            justifyContent: `space-evenly`,
+            justifyContent: [`space-around`, `space-evenly`],
             alignItems: layout.align || `baseline`,
             margin: `auto`,
             maxWidth: `1000px`,
@@ -189,12 +188,12 @@ export const sectionFragment = graphql`
     internal {
       type
     }
-    blocks {
-      ...BlockFreeText
-      ...BlockForm
-      ...BlockGallery
-      ...BlockReferences
-    }
+    # blocks {
+    #   ...BlockFreeText
+    #   ...BlockForm
+    #   ...BlockGallery
+    #   ...BlockReferences
+    # }
     options {
       internal {
         content

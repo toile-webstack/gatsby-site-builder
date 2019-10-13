@@ -21,6 +21,7 @@ module.exports = {
       options: {
         spaceId: process.env.contentfulSpaceID,
         accessToken: process.env.contentfulAccessToken,
+        forceFullSync: true,
       },
     },
     {
@@ -87,7 +88,7 @@ module.exports = {
     // `toile-ignores`,
     `toile-siteSettings`,
     `toile-pages`,
-    `toile-customContentType`,
+    // `toile-customContentType`,
     // 'schema-modeling',
     `gatsby-plugin-netlify`,
   ],

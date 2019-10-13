@@ -456,10 +456,10 @@ export const blockReferencesFragment = graphql`
     internal {
       type
     }
-    references {
-      ...CollectionItem
-      ...PageReference
-    }
+    # references {
+    #   ...CollectionItem
+    #   ...PageReference
+    # }
     options {
       internal {
         content
