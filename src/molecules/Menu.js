@@ -100,12 +100,15 @@ class Menu extends React.Component {
     //   "en"
 
     return (
-      <div>
+      <div
+        css={{
+          ...this.props.passCss,
+        }}
+      >
         <nav
           className="menu"
           css={{
             ...this.colors[classicCombo].style,
-            ...this.props.passCss,
             width: `100%`,
             zIndex: 100,
             // background: this.colors[classicCombo].background,
@@ -213,6 +216,7 @@ class Menu extends React.Component {
             passCSS={{
               right: rhythm(1 / 2),
               left: rhythm(1 / 2),
+              zIndex: 991,
             }}
           />
         )}
@@ -228,7 +232,7 @@ class Menu extends React.Component {
               width: `100%`,
               height: `100%`,
               opacity: `0`,
-              zIndex: 90,
+              zIndex: 990,
             }}
           />
         )}

@@ -166,13 +166,15 @@ const Layout = ({ children, currentLocale, path, location }) => {
           currentLocale={currentLocale}
           location={location}
           passCss={{
-            position: `fixed`,
+            // position: `fixed`,
+            // left: 0,
+            position: `sticky`,
             top: 0,
-            left: 0,
+            zIndex: 999,
           }}
         />
       )}
-      {isLandingPage ? null : (
+      {/* {isLandingPage ? null : (
         <Menu
           icon={favicon}
           name={metadata.name}
@@ -180,7 +182,7 @@ const Layout = ({ children, currentLocale, path, location }) => {
           location={location}
           passCss={{ visibility: `hidden` }}
         />
-      )}
+      )} */}
       {process.env.NODE_ENV === 'development' ||
       (typeof window !== 'undefined' &&
         window.location.href.match(/localhost|dev--.*netlify.com/gi)) ? (
