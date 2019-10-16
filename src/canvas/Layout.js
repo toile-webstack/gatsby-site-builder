@@ -1,7 +1,131 @@
 import React from 'react'
+import { useStaticQuery, graphql } from 'gatsby'
+
+import { mapStyle } from '../utils/processCss'
+import internalJson from '../utils/internalJson'
 import { Stack } from '../../libs/layout-primitives'
 
-const Layout = props => {
+import {
+  defaultLocale,
+  locales,
+  metadata,
+  favicon,
+  pages,
+  menu,
+} from '../utils/siteSettings.json'
+
+import { SEO, Scripts } from '.'
+import Menu from '../molecules/Menu'
+import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
+import ContactInfos from '../molecules/ContactInfos'
+import FooterFeed from '../molecules/FooterFeed'
+import Footer from '../molecules/Footer'
+import CookieAlert from '../atoms/CookieAlert'
+import Sidebar from '../molecules/Sidebar'
+
+import colorsLib from '../utils/colors'
+import { useColors } from '../logic'
+
+const QUERY = graphql`
+  query DefaultLayout {
+    settings: contentfulSettings {
+      id
+      name
+      style {
+        internal {
+          content
+        }
+      }
+      options {
+        internal {
+          content
+        }
+      }
+      node_locale
+      scripts {
+        id
+        name
+        type
+        src
+        charset
+        content {
+          id
+          content
+        }
+      }
+    }
+    footer: contentfulSection(name: { eq: "--footer" }) {
+      id
+      name
+      internal {
+        type
+      }
+      blocks {
+        ...BlockFreeText
+        ...BlockForm
+        ...BlockGallery
+        ...BlockReferences
+      }
+      options {
+        internal {
+          content
+        }
+      }
+      style {
+        internal {
+          content
+        }
+      }
+    }
+    cookieAlert: contentfulSection(name: { eq: "--cookie" }) {
+      id
+      name
+      internal {
+        type
+      }
+      blocks {
+        ...BlockFreeText
+        ...BlockForm
+        ...BlockGallery
+        ...BlockReferences
+      }
+      options {
+        internal {
+          content
+        }
+      }
+      style {
+        internal {
+          content
+        }
+      }
+    }
+  }
+`
+
+const landingRE = new RegExp(/\/landing\//)
+
+const Layout = ({ children, currentLocale, path, location }) => {
+  const { settings, footer, cookieAlert } = useStaticQuery(QUERY)
+
+  const {
+    id: idSettings,
+    // metadata: metadataData,
+    options: optionsData,
+    style: styleData,
+    scripts,
+  } = settings
+
+  // const metadata = internalJson(metadataData) // is already in local JSON file
+  const options = internalJson(optionsData)
+  const style = mapStyle(internalJson(styleData))
+
+  const isLandingPage = landingRE.test(path)
+  const isSSR = typeof window === 'undefined'
+
+  const colors = useColors({ options, colorsLib })
+  const { classicCombo } = colors
+
   return (
     <div
       className="layout"
@@ -11,63 +135,36 @@ const Layout = props => {
         minHeight: `100vh`,
         width: `100%`,
         // paddingTop: rhythm(1.6)
-        ...this.styleData,
+        ...style,
       }}
     >
-      <Helmet
-        defaultTitle={metadata.name}
-        titleTemplate={`%s | ${metadata.name}`}
-        title={metadata.title}
-        // meta={[
-        //   // { name: `twitter:site`, content: `@gatsbyjs` },
-        //   // { property: `og:type`, content: `website` },
-        //   // { property: `og:site_name`, content: metadata.name },
-        //   { name: `description`, content: metadata.description }
-        // ]}
+      <SEO
+        {...{
+          lang: defaultLocale, // must be overwritten on page
+          name: metadata.name,
+          title: metadata.title,
+          description: metadata.description,
+          canonicalUrl: metadata.url + path,
+          // IDEA: use fullPath in sitePage fields for canonical url
+          ogType: metadata.ogType || 'website',
+        }}
       >
-        <meta name="description" content={metadata.description} />
-        <link rel="canonical" href={metadata.url} />
-        {scripts &&
-          !isSSR &&
-          scripts.map(
-            ({
-              id,
-              name,
-              type = 'text/javascript',
-              content: { content },
-              // charset, // src,
-              ...srcAndCharset
-            }) => {
-              const scriptProps = {
-                id: `${name}`,
-                type,
-              }
-              Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                if (a) scriptProps[attr] = a
-              })
-              return (
-                <script
-                  // defer
-                  async
-                  {...{
-                    key: id,
-                    ...scriptProps,
-                  }}
-                >
-                  {`${content}`}
-                </script>
-              )
-            },
-          )}
-      </Helmet>
-
+        <Scripts
+          {...{
+            scripts,
+            async: true,
+            dynamicOnly: true,
+            idPrefix: idSettings,
+          }}
+        />
+      </SEO>
       {isLandingPage ? null : (
         <Menu
           icon={favicon}
           name={metadata.name}
           menu={menu}
-          currentLocale={this.state.currentLocale}
-          location={this.props.location}
+          currentLocale={currentLocale}
+          location={location}
           passCss={{
             position: `fixed`,
             top: 0,
@@ -79,8 +176,8 @@ const Layout = props => {
         <Menu
           icon={favicon}
           name={metadata.name}
-          currentLocale={this.state.currentLocale}
-          location={this.props.location}
+          currentLocale={currentLocale}
+          location={location}
           passCss={{ visibility: `hidden` }}
         />
       )}
@@ -138,16 +235,16 @@ const Layout = props => {
               '> div': {
                 // 1st line blocks OR blog article
                 ':first-child': {
-                  paddingTop: rhythm(2),
+                  paddingTop: '2rem',
                 },
                 ':last-child': {
-                  paddingBottom: rhythm(2),
+                  paddingBottom: '2rem',
                 },
               },
             },
           }}
         >
-          {this.props.children}
+          {children}
         </main>
       </div>
       {isLandingPage ? null : <Footer section={footer} />}

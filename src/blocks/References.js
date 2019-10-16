@@ -99,23 +99,8 @@ const BlockReferences = ({
       ) {
         return null
       }
-      switch (reference.internal.type) {
-        case `ContentfulCollectionItem`:
-          return (
-            <ColumnWrapper>
-              <CollectionItem
-                {...{
-                  key,
-                  collectionItem: reference,
-                  colors,
-                  location,
-                  layout,
-                  blockOptionsData: options,
-                  passCSS: imageStyle,
-                }}
-              />
-            </ColumnWrapper>
-          )
+      console.log(reference)
+      switch (reference.__typename) {
         case `ContentfulPage`:
           return (
             <ColumnWrapper>
@@ -133,7 +118,21 @@ const BlockReferences = ({
             </ColumnWrapper>
           )
         default:
-          return null
+          return (
+            <ColumnWrapper>
+              <CollectionItem
+                {...{
+                  key,
+                  collectionItem: reference,
+                  colors,
+                  location,
+                  layout,
+                  blockOptionsData: options,
+                  passCSS: imageStyle,
+                }}
+              />
+            </ColumnWrapper>
+          )
       }
     })
   })

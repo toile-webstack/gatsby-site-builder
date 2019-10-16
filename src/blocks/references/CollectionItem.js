@@ -1,8 +1,7 @@
 import React from 'react'
+import { graphql } from 'gatsby'
 import Link from 'gatsby-link'
 // import moment from "moment"
-const moment = require('moment')
-const fr = require('moment/locale/fr')
 
 import { createPath } from '../../../utils/utils'
 import { locales } from '../../utils/siteSettings.json'
@@ -20,12 +19,20 @@ import ClassicRowListEntry from './collectionItems/ClassicRowListEntry'
 import TestimonialListEntry from './collectionItems/TestimonialListEntry'
 import EventListEntry from './collectionItems/EventListEntry'
 
+import { mapStyle } from '../../utils/processCss'
+import internalJson from '../../utils/internalJson'
+
+// const moment = require('moment')
+// const fr = require('moment/locale/fr')
+
 class CollectionItem extends React.Component {
   constructor(props) {
     super(props)
     // _json_ fields
-    this.optionsData = JSON.parse(props.collectionItem.options._json_)
-    this.styleData = JSON.parse(props.collectionItem.style._json_)
+    const { options, style } = props.collectionItem
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData
     // colorCombo = colorCombo
@@ -155,30 +162,27 @@ export const collectionItemsFragment = graphql`
     datePublished
     dateLastEdit
     categories
-    # metadata {
-    #   # _json_
-    #   internal {
-    #     content
-    #   }
-    # }
-    # options {
-    #   # _json_
-    #   internal {
-    #     content
-    #   }
-    # }
-    # style {
-    #   # _json_
-    #   internal {
-    #     content
-    #   }
-    # }
+    metadata {
+      internal {
+        content
+      }
+    }
+    options {
+      internal {
+        content
+      }
+    }
+    style {
+      internal {
+        content
+      }
+    }
     node_locale
-    # fields {
-    #   menuName
-    #   shortPath
-    #   localizedPath
-    #   locale
-    # }
+    fields {
+      menuName
+      shortPath
+      localizedPath
+      locale
+    }
   }
 `

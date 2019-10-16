@@ -15,13 +15,15 @@ import BlockGallery from '../blocks/Gallery'
 import BlockReferences from '../blocks/References'
 import Section from '../blocks/Section'
 
-import { SEO, Scripts, Layout, Main } from '../canvas'
+import { SEO, Scripts, Main } from '../canvas'
+import Layout from '../canvas/Layout'
 import { useColors } from '../logic'
 
 const TemplatePage = ({
   data: { contentfulPage: page = {} } = {},
   location,
   // children,
+  path,
 }) => {
   if (!page) return null
 
@@ -30,6 +32,7 @@ const TemplatePage = ({
     options: optionsData,
     style: styleData,
     scripts,
+    node_locale: pageLocale,
   } = page
   // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
   const metadata = internalJson(metadataData)
@@ -40,14 +43,20 @@ const TemplatePage = ({
   const { classicCombo } = colors
 
   return (
-    <Layout>
+    <Layout
+      {...{
+        currentLocale: pageLocale,
+        path,
+        location,
+      }}
+    >
       <SEO
         {...{
-          lang: page.node_locale,
+          lang: pageLocale,
           name: siteMetadata.name,
           title: metadata.title,
           description: metadata.description,
-          canonicalUrl: siteMetadata.url + location.pathname,
+          canonicalUrl: siteMetadata.url + path,
           // IDEA: use fullPath in sitePage fields for canonical url
           ogType: metadata.ogType,
         }}
@@ -62,12 +71,10 @@ const TemplatePage = ({
         />
       </SEO>
       <Main
-        css={
-          {
-            // ...colors[classicCombo].style,
-            // ...style,
-          }
-        }
+        css={{
+          ...colors[classicCombo].style,
+          ...style,
+        }}
       >
         <For
           of={page.blocks}
