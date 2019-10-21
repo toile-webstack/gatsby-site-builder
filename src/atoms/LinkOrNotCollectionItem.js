@@ -44,9 +44,7 @@ const LinkOrNotCollectionItem = ({
     ...colors[classicCombo].style,
     ":hover": {
       ...colors[linkTo === `none` ? classicCombo : funkyCombo].style,
-      color: `${
-        colors[linkTo === `none` ? classicCombo : funkyCombo].body
-      }!important`
+      color: `${colors[linkTo === `none` ? classicCombo : funkyCombo].body}!important`
     },
     ...passCSS
     // ...colors[classicCombo].style,
