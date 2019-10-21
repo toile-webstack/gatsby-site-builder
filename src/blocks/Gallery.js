@@ -161,7 +161,8 @@ class BlockGallery extends React.Component {
                       title={image.title}
                       sizes={image.responsiveSizes}
                       style={{
-                        cursor: this.optionsData.popup ? `pointer` : `auto`
+                        cursor:
+                          to || this.optionsData.popup ? `pointer` : `auto`
                       }}
                     />
                     {this.optionsData.gallery &&
