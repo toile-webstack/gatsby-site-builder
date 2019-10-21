@@ -3,16 +3,16 @@ import Link from "gatsby-link";
 import Helmet from "react-helmet";
 import _ from "lodash";
 // Load font CSS
-import "typeface-open-sans";
-import "typeface-montserrat";
-import "typeface-bellefair";
-import "typeface-quicksand";
-import "typeface-yanone-kaffeesatz";
-import "typeface-dosis";
-import "typeface-josefin-sans";
-import "typeface-noto-sans";
-import "typeface-raleway";
-import "typeface-didact-gothic";
+// import "typeface-open-sans";
+// import "typeface-montserrat";
+// import "typeface-bellefair";
+// import "typeface-quicksand";
+// import "typeface-yanone-kaffeesatz";
+// import "typeface-dosis";
+// import "typeface-josefin-sans";
+// import "typeface-noto-sans";
+// import "typeface-raleway";
+// import "typeface-didact-gothic";
 
 // import * as themes from "./typography-themes"
 // importAll themes from
