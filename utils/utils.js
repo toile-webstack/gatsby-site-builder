@@ -3,7 +3,7 @@ const slugify = require("slugify")
 const createPath = path => {
   return slugify(path, {
     replacement: "-",
-    remove: /[$*_+~.()'"!\:@?]/g,
+    remove: /[$*_+~.,()'"!\:@?]/g,
     lower: true
   })
 }
