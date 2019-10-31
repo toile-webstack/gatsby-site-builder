@@ -13,6 +13,7 @@ module.exports = {
     //     path: `${__dirname}/data`,
     //   },
     // },
+    `gatsby-plugin-layout`,
     {
       resolve: `gatsby-source-contentful-mod`,
       options: {
