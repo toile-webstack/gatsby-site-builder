@@ -1,25 +1,29 @@
-import React from 'react';
-import Helmet from 'react-helmet';
+import React from "react";
+import { Helmet } from "react-helmet";
+import { graphql } from "gatsby";
 
-import { mapStyle } from '../utils/processCss';
-import { typoRhythm, rhythm, scale } from '../utils/typography';
+import { mapStyle } from "../utils/processCss";
+import { typoRhythm, rhythm, scale } from "../utils/typography";
 import {
   addLayoutOptions,
   gridLayout,
-  listItemStyle,
-} from '../utils/computeGrid';
+  listItemStyle
+} from "../utils/computeGrid";
+import internalJson from "../utils/internalJson";
 
-import BlockFreeText from './FreeText';
-import BlockForm from './Form';
-import BlockGallery from '../blocks/Gallery';
-import BlockReferences from '../blocks/References';
+import BlockFreeText from "./FreeText";
+import BlockForm from "./Form";
+import BlockGallery from "../blocks/Gallery";
+import BlockReferences from "../blocks/References";
 
 class Section extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.optionsData = JSON.parse(props.block.options._json_);
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_));
+    const { options, style } = props.block;
+    this.optionsData = internalJson(options);
+    this.styleData = mapStyle(internalJson(style));
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     this.isColored = !!colorPalettes || !!colorCombo;
@@ -36,7 +40,7 @@ class Section extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo,
+      funkyContrastCombo
     } = this.colors;
 
     const section = this.props.block;
@@ -49,7 +53,7 @@ class Section extends React.Component {
     const { layout, list } = addLayoutOptions(
       this.optionsData,
       parentMaxWidth,
-      section.blocks,
+      section.blocks
     );
     const { id: htmlId, name: htmlName } = this.optionsData;
     const { shortCodeMatchees } = this.props;
@@ -66,7 +70,7 @@ class Section extends React.Component {
           ...this.props.csss,
           ...(this.isColored ? this.colors[classicCombo].style : {}),
           // ...this.colors[classicCombo].style,
-          ...this.styleData,
+          ...this.styleData
         }}
       >
         <div
@@ -78,7 +82,7 @@ class Section extends React.Component {
             alignItems: layout.align || `baseline`,
             margin: `auto`,
             maxWidth: `1000px`,
-            padding: `0 ${rhythm(1)}`,
+            padding: `0 ${rhythm(1)}`
           }}
         >
           {list &&
@@ -107,7 +111,7 @@ class Section extends React.Component {
                     flexFlow: `column`,
                     width: `100%`,
                     // width: itemStyle.width,
-                    maxWidth: itemStyle.maxWidth,
+                    maxWidth: itemStyle.maxWidth
 
                     // justifyContent: `space-around`,
                     // justifyContent: `space-evenly`,
@@ -118,7 +122,7 @@ class Section extends React.Component {
                   }}
                 >
                   {column.map((block, i) => {
-                    switch (block.internal.type) {
+                    switch (block.__typename) {
                       case `ContentfulBlockFreeText`:
                         return (
                           <BlockFreeText
@@ -183,9 +187,7 @@ export const sectionFragment = graphql`
   fragment Section on ContentfulSection {
     id
     name
-    internal {
-      type
-    }
+    __typename
     blocks {
       ...BlockFreeText
       ...BlockForm
@@ -193,10 +195,14 @@ export const sectionFragment = graphql`
       ...BlockReferences
     }
     options {
-      _json_
+      internal {
+        content
+      }
     }
     style {
-      _json_
+      internal {
+        content
+      }
     }
   }
 `;

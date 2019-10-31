@@ -1,12 +1,15 @@
 import React from "react";
+import { graphql } from "gatsby";
 import slugify from "slugify";
 import axios from "axios";
 import qs from "qs";
+import _ from "lodash";
 
 import { mapStyle } from "../utils/processCss";
 import { metadata as siteMetadata } from "../utils/siteSettings.json";
 import { rhythm, scale } from "../utils/typography";
 // import colors from "../utils/colors"
+import internalJson from "../utils/internalJson";
 
 import Html from "../atoms/Html";
 
@@ -14,9 +17,11 @@ class BlockForm extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.formData = JSON.parse(props.block.form._json_);
-    this.optionsData = JSON.parse(props.block.options._json_);
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_));
+    const { options, style, form } = props.block;
+    this.formData = internalJson(form);
+    this.optionsData = internalJson(options);
+    this.styleData = mapStyle(internalJson(style));
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     colorCombo = colorCombo
@@ -243,7 +248,7 @@ class BlockForm extends React.Component {
     if (Object.keys(block).length < 1) {
       return null;
     }
-    // const dataOptions = JSON.parse(block.options._json_)
+    // const dataOptions = JSON.parse(block.options.internal.content)
     const dataOptions = block.options;
     // console.log(block.options)
 
@@ -488,11 +493,11 @@ export const blockFormFragment = graphql`
   fragment BlockForm on ContentfulBlockForm {
     id
     name
-    internal {
-      type
-    }
+    __typename
     form {
-      _json_
+      internal {
+        content
+      }
       # fields {
       #   name
       #   type
@@ -519,12 +524,16 @@ export const blockFormFragment = graphql`
       }
     }
     options {
-      _json_
+      internal {
+        content
+      }
       # colorPalettes
       # colorCombo
     }
     style {
-      _json_
+      internal {
+        content
+      }
     }
   }
 `;

@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "gatsby-link";
+import { Link } from "gatsby";
 
 import { rhythm, scale } from "../utils/typography";
 
@@ -20,7 +20,7 @@ const LinkOrNotCollectionItem = ({
   const linkTo = blockOptionsData && blockOptionsData.linkTo;
   const internalLink = collectionItem.path;
 
-  const optionsData = JSON.parse(collectionItem.options._json_);
+  const optionsData = JSON.parse(collectionItem.options.internal.content);
   const externalLink = optionsData && optionsData.linkTo;
 
   const css = {
@@ -33,7 +33,7 @@ const LinkOrNotCollectionItem = ({
       // textAlign: `left`,
       margin: 0
     },
-    " .gatsby-image-outer-wrapper": {
+    " .gatsby-image-wrapper": {
       width: `100%`
     },
     " img": {

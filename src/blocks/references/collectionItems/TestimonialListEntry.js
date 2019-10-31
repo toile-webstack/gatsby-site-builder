@@ -64,7 +64,7 @@ export default ({
       <Img
         title={image.title}
         className="image"
-        sizes={image.responsiveSizes}
+        sizes={image.fluid}
       />
     </div>,
     <div

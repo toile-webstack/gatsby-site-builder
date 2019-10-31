@@ -28,8 +28,8 @@ const createPath = path => {
 }
 
 // GENERATE JSON SETTINGS & CREATE PAGES
-exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage } = boundActionCreators
+exports.createPages = ({ graphql, actions }) => {
+  const { createPage } = actions
   return new Promise((resolve, reject) => {
     const pageTemplate = path.resolve(`src/templates/template-page.js`)
     const listPageTemplate = path.resolve(`src/templates/template-list-page.js`)
@@ -92,7 +92,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
 
         result.data.contentTypes.edges.forEach(({ node }) => {
           const contentType = node
-          const options = JSON.parse(contentType.options._json_)
+          const options = JSON.parse(contentType.options.internal.content)
 
           if (
             typeof options.itemPage === `undefined` &&
@@ -234,7 +234,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
         //     settings.menu[locale] =
         //       node.menu.map(pageInfo => {
         //         const path = createPath(pageInfo.path)
-        //         const pageMetadata = JSON.parse(pageInfo.metadata._json_)
+        //         const pageMetadata = JSON.parse(pageInfo.metadata.internal.content)
         //         let backupName = pageInfo.path.split("/")
         //         backupName = backupName[backupName.length - 1]
         //         const name = pageMetadata.name || backupName

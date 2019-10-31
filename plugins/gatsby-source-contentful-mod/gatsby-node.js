@@ -56,7 +56,7 @@ exports.setFieldsOnGraphQLNodeType = require("./extend-node-type").extendNodeTyp
 exports.sourceNodes = (function() {
   var _ref = _asyncToGenerator(
     /*#__PURE__*/ regeneratorRuntime.mark(function _callee(_ref2, _ref3) {
-      var boundActionCreators = _ref2.boundActionCreators,
+      var actions = _ref2.actions,
         getNodes = _ref2.getNodes,
         hasNodeChanged = _ref2.hasNodeChanged,
         store = _ref2.store;
@@ -87,10 +87,10 @@ exports.sourceNodes = (function() {
           while (1) {
             switch ((_context.prev = _context.next)) {
               case 0:
-                (createNode = boundActionCreators.createNode),
-                  (deleteNodes = boundActionCreators.deleteNodes),
-                  (touchNode = boundActionCreators.touchNode),
-                  (setPluginStatus = boundActionCreators.setPluginStatus);
+                (createNode = actions.createNode),
+                  (deleteNodes = actions.deleteNodes),
+                  (touchNode = actions.touchNode),
+                  (setPluginStatus = actions.setPluginStatus);
 
                 host = host || "cdn.contentful.com";
                 // Get sync token if it exists.
@@ -276,8 +276,8 @@ exports.sourceNodes = (function() {
 
 // TODO: move this somewhere else but problem with types
 // CUSTOM TYPE
-exports.onCreateNode = ({ node, boundActionCreators }) => {
-  const { createNode, deleteNode } = boundActionCreators;
+exports.onCreateNode = ({ node, actions }) => {
+  const { createNode, deleteNode } = actions;
   // TODO: check if I exclude and include all the good types minuscule, majuscule...
   // console.log(node.internal.type)
   // contentfulCollectionItemContentTextNode
@@ -373,8 +373,8 @@ exports.onCreateNode = ({ node, boundActionCreators }) => {
 // // IDEA: put default asset id for every unset image in any node
 // let getFirstAssetId = false
 // let getFirstContentTextId = false
-// exports.onCreateNode = ({ node, boundActionCreators }) => {
-//   const { createNode } = boundActionCreators
+// exports.onCreateNode = ({ node, actions }) => {
+//   const { createNode } = actions
 //   console.log(node.internal.type)
 //   if (node.internal.type === "ContentfulAsset" && !getFirstAssetId) {
 //     getFirstAssetId = true
@@ -405,8 +405,8 @@ exports.onCreateNode = ({ node, boundActionCreators }) => {
 //   //   return
 //   // }
 // }
-// exports.onPreBootstrap = ({ boundActionCreators }) => {
-//   const { createNode } = boundActionCreators
+// exports.onPreBootstrap = ({ actions }) => {
+//   const { createNode } = actions
 //   return new Promise((resolve, reject) => {
 //     // createNode(blockFreeTextMarkdownRemarkNode)
 //     createNode(blockFreeTextMainTextNode)

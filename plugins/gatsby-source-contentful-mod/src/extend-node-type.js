@@ -218,7 +218,7 @@ const resolveResponsiveResolution = (image, options) => {
 }
 exports.resolveResponsiveResolution = resolveResponsiveResolution
 
-const resolveResponsiveSizes = (image, options) => {
+const resolvefluid = (image, options) => {
   if (isImage(image)) {
     return new Promise(resolve => {
       getBase64ImageAndBasicMeasurements(
@@ -290,7 +290,7 @@ const resolveResponsiveSizes = (image, options) => {
     return null
   }
 }
-exports.resolveResponsiveSizes = resolveResponsiveSizes
+exports.resolvefluid = resolvefluid
 
 const resolveResize = (image, options) =>
   new Promise(resolve => {
@@ -382,9 +382,9 @@ exports.extendNodeType = ({ type }) => {
         return resolveResponsiveResolution(image, options)
       },
     },
-    responsiveSizes: {
+    fluid: {
       type: new GraphQLObjectType({
-        name: `ContentfulResponsiveSizes`,
+        name: `Contentfulfluid`,
         fields: {
           base64: { type: GraphQLString },
           aspectRatio: { type: GraphQLFloat },
@@ -421,7 +421,7 @@ exports.extendNodeType = ({ type }) => {
         },
       },
       resolve(image, options, context) {
-        return resolveResponsiveSizes(image, options)
+        return resolvefluid(image, options)
       },
     },
     resize: {

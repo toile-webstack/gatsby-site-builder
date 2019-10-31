@@ -1,17 +1,21 @@
-import React from 'react';
+import React from "react";
+import { graphql } from "gatsby";
 
-import { mapStyle } from '../utils/processCss';
-import { rhythm, scale } from '../utils/typography';
+import { mapStyle } from "../utils/processCss";
+import { rhythm, scale } from "../utils/typography";
 // import colors from "../utils/colors"
+import internalJson from "../utils/internalJson";
 
-import Html from '../atoms/Html';
+import Html from "../atoms/Html";
 
 class BlockFreeText extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.optionsData = JSON.parse(props.block.options._json_);
-    this.styleData = mapStyle(JSON.parse(props.block.style._json_));
+    const { options, style } = props.block;
+    this.optionsData = internalJson(options);
+    this.styleData = mapStyle(internalJson(style));
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     this.isColored = !!colorPalettes || !!colorCombo;
@@ -29,7 +33,7 @@ class BlockFreeText extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo,
+      funkyContrastCombo
     } = this.colors;
 
     const block = this.props.block;
@@ -48,7 +52,7 @@ class BlockFreeText extends React.Component {
         css={{
           padding: rhythm(1),
           display: `flex`,
-          flexFlow: 'row wrap',
+          flexFlow: "row wrap",
           justifyContent: `center`,
           alignItems: `center`,
           width: `100%`,
@@ -57,7 +61,7 @@ class BlockFreeText extends React.Component {
           ...this.props.passCSS,
           ...(this.isColored ? this.colors[classicCombo].style : {}),
           // ...this.colors[classicCombo].style,
-          ...this.styleData,
+          ...this.styleData
           // " a.button:hover": {
           //   ...this.colors[funkyContrastCombo].style,
           //   borderColor: this.colors[classicCombo].border
@@ -81,9 +85,7 @@ export const blockFreeTextFragment = graphql`
   fragment BlockFreeText on ContentfulBlockFreeText {
     id
     name
-    internal {
-      type
-    }
+    __typename
     main {
       id
       childMarkdownRemark {
@@ -94,12 +96,16 @@ export const blockFreeTextFragment = graphql`
       }
     }
     options {
-      _json_
+      internal {
+        content
+      }
       # colorPalettes
       # colorCombo
     }
     style {
-      _json_
+      internal {
+        content
+      }
     }
   }
 `;

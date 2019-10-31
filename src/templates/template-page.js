@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
-import Helmet from "react-helmet";
+import { graphql } from "gatsby";
+import { Helmet } from "react-helmet";
 
 import { mapStyle } from "../utils/processCss";
 import { metadata as siteMetadata } from "../utils/siteSettings.json";
 import { rhythm, scale } from "../utils/typography";
 import colors from "../utils/colors";
+import internalJson from "../utils/internalJson";
 
 import BlockFreeText from "../blocks/FreeText";
 import BlockForm from "../blocks/Form";
@@ -78,11 +80,18 @@ class PageTemplate extends React.Component {
     super(props);
     if (!props.data) return;
     // _json_ fields
-    this.metadata = JSON.parse(props.data.contentfulPage.metadata._json_);
-    this.optionsData = JSON.parse(props.data.contentfulPage.options._json_);
-    this.styleData = mapStyle(
-      JSON.parse(props.data.contentfulPage.style._json_)
-    );
+    const {
+      metadata: metadataData,
+      options: optionsData,
+      style: styleData,
+      scripts,
+      node_locale: pageLocale
+    } = props.data.contentfulPage;
+
+    this.metadata = internalJson(metadataData);
+    this.optionsData = internalJson(optionsData);
+    this.styleData = mapStyle(internalJson(styleData));
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     colorCombo = colorCombo
@@ -191,7 +200,7 @@ class PageTemplate extends React.Component {
               return null;
             }
 
-            switch (block.internal.type) {
+            switch (block.__typename) {
               case `ContentfulSection`:
                 return (
                   <Section
@@ -263,7 +272,9 @@ export const pageQuery = graphql`
       node_locale
       path
       metadata {
-        _json_
+        internal {
+          content
+        }
         # name
         # title
         # description
@@ -276,12 +287,16 @@ export const pageQuery = graphql`
         ...Section
       }
       options {
-        _json_
+        internal {
+          content
+        }
         # colorPalettes
         # colorCombo
       }
       style {
-        _json_
+        internal {
+          content
+        }
       }
       scripts {
         id

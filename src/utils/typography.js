@@ -10,7 +10,9 @@ import {
   typography as typographyOptions,
   style
 } from "./siteSettings.json";
-import colors, {
+import colors from "./colors.js";
+
+const {
   classicCombo,
   contrastCombo,
   funkyCombo,
@@ -18,7 +20,7 @@ import colors, {
   palettes,
   classic,
   contrast
-} from "./colors.js";
+} = colors;
 
 const options = {
   // title: ,//The theme title.
@@ -264,14 +266,15 @@ const options = {
 const typography = new Typography(options);
 
 // Rhythm(1) in pixels
-typography.typoRhythm =
+const typoRhythm =
   parseFloat(options.baseFontSize) * parseFloat(typography.rhythm(1));
 
 // Hot reload typography in development.
-if (process.env.NODE_ENV !== `production`) {
-  typography.injectStyles();
-}
+// if (process.env.NODE_ENV !== `production`) {
+//   typography.injectStyles();
+// }
 
 // typography.colors = { colorOption, palettes, ...colors }
 
-export default typography;
+const { rhythm, scale } = typography;
+export { rhythm, scale, typoRhythm, typography as default };

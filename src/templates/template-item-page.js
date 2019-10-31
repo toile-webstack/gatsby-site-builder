@@ -1,6 +1,7 @@
 import React from "react";
+import { graphql } from "gatsby";
 import Img from "gatsby-image";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import moment from "moment";
 import Moment from "react-moment";
 
@@ -23,11 +24,11 @@ class ItemPageTemplate extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.metadata = JSON.parse(props.data.collectionItem.metadata._json_);
-    this.optionsData = JSON.parse(props.data.collectionItem.options._json_);
+    this.metadata = JSON.parse(props.data.collectionItem.metadata.internal.content);
+    this.optionsData = JSON.parse(props.data.collectionItem.options.internal.content);
     // console.log(this.optionsData)
     this.styleData = mapStyle(
-      JSON.parse(props.data.collectionItem.style._json_)
+      JSON.parse(props.data.collectionItem.style.internal.content)
     );
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
@@ -165,7 +166,7 @@ class ItemPageTemplate extends React.Component {
             display: `flex`,
             flexFlow: `column`,
             alignItems: `flex-start`,
-            " .gatsby-image-outer-wrapper": {
+            " .gatsby-image-wrapper": {
               width: `100%`
             }
           }}
@@ -178,7 +179,7 @@ class ItemPageTemplate extends React.Component {
                 maxHeight: `300px`
               }}
               title={collectionItem.featuredImage.title}
-              sizes={collectionItem.featuredImage.responsiveSizes}
+              sizes={collectionItem.featuredImage.fluid}
             />
           )}
           <h1
@@ -267,7 +268,7 @@ export const itemPageQuery = graphql`
         id
         title
         description
-        responsiveSizes(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+        fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
           base64
           aspectRatio
           src
@@ -289,7 +290,7 @@ export const itemPageQuery = graphql`
         id
         title
         description
-        responsiveSizes(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+        fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
           base64
           aspectRatio
           src
@@ -298,13 +299,19 @@ export const itemPageQuery = graphql`
         }
       }
       metadata {
-        _json_
+        internal {
+          content
+        }
       }
       options {
-        _json_
+        internal {
+          content
+        }
       }
       style {
-        _json_
+        internal {
+          content
+        }
       }
       node_locale
       fields {

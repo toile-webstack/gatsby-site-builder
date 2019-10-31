@@ -1,15 +1,15 @@
-import React from "react"
-// import Link from "gatsby-link"
-import MdMenu from "react-icons/lib/md/menu"
-import MdClose from "react-icons/lib/md/close"
+import React from "react";
+// import { Link } from "gatsby"
+import MdMenu from "react-icons/lib/md/menu";
+import MdClose from "react-icons/lib/md/close";
 
-import { rhythm, scale } from "../utils/typography"
+import { rhythm, scale } from "../utils/typography";
 
 export default props => {
   return props.open ? (
     <MdClose
       onClick={() => {
-        props.toggleOpen()
+        props.toggleOpen();
       }}
       css={{
         fontSize: rhythm(1),
@@ -23,7 +23,7 @@ export default props => {
   ) : (
     <MdMenu
       onClick={() => {
-        props.toggleOpen()
+        props.toggleOpen();
       }}
       css={{
         fontSize: rhythm(1),
@@ -34,5 +34,5 @@ export default props => {
         }
       }}
     />
-  )
-}
+  );
+};

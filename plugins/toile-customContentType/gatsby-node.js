@@ -16,8 +16,8 @@ const { createPath } = require(`../../utils/utils.js`);
 
 // const destFile = "src/utils/siteSettings.json"
 
-// exports.onCreateNode = ({ node, boundActionCreators }) => {
-//   const { createNode, createNodeField } = boundActionCreators
+// exports.onCreateNode = ({ node, actions }) => {
+//   const { createNode, createNodeField } = actions
 //   if (
 //     node.internal.type.match(
 //       /SitePage|SitePlugin|Site|ContentfulContentType|ContentfulSettings|ContentfulBlockFreeText|ContentfulPage|ContentfulBlockForm|ContentfulSection|ContentfulCustomContentType|ContentfulAsset|contentfulBlockFreeTextMainTextNode|contentfulCollectionItemContentTextNode|MarkdownRemark/
@@ -103,15 +103,16 @@ const { createPath } = require(`../../utils/utils.js`);
 //   // MarkdownRemark
 // }
 
-exports.onCreateNode = ({ node, boundActionCreators }) => {
-  const { createNode, createNodeField } = boundActionCreators;
+exports.onCreateNode = ({ node, actions }) => {
+  const { createNode, createNodeField } = actions;
   // Add menuName field to contentfulPages
   if (node.internal.type.match(/ContentfulCollectionItem/)) {
     const locale = node.node_locale.split("-")[0];
     const path = createPath(`${node.type}/${node.name}`);
     const shortPath = `/${path}/`;
     const localizedPath = `/${locale}/${path}/`;
-    const metadata = JSON.parse(node.metadata._json_);
+    const metadata =
+      (node.metadata && JSON.parse(node.metadata.internal.content)) || {};
     const menuName = metadata.name || node.name || ``;
 
     createNodeField({
@@ -138,8 +139,8 @@ exports.onCreateNode = ({ node, boundActionCreators }) => {
 };
 
 // CREATE PAGES for collection items
-exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage } = boundActionCreators;
+exports.createPages = ({ graphql, actions }) => {
+  const { createPage } = actions;
   return new Promise((resolve, reject) => {
     const pageTemplate = path.resolve(`src/templates/template-page.js`);
     const listPageTemplate = path.resolve(
@@ -178,7 +179,9 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
                     locale
                   }
                   options {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   node_locale
                 }
@@ -216,7 +219,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
             locale
           } = collectionItem.fields;
           const path = locales.length === 1 ? shortPath : localizedPath;
-          // const options = JSON.parse(collectionItem.options._json_)
+          // const options = JSON.parse(collectionItem.options.internal.content)
           // TODO: 'Master' option to determine styles and options for the whole collection
           const pageContext = { id: collectionItem.id };
           const pageComponent = slash(itemPageTemplate);

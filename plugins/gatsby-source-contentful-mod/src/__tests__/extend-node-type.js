@@ -1,7 +1,7 @@
 const {
   createUrl,
   resolveResponsiveResolution,
-  resolveResponsiveSizes,
+  resolvefluid,
   resolveResize,
 } = require(`../extend-node-type`)
 
@@ -73,14 +73,14 @@ describe(`contentful extend node type`, () => {
       expect(resp.height).toBe(399)
     })
   })
-  describe(`resolveResponsiveSizes`, () => {
+  describe(`resolvefluid`, () => {
     it(`generates responsive size data for images`, async () => {
-      const resp = await resolveResponsiveSizes(image, { maxWidth: 400 })
+      const resp = await resolvefluid(image, { maxWidth: 400 })
       expect(resp.srcSet.length).toBeGreaterThan(1)
       expect(resp).toMatchSnapshot()
     })
     it(`generates responsive sizes data for images using all options`, async () => {
-      const resp = await resolveResponsiveSizes(image, {
+      const resp = await resolvefluid(image, {
         maxWidth: 450,
         maxHeight: 399,
         quality: 50,

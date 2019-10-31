@@ -21,8 +21,8 @@ let defaultLocale = "";
 let locales = [];
 
 // ADD DEFAULT LOCALE AND LOCALES ARRAY IN EACH SETTINGS NODE
-exports.onCreateNode = ({ node, boundActionCreators }) => {
-  const { createNode, createNodeField } = boundActionCreators;
+exports.onCreateNode = ({ node, actions }) => {
+  const { createNode, createNodeField } = actions;
 
   if (node.internal.type === `ContentfulSettings`) {
     const locale = node.node_locale.split("-")[0];
@@ -47,8 +47,8 @@ exports.onCreateNode = ({ node, boundActionCreators }) => {
 };
 
 // GENERATE JSON SETTINGS in a file
-exports.createPagesStatefully = ({ graphql, boundActionCreators }) => {
-  const { createPage, createNodeField } = boundActionCreators;
+exports.createPagesStatefully = ({ graphql, actions }) => {
+  const { createPage, createNodeField } = actions;
   return new Promise((resolve, reject) => {
     resolve(
       graphql(
@@ -76,22 +76,34 @@ exports.createPagesStatefully = ({ graphql, boundActionCreators }) => {
                     ...Page
                   }
                   metadata {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   colors {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   fonts {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   contact {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   options {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   style {
-                    _json_
+                    internal {
+                      content
+                    }
                   }
                   favicon {
                     id
@@ -109,11 +121,11 @@ exports.createPagesStatefully = ({ graphql, boundActionCreators }) => {
                   }
                   facebookImage {
                     id
-                    responsiveSizes {
+                    fluid {
                       src
                     }
                   }
-                  gaTrackingId
+                  # gaTrackingId
                   node_locale
                   fields {
                     defaultLocale
@@ -173,26 +185,22 @@ exports.createPagesStatefully = ({ graphql, boundActionCreators }) => {
           fonts,
           contact,
           options,
-          style,
-          gaTrackingId
+          style
+          // gaTrackingId
         } = result.data.settings.edges[0].node;
-        const favicon = `https:${
-          result.data.settings.edges[0].node.favicon.resize.src
-        }`;
-        const socialImageUrl = `https:${
-          result.data.settings.edges[0].node.facebookImage.responsiveSizes.src
-        }`;
+        const favicon = `https:${result.data.settings.edges[0].node.favicon.resize.src}`;
+        const socialImageUrl = `https:${result.data.settings.edges[0].node.facebookImage.fluid.src}`;
 
         // Settings Name
         let settingsName = name;
         // Website main metadata
-        metadata = JSON.parse(metadata._json_);
+        metadata = JSON.parse(metadata.internal.content);
         metadata.url = process.env.URL;
         metadata.name = metadata.name || settingsName;
         metadata.title = metadata.title || metadata.name;
         metadata.description = metadata.description || "";
         // Default colors
-        colors = JSON.parse(colors._json_);
+        colors = JSON.parse(colors.internal.content);
         colors.mainCombo = colors.mainCombo || "classic";
         colors.menuCombo = colors.menuCombo || "classic";
         colors.footerCombo = colors.footerCombo || "contrast";
@@ -206,7 +214,7 @@ exports.createPagesStatefully = ({ graphql, boundActionCreators }) => {
           }
         ];
         // Default fonts
-        fonts = JSON.parse(fonts._json_);
+        fonts = JSON.parse(fonts.internal.content);
         fonts.body = fonts.body
           ? fonts.body.concat(["Open Sans"])
           : ["Open Sans"];
@@ -214,12 +222,12 @@ exports.createPagesStatefully = ({ graphql, boundActionCreators }) => {
           ? fonts.header.concat(["Open Sans"])
           : ["Open Sans"];
         // contact infos
-        contact = JSON.parse(contact._json_);
+        contact = JSON.parse(contact.internal.content);
         // Options
-        options = JSON.parse(options._json_);
+        options = JSON.parse(options.internal.content);
         const { typography } = options;
         // Style
-        style = JSON.parse(style._json_);
+        style = JSON.parse(style.internal.content);
 
         // MENU
         // Array of site pages
@@ -284,7 +292,7 @@ exports.createPagesStatefully = ({ graphql, boundActionCreators }) => {
           favicon,
           socialImageUrl,
           metadata,
-          gaTrackingId,
+          // gaTrackingId,
           colors,
           fonts,
           contact,

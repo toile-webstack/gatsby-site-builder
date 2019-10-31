@@ -1,8 +1,5 @@
 import React from "react";
-import Link from "gatsby-link";
-// import moment from "moment"
-const moment = require("moment");
-const fr = require("moment/locale/fr");
+import { graphql, Link } from "gatsby";
 
 import { createPath } from "../../../utils/utils";
 import { locales } from "../../utils/siteSettings.json";
@@ -24,8 +21,8 @@ class CollectionItem extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.optionsData = JSON.parse(props.collectionItem.options._json_);
-    this.styleData = JSON.parse(props.collectionItem.style._json_);
+    this.optionsData = JSON.parse(props.collectionItem.options.internal.content);
+    this.styleData = JSON.parse(props.collectionItem.style.internal.content);
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     // colorCombo = colorCombo
@@ -136,7 +133,7 @@ export const collectionItemsFragment = graphql`
       id
       title
       description
-      responsiveSizes(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+      fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
         base64
         aspectRatio
         src
@@ -156,13 +153,19 @@ export const collectionItemsFragment = graphql`
     dateLastEdit
     categories
     metadata {
-      _json_
+      internal {
+        content
+      }
     }
     options {
-      _json_
+      internal {
+        content
+      }
     }
     style {
-      _json_
+      internal {
+        content
+      }
     }
     node_locale
     fields {

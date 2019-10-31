@@ -22,7 +22,7 @@ exports.setFieldsOnGraphQLNodeType = require(`./extend-node-type`).extendNodeTyp
  */
 
 exports.sourceNodes = async (
-  { boundActionCreators, getNodes, hasNodeChanged, store },
+  { actions, getNodes, hasNodeChanged, store },
   { spaceId, accessToken, host }
 ) => {
   const {
@@ -30,7 +30,7 @@ exports.sourceNodes = async (
     deleteNodes,
     touchNode,
     setPluginStatus,
-  } = boundActionCreators
+  } = actions
 
   host = host || `cdn.contentful.com`
   // Get sync token if it exists.

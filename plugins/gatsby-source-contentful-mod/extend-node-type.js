@@ -223,7 +223,7 @@ var resolveResponsiveResolution = function resolveResponsiveResolution(image, op
 };
 exports.resolveResponsiveResolution = resolveResponsiveResolution;
 
-var resolveResponsiveSizes = function resolveResponsiveSizes(image, options) {
+var resolvefluid = function resolvefluid(image, options) {
   if (isImage(image)) {
     return new Promise(function (resolve) {
       getBase64ImageAndBasicMeasurements(image, options).then(function (_ref2) {
@@ -296,7 +296,7 @@ var resolveResponsiveSizes = function resolveResponsiveSizes(image, options) {
     return null;
   }
 };
-exports.resolveResponsiveSizes = resolveResponsiveSizes;
+exports.resolvefluid = resolvefluid;
 
 var resolveResize = function resolveResize(image, options) {
   return new Promise(function (resolve) {
@@ -394,9 +394,9 @@ exports.extendNodeType = function (_ref4) {
         return resolveResponsiveResolution(image, options);
       }
     },
-    responsiveSizes: {
+    fluid: {
       type: new GraphQLObjectType({
-        name: "ContentfulResponsiveSizes",
+        name: "Contentfulfluid",
         fields: {
           base64: { type: GraphQLString },
           aspectRatio: { type: GraphQLFloat },
@@ -433,7 +433,7 @@ exports.extendNodeType = function (_ref4) {
         }
       },
       resolve: function resolve(image, options, context) {
-        return resolveResponsiveSizes(image, options);
+        return resolvefluid(image, options);
       }
     },
     resize: {

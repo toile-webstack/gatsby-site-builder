@@ -1,5 +1,5 @@
-const tinycolor = require('tinycolor2');
-import { colors } from './siteSettings.json';
+const tinycolor = require("tinycolor2");
+const { colors } = require("./siteSettings.json");
 
 const initialColors = colors;
 
@@ -134,36 +134,36 @@ colors.palettes.forEach(palette => {
 // }
 
 const palettes = colors.palettes;
-const mainCombo = colors.mainCombo || 'classic';
+const mainCombo = colors.mainCombo || "classic";
 
 const computeBase = mainCombo => {
   let base = { classicCombo: mainCombo };
   switch (mainCombo) {
-    case 'classic':
-      base.contrastCombo = 'contrast';
-      base.funkyCombo = 'funky';
-      base.funkyContrastCombo = 'funkyContrast';
+    case "classic":
+      base.contrastCombo = "contrast";
+      base.funkyCombo = "funky";
+      base.funkyContrastCombo = "funkyContrast";
       break;
-    case 'contrast':
-      base.contrastCombo = 'classic';
-      base.funkyCombo = 'funkyContrast';
-      base.funkyContrastCombo = 'funky';
+    case "contrast":
+      base.contrastCombo = "classic";
+      base.funkyCombo = "funkyContrast";
+      base.funkyContrastCombo = "funky";
       break;
-    case 'funky':
-      base.contrastCombo = 'funkyContrast';
-      base.funkyCombo = 'classic';
-      base.funkyContrastCombo = 'contrast';
+    case "funky":
+      base.contrastCombo = "funkyContrast";
+      base.funkyCombo = "classic";
+      base.funkyContrastCombo = "contrast";
       break;
-    case 'funkyContrast':
-      base.contrastCombo = 'funky';
-      base.funkyCombo = 'contrast';
-      base.funkyContrastCombo = 'classic';
+    case "funkyContrast":
+      base.contrastCombo = "funky";
+      base.funkyCombo = "contrast";
+      base.funkyContrastCombo = "classic";
       break;
     default:
-      base.classicCombo = 'classic';
-      base.contrastCombo = 'contrast';
-      base.funkyCombo = 'funky';
-      base.funkyContrastCombo = 'funkyContrast';
+      base.classicCombo = "classic";
+      base.contrastCombo = "contrast";
+      base.funkyCombo = "funky";
+      base.funkyContrastCombo = "funkyContrast";
   }
   return base;
 };
@@ -171,11 +171,12 @@ const {
   classicCombo,
   contrastCombo,
   funkyCombo,
-  funkyContrastCombo,
+  funkyContrastCombo
 } = computeBase(mainCombo);
-const menuCombo = eval(colors.menuCombo + 'Combo') || classicCombo;
-const footerCombo = eval(colors.footerCombo + 'Combo') || contrastCombo;
-const sidebarCombo = eval(colors.sidebarCombo + 'Combo') || classicCombo;
+// TODO: replace the eval hack
+const menuCombo = eval(colors.menuCombo + "Combo") || classicCombo;
+const footerCombo = eval(colors.footerCombo + "Combo") || contrastCombo;
+const sidebarCombo = eval(colors.sidebarCombo + "Combo") || classicCombo;
 
 class Combo {
   constructor(background, header, body, border, linkHover) {
@@ -193,36 +194,36 @@ class Combo {
       color: this.body,
       backgroundColor: this.background,
       borderColor: this.border,
-      ' h1, h2, h3, h4, h5, h6': {
-        color: this.header,
+      " h1, h2, h3, h4, h5, h6": {
+        color: this.header
       },
-      ' a:hover': {
-        color: this.linkHover,
+      " a:hover": {
+        color: this.linkHover
       },
-      ' *::selection': {
+      " *::selection": {
         background: this.linkHover,
-        color: this.background,
+        color: this.background
       },
-      ' input, textarea': {
+      " input, textarea": {
         backgroundColor: colors.palettes[0].neutral,
         color: colors.palettes[0].primary,
-        borderColor: this.border,
+        borderColor: this.border
       },
-      ' a.button:not(block a.button), button:not(block button)': {
+      " a.button:not(block a.button), button:not(block button)": {
         color: this.body,
         backgroundColor: this.background,
-        borderColor: this.border,
+        borderColor: this.border
       },
       " input[type='submit']": {
         color: this.body,
         backgroundColor: this.background,
-        borderColor: this.border,
+        borderColor: this.border
       },
       " a.button:hover, button:hover, input[type='submit']:hover": {
         color: this.background,
         backgroundColor: this.body,
-        borderColor: this.border,
-      },
+        borderColor: this.border
+      }
     };
   }
 }
@@ -235,7 +236,7 @@ const computeCombos = colorPalettes => {
     colorPalettes[0].primary,
     colorPalettes[0].primary,
     colorPalettes[0].primary,
-    colorPalettes[0].secondary,
+    colorPalettes[0].secondary
   );
   // const classic = new Combo(
   //   `initial`,
@@ -249,21 +250,21 @@ const computeCombos = colorPalettes => {
     colorPalettes[0].neutral,
     colorPalettes[0].neutral,
     colorPalettes[0].neutral,
-    colorPalettes[0].secondary,
+    colorPalettes[0].secondary
   );
   const funky = new Combo(
     colorPalettes[0].neutral,
     colorPalettes[0].secondary,
     colorPalettes[0].secondary,
     colorPalettes[0].secondary,
-    colorPalettes[0].primary,
+    colorPalettes[0].primary
   );
   const funkyContrast = new Combo(
     colorPalettes[0].secondary,
     colorPalettes[0].neutral,
     colorPalettes[0].neutral,
     colorPalettes[0].neutral,
-    colorPalettes[0].primary,
+    colorPalettes[0].primary
   );
   return { classic, contrast, funky, funkyContrast };
 };
@@ -275,6 +276,15 @@ const computeColors = (colorPalettes = [1], colorCombo = `classic`) => {
   const styles = computeCombos(colorPalettes);
   return { ...combos, ...styles, colorPalettes };
 };
+
+//prettier-ignore
+export {
+  menuCombo, footerCombo, sidebarCombo,
+  classicCombo, contrastCombo, funkyCombo, funkyContrastCombo,
+  classic, contrast, funky, funkyContrast,
+  palettes,
+  computeBase, computeCombos, computeColors
+}
 
 //prettier-ignore
 export default {

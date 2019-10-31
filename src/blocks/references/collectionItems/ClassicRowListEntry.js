@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "gatsby-link";
+import { Link } from "gatsby";
 import Img from "gatsby-image";
 import Moment from "react-moment";
 
@@ -63,7 +63,7 @@ export default ({
       <Img
         title={image.title}
         className="image"
-        sizes={image.responsiveSizes}
+        sizes={image.fluid}
       />
     </div>,
     <div

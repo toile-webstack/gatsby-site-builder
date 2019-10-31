@@ -1,6 +1,6 @@
 import React from "react";
-import Link from "gatsby-link";
-import Helmet from "react-helmet";
+import { graphql, Link, StaticQuery } from "gatsby";
+import { Helmet } from "react-helmet";
 import _ from "lodash";
 
 // import * as themes from "./typography-themes"
@@ -19,9 +19,14 @@ import {
   locales,
   metadata,
   favicon,
+  socialImageUrl,
   pages,
-  menu
+  menu,
+  colors,
+  fonts,
+  contact
 } from "../utils/siteSettings.json";
+import internalJson from "../utils/internalJson";
 
 import Menu from "../molecules/Menu";
 import ColorPalettesDemo from "../molecules/ColorPalettesDemo";
@@ -41,14 +46,12 @@ class DefaultLayout extends React.Component {
   constructor(props) {
     // console.log(props)
     super(props);
-    // _json_ fields
-    // this.metadata = JSON.parse(props.data.contentfulPage.metadata._json_)
-    this.optionsData = JSON.parse(
-      props.data.settings.edges[0].node.options._json_
-    );
-    this.styleData = mapStyle(
-      JSON.parse(props.data.settings.edges[0].node.style._json_)
-    );
+
+    const { options, style } = props.data.settings.edges[0].node;
+    // this.metadata = JSON.parse(props.data.contentfulPage.metadata.internal.content)
+    this.optionsData = internalJson(options);
+    this.styleData = mapStyle(internalJson(style));
+
     // menu is like {
     //   en-BE: [
     //     {name: 'Homepage', path: '/en-BE/'},
@@ -110,6 +113,7 @@ class DefaultLayout extends React.Component {
           defaultTitle={metadata.name}
           titleTemplate={`%s | ${metadata.name}`}
           title={metadata.title}
+          defer={false}
           // meta={[
           //   // { name: `twitter:site`, content: `@gatsbyjs` },
           //   // { property: `og:type`, content: `website` },
@@ -117,6 +121,22 @@ class DefaultLayout extends React.Component {
           //   { name: `description`, content: metadata.description }
           // ]}
         >
+          {/* From HTML.js */}
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          {/* TODO: Check if what is up here is not already implemented */}
+          <meta property="og:image" content={`${socialImageUrl}`} />
+          <link rel="icon" type="image/png" sizes="32x32" href={favicon} />
+          <meta property="og:type" content="website" />
+          {metadata.name && (
+            <meta property="og:site_name" content={`${metadata.name}`} />
+          )}
+          {/* End from HTML.js */}
+
           <meta name="description" content={metadata.description} />
           <link rel="canonical" href={metadata.url} />
           {scripts &&
@@ -239,7 +259,7 @@ class DefaultLayout extends React.Component {
               }
             }}
           >
-            {this.props.children()}
+            {this.props.children}
           </main>
         </div>
         {isLandingPage ? null : <Footer section={footer} />}
@@ -249,10 +269,8 @@ class DefaultLayout extends React.Component {
   }
 }
 
-export default DefaultLayout;
-
 // TODO: query for global styles and options in settings
-export const pageQuery = graphql`
+const QUERY = graphql`
   query IndexLayout {
     settings: allContentfulSettings(limit: 2) {
       edges {
@@ -260,10 +278,16 @@ export const pageQuery = graphql`
           id
           name
           style {
-            _json_
+            # _json_
+            internal {
+              content
+            }
           }
           options {
-            _json_
+            # _json_
+            internal {
+              content
+            }
           }
           node_locale
           scripts {
@@ -293,10 +317,16 @@ export const pageQuery = graphql`
         ...BlockReferences
       }
       options {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       style {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
     }
     cookieAlert: contentfulSection(name: { eq: "--cookie" }) {
@@ -312,11 +342,24 @@ export const pageQuery = graphql`
         ...BlockReferences
       }
       options {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
       style {
-        _json_
+        # _json_
+        internal {
+          content
+        }
       }
     }
   }
 `;
+
+export default props => (
+  <StaticQuery
+    query={QUERY}
+    render={data => <DefaultLayout {...{ ...props, data }} />}
+  />
+);

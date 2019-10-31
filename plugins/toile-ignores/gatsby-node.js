@@ -14,8 +14,8 @@ const crypto = require(`crypto`)
 //   GraphQLEnumType
 // } = require(`graphql`)
 
-exports.onCreateNode = ({ node, boundActionCreators }) => {
-  const { createNode, createNodeField } = boundActionCreators
+exports.onCreateNode = ({ node, actions }) => {
+  const { createNode, createNodeField } = actions
   if (node.internal.type === "ContentfulSettings") {
     // console.log(node)
   }

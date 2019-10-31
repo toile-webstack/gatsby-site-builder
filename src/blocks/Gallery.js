@@ -1,5 +1,6 @@
 import React from "react";
 import Img from "gatsby-image";
+import { graphql } from "gatsby";
 
 import { mapStyle } from "../utils/processCss";
 import { typoRhythm, rhythm, scale } from "../utils/typography";
@@ -14,6 +15,7 @@ import {
 //   withSimpleLineBreaks,
 //   protectEmail
 // } from "../utils/processHtml"
+import internalJson from "../utils/internalJson";
 
 import Modal from "../atoms/Modal";
 import Link from "../atoms/Link";
@@ -22,14 +24,10 @@ class BlockGallery extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.optionsData = props.block.options;
-    this.optionsData = this.optionsData._json_
-      ? JSON.parse(props.block.options._json_)
-      : this.optionsData;
-    this.styleData = props.block.style;
-    this.styleData = this.styleData._json_
-      ? mapStyle(JSON.parse(props.block.style._json_))
-      : this.styleData;
+    const { options, style } = props.block;
+    this.optionsData = internalJson(options);
+    this.styleData = mapStyle(internalJson(style));
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     this.isColored = !!colorPalettes || !!colorCombo;
@@ -152,14 +150,14 @@ class BlockGallery extends React.Component {
                         <Img
                           className="image"
                           title={image.title}
-                          sizes={image.responsiveSizes}
+                          sizes={image.fluid}
                         />
                       </Modal>
                     ) : null}
                     <Img
                       className="image"
                       title={image.title}
-                      sizes={image.responsiveSizes}
+                      sizes={image.fluid}
                       style={{
                         cursor:
                           to || this.optionsData.popup ? `pointer` : `auto`
@@ -185,14 +183,12 @@ export const blockGalleryFragment = graphql`
   fragment BlockGallery on ContentfulBlockGallery {
     id
     name
-    internal {
-      type
-    }
+    __typename
     gallery {
       id
       title
       description
-      responsiveSizes(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+      fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
         base64
         aspectRatio
         src
@@ -201,12 +197,16 @@ export const blockGalleryFragment = graphql`
       }
     }
     options {
-      _json_
+      internal {
+        content
+      }
       # colorPalettes
       # colorCombo
     }
     style {
-      _json_
+      internal {
+        content
+      }
     }
   }
 `;

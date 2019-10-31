@@ -15,7 +15,7 @@ module.exports = {
     // },
     `gatsby-plugin-layout`,
     {
-      resolve: `gatsby-source-contentful-mod`,
+      resolve: `gatsby-source-contentful`,
       options: {
         spaceId: process.env.contentfulSpaceID,
         accessToken: process.env.contentfulAccessToken
@@ -69,6 +69,12 @@ module.exports = {
         ]
       }
     },
+    {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/utils/typography`
+      }
+    },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-glamor`,
     `gatsby-plugin-sharp`,
@@ -82,7 +88,7 @@ module.exports = {
         trackingId: process.env.analyticsTrackingId
       }
     },
-    `toile-ignores`,
+    // `toile-ignores`,
     `toile-siteSettings`,
     `toile-pages`,
     `toile-customContentType`,
