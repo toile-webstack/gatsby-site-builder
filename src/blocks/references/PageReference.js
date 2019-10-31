@@ -13,6 +13,8 @@ import { rhythm, scale } from "../../utils/typography";
 //   pages,
 //   menu
 // } from "../../utils/siteSettings.json"
+import { mapStyle } from "../../utils/processCss";
+import internalJson from "../../utils/internalJson";
 
 import {
   replaceShortCodes,
@@ -24,8 +26,10 @@ class PageReference extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.optionsData = JSON.parse(props.page.options.internal.content);
-    this.styleData = JSON.parse(props.page.style.internal.content);
+    const { options, style } = props.page;
+    this.optionsData = internalJson(options);
+    this.styleData = mapStyle(internalJson(style));
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     colorCombo = colorCombo

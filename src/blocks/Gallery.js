@@ -149,15 +149,15 @@ class BlockGallery extends React.Component {
                       >
                         <Img
                           className="image"
-                          title={image.title}
-                          sizes={image.fluid}
+                          // title={image.title}
+                          fluid={image.fluid}
                         />
                       </Modal>
                     ) : null}
                     <Img
                       className="image"
-                      title={image.title}
-                      sizes={image.fluid}
+                      // title={image.title}
+                      fluid={image.fluid}
                       style={{
                         cursor:
                           to || this.optionsData.popup ? `pointer` : `auto`
@@ -188,12 +188,8 @@ export const blockGalleryFragment = graphql`
       id
       title
       description
-      fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
-        base64
-        aspectRatio
-        src
-        srcSet
-        sizes
+      fluid(maxWidth: 1000, quality: 80) {
+        ...GatsbyContentfulFluid
       }
     }
     options {

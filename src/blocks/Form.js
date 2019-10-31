@@ -33,7 +33,7 @@ class BlockForm extends React.Component {
     // Form name
     this.formName = slugify(props.block.name.toLowerCase());
     // Form Fields
-    this.fields = this.formData ? this.formData.fields : [];
+    this.fields = this.formData ? this.formData.formFields : [];
     this.defaultFieldsState = {};
     this.fields.forEach(field => {
       // for checkboxes, create an entry for each

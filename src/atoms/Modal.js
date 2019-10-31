@@ -26,6 +26,7 @@ export default props => {
         alignItems: `center`,
         zIndex: 100,
         cursor: `pointer`,
+        touchAction: "pinch-zoom",
         "> div": {
           position: `relative`,
           backgroundColor: `inherit`,
@@ -39,6 +40,7 @@ export default props => {
         },
         " .image, img": {
           // width: `auto`,
+          width: "100%",
           maxWidth: `75vw`,
           height: `auto`,
           maxHeight: `75vh`,

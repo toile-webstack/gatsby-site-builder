@@ -127,7 +127,7 @@ const options = {
         margin: `auto`
         // width: `100%`
       },
-      ".gatsby-image-wrapper > img": {
+      ".gatsby-image-wrapper img": {
         display: `inline`,
         maxWidth: `none`,
         maxHeight: `none`
