@@ -83,9 +83,9 @@ class PageTemplate extends React.Component {
     const {
       metadata: metadataData,
       options: optionsData,
-      style: styleData,
-      scripts,
-      node_locale: pageLocale
+      style: styleData
+      // scripts,
+      // node_locale: pageLocale
     } = props.data.contentfulPage;
 
     this.metadata = internalJson(metadataData);

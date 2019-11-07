@@ -14,6 +14,7 @@ import {
   gridLayout,
   listItemStyle
 } from "../utils/computeGrid";
+import internalJson from "../utils/internalJson";
 
 import BlockFreeText from "../blocks/FreeText";
 import BlockGallery from "../blocks/Gallery";
@@ -24,12 +25,18 @@ class ItemPageTemplate extends React.Component {
   constructor(props) {
     super(props);
     // _json_ fields
-    this.metadata = JSON.parse(props.data.collectionItem.metadata.internal.content);
-    this.optionsData = JSON.parse(props.data.collectionItem.options.internal.content);
-    // console.log(this.optionsData)
-    this.styleData = mapStyle(
-      JSON.parse(props.data.collectionItem.style.internal.content)
-    );
+    const {
+      metadata: metadataData,
+      options: optionsData,
+      style: styleData
+      // scripts,
+      // node_locale: pageLocale
+    } = props.data.collectionItem;
+
+    this.metadata = internalJson(metadataData);
+    this.optionsData = internalJson(optionsData);
+    this.styleData = mapStyle(internalJson(styleData));
+
     // Colors
     let { colorPalettes, colorCombo } = this.optionsData;
     // colorCombo = colorCombo && colors[`${colorCombo}Combo`]
@@ -238,7 +245,7 @@ class ItemPageTemplate extends React.Component {
           </div>
         </div>
         <Html
-          html={collectionItem.content.childMarkdownRemark.html}
+          html={collectionItem?.content?.childMarkdownRemark?.html}
           className="collectionItem--content"
         />
         {collectionItem.gallery && !hideGallery && (

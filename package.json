@@ -8,7 +8,8 @@
     "develop": "gatsby develop",
     "dev": "gatsby clean && gatsby develop",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf .cache public"
+    "clean": "rm -rf .cache public",
+    "schema-update": "rm -f schema.gql && GATSBY_UPDATE_SCHEMA_SNAPSHOT=true && gatsby build"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,7 @@
     "axios": "^0.16.2",
     "compass-vertical-rhythm": "^1.3.1",
     "dotenv": "^4.0.0",
-    "gatsby": "^2.17.7",
+    "gatsby": "^2.17.10",
     "gatsby-image": "^2",
     "gatsby-plugin-catch-links": "^2",
     "gatsby-plugin-glamor": "^2",
@@ -33,7 +34,8 @@
     "gatsby-plugin-netlify": "^2",
     "gatsby-plugin-nprogress": "^2",
     "gatsby-plugin-react-helmet": "^3.1.13",
-    "gatsby-plugin-sharp": "^2",
+    "gatsby-plugin-schema-snapshot": "^1.0.0",
+    "gatsby-plugin-sharp": "^2.2.36",
     "gatsby-plugin-sitemap": "^2",
     "gatsby-plugin-typography": "^2.3.15",
     "gatsby-remark-autolink-headers": "^2",
@@ -47,7 +49,7 @@
     "gatsby-source-contentful": "^2",
     "gatsby-source-filesystem": "^2",
     "gatsby-transformer-remark": "^2",
-    "gatsby-transformer-sharp": "^2",
+    "gatsby-transformer-sharp": "^2.3.2",
     "glamor": "^2.20.40",
     "lodash": "^4.17.15",
     "moment": "^2.18.1",

@@ -7,6 +7,7 @@ const slash = require(`slash`);
 const slugify = require("slugify");
 const crypto = require(`crypto`);
 const { createPath } = require(`../../utils/utils.js`);
+const internalJson = require(`../../src/utils/internalJson.js`);
 // const {
 //   GraphQLObjectType,
 //   GraphQLList,
@@ -194,13 +195,13 @@ exports.createPagesStatefully = ({ graphql, actions }) => {
         // Settings Name
         let settingsName = name;
         // Website main metadata
-        metadata = JSON.parse(metadata.internal.content);
+        metadata = internalJson(metadata);
         metadata.url = process.env.URL;
         metadata.name = metadata.name || settingsName;
         metadata.title = metadata.title || metadata.name;
         metadata.description = metadata.description || "";
         // Default colors
-        colors = JSON.parse(colors.internal.content);
+        colors = internalJson(colors);
         colors.mainCombo = colors.mainCombo || "classic";
         colors.menuCombo = colors.menuCombo || "classic";
         colors.footerCombo = colors.footerCombo || "contrast";
@@ -227,7 +228,7 @@ exports.createPagesStatefully = ({ graphql, actions }) => {
         options = JSON.parse(options.internal.content);
         const { typography } = options;
         // Style
-        style = JSON.parse(style.internal.content);
+        style = internalJson(style);
 
         // MENU
         // Array of site pages

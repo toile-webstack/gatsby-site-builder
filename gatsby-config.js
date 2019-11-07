@@ -92,6 +92,13 @@ module.exports = {
     `toile-siteSettings`,
     `toile-pages`,
     `toile-customContentType`,
+    {
+      resolve: `gatsby-plugin-schema-snapshot`,
+      options: {
+        path: `schema.gql`,
+        update: process.env.GATSBY_UPDATE_SCHEMA_SNAPSHOT
+      }
+    },
     `gatsby-plugin-netlify`
   ]
 };

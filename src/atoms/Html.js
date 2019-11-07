@@ -1,15 +1,17 @@
-import React from 'react';
+import React from "react";
 
-import { rhythm, scale } from '../utils/typography';
+import { rhythm, scale } from "../utils/typography";
 
 import {
   replaceShortCodes,
   withSimpleLineBreaks,
   protectEmail,
-  targetBlank,
-} from '../utils/processHtml';
+  targetBlank
+} from "../utils/processHtml";
 
 export default ({ html, passCSS, shortCodeMatchees, ...rest }) => {
+  if (!html) return null;
+
   html = protectEmail(html);
   html = withSimpleLineBreaks(html);
   // html = targetBlank(html)
@@ -22,10 +24,10 @@ export default ({ html, passCSS, shortCodeMatchees, ...rest }) => {
         width: `100%`,
         whiteSpace: `pre-line`,
         // whiteSpace: `pre-wrap`,
-        ...passCSS,
+        ...passCSS
       }}
       dangerouslySetInnerHTML={{
-        __html: html,
+        __html: html
       }}
     />
   );

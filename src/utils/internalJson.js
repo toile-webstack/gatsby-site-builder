@@ -3,4 +3,6 @@ const internalJson = o =>
   o ||
   {};
 
-export default internalJson;
+// export default internalJson;
+
+module.exports = internalJson;
