@@ -1,7 +1,7 @@
-import React from "react";
-import { graphql, Link, StaticQuery } from "gatsby";
-import { Helmet } from "react-helmet";
-import _ from "lodash";
+import React from 'react'
+import { graphql, Link, StaticQuery } from 'gatsby'
+import { Helmet } from 'react-helmet'
+import _ from 'lodash'
 
 // import * as themes from "./typography-themes"
 // importAll themes from
@@ -12,8 +12,8 @@ import _ from "lodash";
 // )
 // const typographyTheme = require("./typography-themes/typography-theme-alton/src/index.js")
 // console.log(themes)
-import { mapStyle } from "../utils/processCss";
-import { rhythm, scale } from "../utils/typography";
+import { mapStyle } from '../utils/processCss'
+import { rhythm, scale } from '../utils/typography'
 import {
   defaultLocale,
   locales,
@@ -24,17 +24,19 @@ import {
   menu,
   colors,
   fonts,
-  contact
-} from "../utils/siteSettings.json";
-import internalJson from "../utils/internalJson";
+  contact,
+} from '../utils/siteSettings.json'
+import internalJson from '../utils/internalJson'
 
-import Menu from "../molecules/Menu";
-import ColorPalettesDemo from "../molecules/ColorPalettesDemo";
-import ContactInfos from "../molecules/ContactInfos";
-import FooterFeed from "../molecules/FooterFeed";
-import Footer from "../molecules/Footer";
-import CookieAlert from "../atoms/CookieAlert";
-import Sidebar from "../molecules/Sidebar";
+import Menu from '../molecules/Menu'
+import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
+import ContactInfos from '../molecules/ContactInfos'
+import FooterFeed from '../molecules/FooterFeed'
+import Footer from '../molecules/Footer'
+import CookieAlert from '../atoms/CookieAlert'
+import Sidebar from '../molecules/Sidebar'
+
+import { SEO, Scripts } from '../atoms'
 
 // TODO: Handle Contact page differently
 // siteMapping.push({
@@ -45,12 +47,12 @@ import Sidebar from "../molecules/Sidebar";
 class DefaultLayout extends React.Component {
   constructor(props) {
     // console.log(props)
-    super(props);
+    super(props)
 
-    const { options, style } = props.data.settings.edges[0].node;
+    const { options, style } = props.data.settings.edges[0].node
     // this.metadata = JSON.parse(props.data.contentfulPage.metadata.internal.content)
-    this.optionsData = internalJson(options);
-    this.styleData = mapStyle(internalJson(style));
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
 
     // menu is like {
     //   en-BE: [
@@ -62,40 +64,44 @@ class DefaultLayout extends React.Component {
     //     {name: 'Contacte-moi', path: '/fr-BE/contact/'}
     //   ]
     // }
-    this.landingRE = new RegExp(/\/landing\//);
+    this.landingRE = new RegExp(/\/landing\//)
 
     this.state = {
-      defaultLocale: defaultLocale,
+      // defaultLocale,
       currentLocale: defaultLocale,
-      isLandingPage: Boolean(props.location.pathname.match(this.landingRE))
-    };
-  }
-  componentWillMount() {
-    this.updateState();
-  }
-  componentWillReceiveProps(nextProps) {
-    this.updateState(nextProps);
-    if (nextProps.location.pathname !== this.props.location.pathname) {
-      this.setState({
-        isLandingPage: !!nextProps.location.pathname.match(this.landingRE)
-      });
+      isLandingPage: Boolean(props.location.pathname.match(this.landingRE)),
     }
   }
+
+  componentDidMount() {
+    this.updateState()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.updateState(nextProps)
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.setState({
+        isLandingPage: !!nextProps.location.pathname.match(this.landingRE),
+      })
+    }
+  }
+
   updateState(props = this.props) {
     // TODO: Problem if a locale name happend to be in the page slug itself
     locales.forEach(locale => {
-      const re = new RegExp(`/${locale}/`, "gi");
+      const re = new RegExp(`/${locale}/`, 'gi')
       if (props.location.pathname.match(re)) {
-        this.setState({ currentLocale: locale });
+        this.setState({ currentLocale: locale })
       }
-    });
+    })
   }
-  render() {
-    const { isLandingPage } = this.state;
-    const { footer, cookieAlert, settings } = this.props.data;
 
-    const { scripts } = this.props.data.settings.edges[0].node;
-    const isSSR = typeof window === "undefined";
+  render() {
+    const { isLandingPage } = this.state
+    const { footer, cookieAlert, settings } = this.props.data
+
+    const { scripts } = this.props.data.settings.edges[0].node
+    const isSSR = typeof window === 'undefined'
 
     return (
       <div
@@ -106,7 +112,7 @@ class DefaultLayout extends React.Component {
           minHeight: `100vh`,
           width: `100%`,
           // paddingTop: rhythm(1.6)
-          ...this.styleData
+          ...this.styleData,
         }}
       >
         <Helmet
@@ -145,30 +151,30 @@ class DefaultLayout extends React.Component {
               ({
                 id,
                 name,
-                type = "text/javascript",
+                type = 'text/javascript',
                 content: { content },
                 // charset, // src,
                 ...srcAndCharset
               }) => {
                 const scriptProps = {
                   id: `${name}`,
-                  type
-                };
+                  type,
+                }
                 Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                  if (a) scriptProps[attr] = a;
-                });
+                  if (a) scriptProps[attr] = a
+                })
                 return (
                   <script
                     // defer
                     async
                     {...{
                       key: id,
-                      ...scriptProps
+                      ...scriptProps,
                     }}
                   >
                     {`${content}`}
                   </script>
-                );
+                )
               }
             )}
         </Helmet>
@@ -183,7 +189,7 @@ class DefaultLayout extends React.Component {
             passCss={{
               position: `fixed`,
               top: 0,
-              left: 0
+              left: 0,
             }}
           />
         )}
@@ -196,8 +202,8 @@ class DefaultLayout extends React.Component {
             passCss={{ visibility: `hidden` }}
           />
         )}
-        {process.env.NODE_ENV === "development" ||
-        (typeof window !== "undefined" &&
+        {process.env.NODE_ENV === 'development' ||
+        (typeof window !== 'undefined' &&
           window.location.href.match(/localhost|dev--.*netlify.com/gi)) ? (
           <ColorPalettesDemo />
         ) : null}
@@ -208,7 +214,7 @@ class DefaultLayout extends React.Component {
             flexGrow: 1,
             flexFlow: `column`,
             justifyContent: `center`,
-            width: `100%`
+            width: `100%`,
             // for sidebar layout
             // "@media(min-width: 800px)": {
             //   flexFlow: `row`,
@@ -238,7 +244,7 @@ class DefaultLayout extends React.Component {
               display: `flex`,
               flexFlow: `column`,
               width: `100%`,
-              "> div": {
+              '> div': {
                 // pages
                 flexGrow: `1`,
                 display: `flex`,
@@ -247,16 +253,16 @@ class DefaultLayout extends React.Component {
                 padding: 0,
                 // padding: `${rhythm(1)} ${rhythm(1 / 2)}`,
                 position: `relative`,
-                "> div": {
+                '> div': {
                   // 1st line blocks OR blog article
-                  ":first-child": {
-                    paddingTop: rhythm(2)
+                  ':first-child': {
+                    paddingTop: rhythm(2),
                   },
-                  ":last-child": {
-                    paddingBottom: rhythm(2)
-                  }
-                }
-              }
+                  ':last-child': {
+                    paddingBottom: rhythm(2),
+                  },
+                },
+              },
             }}
           >
             {this.props.children}
@@ -265,7 +271,7 @@ class DefaultLayout extends React.Component {
         {isLandingPage ? null : <Footer section={footer} />}
         {!cookieAlert ? null : <CookieAlert section={cookieAlert} />}
       </div>
-    );
+    )
   }
 }
 
@@ -355,11 +361,11 @@ const QUERY = graphql`
       }
     }
   }
-`;
+`
 
 export default props => (
   <StaticQuery
     query={QUERY}
     render={data => <DefaultLayout {...{ ...props, data }} />}
   />
-);
+)

@@ -1,36 +1,28 @@
-import React from "react";
-import { graphql, Link } from "gatsby";
+import React from 'react'
+import { graphql } from 'gatsby'
 
-import { createPath } from "../../../utils/utils";
-import { locales } from "../../utils/siteSettings.json";
-import { rhythm, scale } from "../../utils/typography";
-// import colors from "../utils/colors"
-import {
-  replaceShortCodes,
-  withSimpleLineBreaks,
-  protectEmail
-} from "../../utils/processHtml";
+import { locales } from '../../utils/siteSettings.json'
 
-import MusicListEntry from "./collectionItems/MusicListEntry";
-import DefaultListEntry from "./collectionItems/DefaultListEntry";
-import ClassicRowListEntry from "./collectionItems/ClassicRowListEntry";
-import TestimonialListEntry from "./collectionItems/TestimonialListEntry";
-import EventListEntry from "./collectionItems/EventListEntry";
+// import MusicListEntry from "./collectionItems/MusicListEntry";
+import DefaultListEntry from './collectionItems/DefaultListEntry'
+import ClassicRowListEntry from './collectionItems/ClassicRowListEntry'
+import TestimonialListEntry from './collectionItems/TestimonialListEntry'
+import EventListEntry from './collectionItems/EventListEntry'
 
 class CollectionItem extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     // _json_ fields
-    this.optionsData = JSON.parse(props.collectionItem.options.internal.content);
-    this.styleData = JSON.parse(props.collectionItem.style.internal.content);
+    this.optionsData = JSON.parse(props.collectionItem.options.internal.content)
+    this.styleData = JSON.parse(props.collectionItem.style.internal.content)
     // Colors
-    let { colorPalettes, colorCombo } = this.optionsData;
+    let { colorPalettes, colorCombo } = this.optionsData
     // colorCombo = colorCombo
     //   ? props.colors[`${colorCombo}Combo`]
     //   : props.colors.classicCombo;
     // const newColors = props.colors.computeColors(colorPalettes, colorCombo);
     // this.colors = { ...props.colors, ...newColors };
-    this.colors = { ...props.colors };
+    this.colors = { ...props.colors }
   }
 
   render() {
@@ -38,15 +30,15 @@ class CollectionItem extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo
-    } = this.colors;
+      funkyContrastCombo,
+    } = this.colors
 
-    let collectionItem = this.props.collectionItem;
+    let collectionItem = this.props.collectionItem
     if (Object.keys(collectionItem).length < 1) {
-      return null;
+      return null
     }
     if (!collectionItem.featuredImage || !collectionItem.name) {
-      return null;
+      return null
     }
 
     // const locale = collectionItem.fields.locale
@@ -60,7 +52,7 @@ class CollectionItem extends React.Component {
       collectionItem.path ||
       (locales.length > 1
         ? collectionItem.fields.localizedPath
-        : collectionItem.fields.shortPath);
+        : collectionItem.fields.shortPath)
 
     switch (this.props.layout.name) {
       case `classicRow`:
@@ -73,8 +65,8 @@ class CollectionItem extends React.Component {
             blockOptionsData={this.props.blockOptionsData}
             passCSS={this.props.passCSS}
           />
-        );
-        break;
+        )
+        break
       case `testimonial`:
         return (
           <TestimonialListEntry
@@ -85,8 +77,8 @@ class CollectionItem extends React.Component {
             blockOptionsData={this.props.blockOptionsData}
             passCSS={this.props.passCSS}
           />
-        );
-        break;
+        )
+        break
       case `event`:
         return (
           <EventListEntry
@@ -97,8 +89,8 @@ class CollectionItem extends React.Component {
             blockOptionsData={this.props.blockOptionsData}
             passCSS={this.props.passCSS}
           />
-        );
-        break;
+        )
+        break
       case ``:
       case `default`:
         return (
@@ -110,15 +102,15 @@ class CollectionItem extends React.Component {
             blockOptionsData={this.props.blockOptionsData}
             passCSS={this.props.passCSS}
           />
-        );
-        break;
+        )
+        break
       default:
-        return null;
+        return null
     }
   }
 }
 
-export default CollectionItem;
+export default CollectionItem
 
 export const collectionItemsFragment = graphql`
   fragment CollectionItem on ContentfulCollectionItem {
@@ -175,4 +167,4 @@ export const collectionItemsFragment = graphql`
       locale
     }
   }
-`;
+`

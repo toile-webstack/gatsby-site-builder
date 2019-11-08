@@ -1,38 +1,38 @@
-import React from "react";
-import { Helmet } from "react-helmet";
-import { graphql } from "gatsby";
+import React from 'react'
+import { graphql } from 'gatsby'
 
-import { mapStyle } from "../utils/processCss";
-import { typoRhythm, rhythm, scale } from "../utils/typography";
+import { mapStyle } from '../utils/processCss'
+import { rhythm } from '../utils/typography'
 import {
   addLayoutOptions,
-  gridLayout,
-  listItemStyle
-} from "../utils/computeGrid";
-import internalJson from "../utils/internalJson";
+  // gridLayout,
+  // listItemStyle
+} from '../utils/computeGrid'
+import internalJson from '../utils/internalJson'
 
-import BlockFreeText from "./FreeText";
-import BlockForm from "./Form";
-import BlockGallery from "../blocks/Gallery";
-import BlockReferences from "../blocks/References";
+// import { FreeText, Form, Gallery, References } from '.'
+import BlockFreeText from './FreeText'
+import BlockForm from './Form'
+import BlockGallery from '../blocks/Gallery'
+import BlockReferences from '../blocks/References'
 
 class Section extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     // _json_ fields
-    const { options, style } = props.block;
-    this.optionsData = internalJson(options);
-    this.styleData = mapStyle(internalJson(style));
+    const { options, style } = props.block
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
 
     // Colors
-    let { colorPalettes, colorCombo } = this.optionsData;
-    this.isColored = !!colorPalettes || !!colorCombo;
+    let { colorPalettes, colorCombo } = this.optionsData
+    this.isColored = !!colorPalettes || !!colorCombo
     colorCombo = colorCombo
       ? props.colors[`${colorCombo}Combo`]
-      : props.colors.classicCombo;
-    colorPalettes = colorPalettes || props.colors.colorPalettes;
-    const newColors = props.colors.computeColors(colorPalettes, colorCombo);
-    this.colors = { ...props.colors, ...newColors };
+      : props.colors.classicCombo
+    colorPalettes = colorPalettes || props.colors.colorPalettes
+    const newColors = props.colors.computeColors(colorPalettes, colorCombo)
+    this.colors = { ...props.colors, ...newColors }
   }
 
   render() {
@@ -40,23 +40,23 @@ class Section extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo
-    } = this.colors;
+      funkyContrastCombo,
+    } = this.colors
 
-    const section = this.props.block;
-    if (typeof section === `undefined` || !section) return null;
+    const section = this.props.block
+    if (typeof section === `undefined` || !section) return null
 
     const parentMaxWidth =
-      (this.props.passCSS && this.props.passCSS.maxWidth) || 1000;
+      (this.props.passCSS && this.props.passCSS.maxWidth) || 1000
 
     // const layout = gridLayout(this.optionsData, parentMaxWidth, section.blocks)
     const { layout, list } = addLayoutOptions(
       this.optionsData,
       parentMaxWidth,
       section.blocks
-    );
-    const { id: htmlId, name: htmlName } = this.optionsData;
-    const { shortCodeMatchees } = this.props;
+    )
+    const { id: htmlId, name: htmlName } = this.optionsData
+    const { shortCodeMatchees } = this.props
 
     return (
       <div
@@ -70,7 +70,7 @@ class Section extends React.Component {
           ...this.props.csss,
           ...(this.isColored ? this.colors[classicCombo].style : {}),
           // ...this.colors[classicCombo].style,
-          ...this.styleData
+          ...this.styleData,
         }}
       >
         <div
@@ -82,16 +82,16 @@ class Section extends React.Component {
             alignItems: layout.align || `baseline`,
             margin: `auto`,
             maxWidth: `1000px`,
-            padding: `0 ${rhythm(1)}`
+            padding: `0 ${rhythm(1)}`,
           }}
         >
           {list &&
             list.map((column, i, blocks) => {
               if (Object.keys(column).length < 1) {
-                return null;
+                return null
               }
               // const itemStyle = listItemStyle(layout, i)
-              const itemStyle = column[0].itemStyle;
+              const itemStyle = column[0].itemStyle
 
               // console.log(itemStyle)
               //
@@ -111,7 +111,7 @@ class Section extends React.Component {
                     flexFlow: `column`,
                     width: `100%`,
                     // width: itemStyle.width,
-                    maxWidth: itemStyle.maxWidth
+                    maxWidth: itemStyle.maxWidth,
 
                     // justifyContent: `space-around`,
                     // justifyContent: `space-evenly`,
@@ -134,8 +134,8 @@ class Section extends React.Component {
                             shortCodeMatchees={shortCodeMatchees}
                             cookieButton={this.props.cookieButton}
                           />
-                        );
-                        break;
+                        )
+                        break
                       case `ContentfulBlockForm`:
                         return (
                           <BlockForm
@@ -145,8 +145,8 @@ class Section extends React.Component {
                             location={this.props.location}
                             passCSS={itemStyle}
                           />
-                        );
-                        break;
+                        )
+                        break
                       case `ContentfulBlockGallery`:
                         return (
                           <BlockGallery
@@ -156,8 +156,8 @@ class Section extends React.Component {
                             location={this.props.location}
                             passCSS={itemStyle}
                           />
-                        );
-                        break;
+                        )
+                        break
                       case `ContentfulBlockReferences`:
                         return (
                           <BlockReferences
@@ -167,21 +167,21 @@ class Section extends React.Component {
                             location={this.props.location}
                             passCSS={itemStyle}
                           />
-                        );
-                        break;
+                        )
+                        break
                       default:
                     }
                   })}
                 </div>
-              );
+              )
             })}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Section;
+export default Section
 
 export const sectionFragment = graphql`
   fragment Section on ContentfulSection {
@@ -205,4 +205,4 @@ export const sectionFragment = graphql`
       }
     }
   }
-`;
+`
