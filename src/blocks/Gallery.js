@@ -1,183 +1,156 @@
-import React from "react";
-import Img from "gatsby-image";
-import { graphql } from "gatsby";
+import React, { useState } from 'react'
+import Img from 'gatsby-image'
+import { graphql } from 'gatsby'
 
-import { mapStyle } from "../utils/processCss";
-import { typoRhythm, rhythm, scale } from "../utils/typography";
+import { mapStyle } from '../utils/processCss'
+import { rhythm } from '../utils/typography'
 import {
   addLayoutOptions,
-  gridLayout,
-  listItemStyle
-} from "../utils/computeGrid";
+  // gridLayout,
+  // listItemStyle,
+} from '../utils/computeGrid'
 // import colors from "../utils/colors"
 // import {
 //   replaceShortCodes,
 //   withSimpleLineBreaks,
 //   protectEmail
 // } from "../utils/processHtml"
-import internalJson from "../utils/internalJson";
+import { internalJson, useColors } from '../utils'
 
-import Modal from "../atoms/Modal";
-import Link from "../atoms/Link";
+import Modal from '../atoms/Modal'
+import Link from '../atoms/Link'
 
-class BlockGallery extends React.Component {
-  constructor(props) {
-    super(props);
-    // _json_ fields
-    const { options, style } = props.block;
-    this.optionsData = internalJson(options);
-    this.styleData = mapStyle(internalJson(style));
+const Gallery = ({
+  block,
+  colors: colorsLib,
+  // location,
+  className = '',
+  passCSS,
+}) => {
+  if (Object.keys(block).length < 1) return null
+  if (block.gallery.length < 1) return null
 
-    // Colors
-    let { colorPalettes, colorCombo } = this.optionsData;
-    this.isColored = !!colorPalettes || !!colorCombo;
-    colorCombo = colorCombo
-      ? props.colors[`${colorCombo}Combo`]
-      : props.colors.classicCombo;
-    colorPalettes = colorPalettes || props.colors.colorPalettes;
-    const newColors = props.colors.computeColors(colorPalettes, colorCombo);
-    this.colors = { ...props.colors, ...newColors };
-    this.state = {
-      showModal: false
-    };
-    this.closeModal = this.closeModal.bind(this);
+  const [showModal, setShowModal] = useState(false)
+  const closeModal = () => {
+    setShowModal(false)
   }
 
-  closeModal() {
-    this.setState({ showModal: false });
-  }
+  const { options: optionsData, style: styleData } = block
+  const options = internalJson(optionsData)
+  const style = mapStyle(internalJson(styleData))
 
-  render() {
-    // console.log(this.props.passCSS)
-    // console.log(this.props)
-    const {
-      classicCombo,
-      contrastCombo,
-      funkyCombo,
-      funkyContrastCombo
-    } = this.colors;
+  const colors = useColors({ options, colorsLib })
+  const { isColored, classicCombo } = colors
 
-    const block = this.props.block;
-    if (Object.keys(block).length < 1) {
-      return null;
-    }
+  const parentMaxWidth = passCSS?.maxWidth || 1000
 
-    const parentMaxWidth =
-      (this.props.passCSS && this.props.passCSS.maxWidth) || 1000;
+  // const layout = gridLayout(this.optionsData, parentMaxWidth, block.gallery)
+  const { layout, list } = addLayoutOptions(
+    options,
+    parentMaxWidth,
+    block.gallery
+  )
 
-    // const layout = gridLayout(this.optionsData, parentMaxWidth, block.gallery)
-    const { layout, list } = addLayoutOptions(
-      this.optionsData,
-      parentMaxWidth,
-      block.gallery
-    );
+  const { id, name, links = [] } = options
 
-    const { id: htmlId, name: htmlName, links = [] } = this.optionsData;
-
-    return (
-      <div
-        id={htmlId}
-        name={htmlName}
-        className="block blockGallery"
-        css={{
+  return (
+    <div
+      {...{
+        id,
+        name,
+        className: `block blockGallery ${className || ''}`,
+        css: {
           padding: rhythm(1),
           display: `flex`,
           flexFlow: `row wrap`,
-          justifyContent: `space-around`,
-          justifyContent: `space-evenly`,
+          justifyContent: [`space-around`, `space-evenly`],
           alignItems: layout.align || `baseline`,
           width: `100%`,
           maxWidth: `1000px`,
           margin: `0 auto`,
 
-          ...this.props.passCSS,
-          ...(this.isColored ? this.colors[classicCombo].style : {}),
+          ...passCSS,
+          ...(isColored ? colors[classicCombo].style : {}),
           // ...this.colors[classicCombo].style,
-          ...this.styleData
+          ...style,
           // " a.button:hover": {
           //   ...this.colors[funkyContrastCombo].style,
           //   borderColor: this.colors[classicCombo].border
           // }
-        }}
-      >
-        {list.map((column, colCount) => {
-          // const imageStyle = listImageStyle(layout, i)
-          const itemStyle = column[0].itemStyle;
-          const imageStyle = column[0].imageStyle;
+        },
+      }}
+    >
+      {list.map((column, colCount) => {
+        // const imageStyle = listImageStyle(layout, i)
+        const { itemStyle, imageStyle } = column[0]
 
-          return (
-            <div
-              key={colCount}
-              className="column"
-              css={{
-                display: `flex`,
-                flexFlow: `column`,
-                width: `100%`,
-                maxWidth: itemStyle.maxWidth
-              }}
-            >
-              {column.map((image, imCount) => {
-                const to = links[colCount];
-                return (
-                  <Link
-                    tag="div"
-                    key={imCount}
-                    onClick={() => {
-                      if (this.optionsData.popup) {
-                        this.setState({ showModal: image.id });
-                      }
+        return (
+          <div
+            key={colCount}
+            className="column"
+            css={{
+              display: `flex`,
+              flexFlow: `column`,
+              width: `100%`,
+              maxWidth: itemStyle.maxWidth,
+            }}
+          >
+            {column.map((image, imCount) => {
+              const to = links[colCount]
+              return (
+                <Link
+                  tag="div"
+                  key={imCount}
+                  onClick={() => {
+                    if (options.popup) {
+                      setShowModal(image.id)
+                    }
+                  }}
+                  css={{
+                    ...imageStyle,
+                    display: 'block',
+                    // cursor: `pointer`,
+                    ' .gatsby-image-wrapper': {
+                      cursor: to ? `pointer` : 'auto',
+                    },
+                  }}
+                  to={to}
+                  // colors={this.colors}
+                >
+                  {options.gallery?.showTitle && image.title && (
+                    <div>{image.title}</div>
+                  )}
+                  {showModal === image.id ? (
+                    <Modal close={closeModal}>
+                      <Img
+                        className="image"
+                        // title={image.title}
+                        fluid={image.fluid}
+                      />
+                    </Modal>
+                  ) : null}
+                  <Img
+                    className="image"
+                    // title={image.title}
+                    fluid={image.fluid}
+                    style={{
+                      cursor: to || options.popup ? `pointer` : `auto`,
                     }}
-                    css={{
-                      ...imageStyle,
-                      display: "block",
-                      // cursor: `pointer`,
-                      " .gatsby-image-wrapper": {
-                        cursor: to ? `pointer` : "auto"
-                      }
-                    }}
-                    to={to}
-                    // colors={this.colors}
-                  >
-                    {this.optionsData.gallery &&
-                      this.optionsData.gallery.showTitle &&
-                      image.title && <div>{image.title}</div>}
-                    {this.state.showModal === image.id ? (
-                      <Modal
-                        close={() => {
-                          this.closeModal();
-                        }}
-                      >
-                        <Img
-                          className="image"
-                          // title={image.title}
-                          fluid={image.fluid}
-                        />
-                      </Modal>
-                    ) : null}
-                    <Img
-                      className="image"
-                      // title={image.title}
-                      fluid={image.fluid}
-                      style={{
-                        cursor:
-                          to || this.optionsData.popup ? `pointer` : `auto`
-                      }}
-                    />
-                    {this.optionsData.gallery &&
-                      this.optionsData.gallery.showDescription &&
-                      image.description && <div>{image.description}</div>}
-                  </Link>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
+                  />
+                  {options.gallery &&
+                    options.gallery.showDescription &&
+                    image.description && <div>{image.description}</div>}
+                </Link>
+              )
+            })}
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
-export default BlockGallery;
+export default Gallery
 
 export const blockGalleryFragment = graphql`
   fragment BlockGallery on ContentfulBlockGallery {
@@ -205,4 +178,4 @@ export const blockGalleryFragment = graphql`
       }
     }
   }
-`;
+`
