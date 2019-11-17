@@ -1,10 +1,10 @@
-import React from "react";
-import { graphql, Link } from "gatsby";
-import moment from "moment";
+import React from 'react'
+import { graphql, Link } from 'gatsby'
+import moment from 'moment'
 
-import { createPath } from "../../../utils/utils";
-import { locales, pages } from "../../utils/siteSettings.json";
-import { rhythm, scale } from "../../utils/typography";
+import { createPath } from '../../../utils/utils'
+import { locales, pages } from '../../utils/siteSettings.json'
+import { rhythm, scale } from '../../utils/typography'
 // import {
 //   defaultLocale,
 //   locales,
@@ -13,34 +13,34 @@ import { rhythm, scale } from "../../utils/typography";
 //   pages,
 //   menu
 // } from "../../utils/siteSettings.json"
-import { mapStyle } from "../../utils/processCss";
-import internalJson from "../../utils/internalJson";
+import { mapStyle } from '../../utils/processCss'
+import internalJson from '../../utils/internalJson'
 
 import {
   replaceShortCodes,
   withSimpleLineBreaks,
-  protectEmail
-} from "../../utils/processHtml";
+  protectEmail,
+} from '../../utils/processHtml'
 
 class PageReference extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     // _json_ fields
-    const { options, style } = props.page;
-    this.optionsData = internalJson(options);
-    this.styleData = mapStyle(internalJson(style));
+    const { options, style } = props.page
+    this.optionsData = internalJson(options)
+    this.styleData = mapStyle(internalJson(style))
 
     // Colors
-    let { colorPalettes, colorCombo } = this.optionsData;
+    let { colorPalettes, colorCombo } = this.optionsData
     colorCombo = colorCombo
       ? props.colors[`${colorCombo}Combo`]
-      : props.colors.classicCombo;
-    const newColors = props.colors.computeColors(colorPalettes, colorCombo);
-    this.colors = { ...props.colors, ...newColors };
+      : props.colors.classicCombo
+    const newColors = props.colors.computeColors(colorPalettes, colorCombo)
+    this.colors = { ...props.colors, ...newColors }
 
-    const { menuName, shortPath, localizedPath } = props.page.fields;
-    this.menuName = menuName;
-    this.path = locales.length === 1 ? shortPath : localizedPath;
+    const { menuName, shortPath, localizedPath } = props.page.fields
+    this.menuName = menuName
+    this.path = locales.length === 1 ? shortPath : localizedPath
   }
 
   render() {
@@ -48,24 +48,24 @@ class PageReference extends React.Component {
       classicCombo,
       contrastCombo,
       funkyCombo,
-      funkyContrastCombo
-    } = this.colors;
+      funkyContrastCombo,
+    } = this.colors
 
-    let page = this.props.page;
+    let page = this.props.page
     if (Object.keys(page).length < 1) {
-      return null;
+      return null
     }
     // if (!page.featuredImage || !page.name) {
     //   return null
     // }
 
-    const locale = page.node_locale;
+    const locale = page.node_locale
 
-    return <Link to={this.path}>{this.menuName}</Link>;
+    return <Link to={this.path}>{this.menuName}</Link>
   }
 }
 
-export default PageReference;
+export default PageReference
 
 export const pageReferenceFragment = graphql`
   fragment PageReference on ContentfulPage {
@@ -95,4 +95,4 @@ export const pageReferenceFragment = graphql`
     }
     node_locale
   }
-`;
+`

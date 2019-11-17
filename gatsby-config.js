@@ -1,26 +1,21 @@
-require("dotenv").config();
+require('dotenv').config()
 // const settings = require("./src/utils/siteSettings.json");
+
+const analyticsId = process.env.analyticsTrackingId
 
 module.exports = {
   siteMetadata: {
-    siteUrl: process.env.URL
+    siteUrl: process.env.URL,
   },
   plugins: [
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `data`,
-    //     path: `${__dirname}/data`,
-    //   },
-    // },
-    `gatsby-plugin-layout`,
     {
       resolve: `gatsby-source-contentful`,
       options: {
         spaceId: process.env.contentfulSpaceID,
-        accessToken: process.env.contentfulAccessToken
-      }
+        accessToken: process.env.contentfulAccessToken,
+      },
     },
+    `gatsby-plugin-layout`,
     {
       resolve: `gatsby-plugin-nprogress`,
       options: {
@@ -28,7 +23,7 @@ module.exports = {
         // color: `tomato`,
         // Disable the loading spinner.
         // showSpinner: false,
-      }
+      },
     },
     `gatsby-transformer-sharp`,
     {
@@ -60,34 +55,38 @@ module.exports = {
           // `gatsby-remark-autolink-headers`,
           `gatsby-remark-emoji`,
           {
-            resolve: "gatsby-remark-external-links"
+            resolve: 'gatsby-remark-external-links',
             // options: {
             //   target: "_blank",
             //   rel: "nofollow noopener noreferrer"
             // }
-          }
-        ]
-      }
+          },
+        ],
+      },
     },
     {
       resolve: `gatsby-plugin-typography`,
       options: {
-        pathToConfigModule: `src/utils/typography`
-      }
+        pathToConfigModule: `src/utils/typography`,
+      },
     },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-glamor`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-catch-links`,
     {
-      resolve: `gatsby-plugin-sitemap`
+      resolve: `gatsby-plugin-sitemap`,
     },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: process.env.analyticsTrackingId
-      }
-    },
+    ...(analyticsId
+      ? [
+          {
+            resolve: `gatsby-plugin-google-analytics`,
+            options: {
+              trackingId: analyticsId,
+            },
+          },
+        ]
+      : []),
     // `toile-ignores`,
     `toile-siteSettings`,
     `toile-pages`,
@@ -96,9 +95,9 @@ module.exports = {
       resolve: `gatsby-plugin-schema-snapshot`,
       options: {
         path: `schema.gql`,
-        update: process.env.GATSBY_UPDATE_SCHEMA_SNAPSHOT
-      }
+        update: process.env.GATSBY_UPDATE_SCHEMA_SNAPSHOT,
+      },
     },
-    `gatsby-plugin-netlify`
-  ]
-};
+    `gatsby-plugin-netlify`,
+  ],
+}
