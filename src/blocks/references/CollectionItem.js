@@ -3,110 +3,60 @@ import { graphql } from 'gatsby'
 
 import { locales } from '../../utils/siteSettings.json'
 
+import { internalJson } from '../../utils'
+import { mapStyle } from '../../utils/processCss'
+
 // import MusicListEntry from "./collectionItems/MusicListEntry";
 import DefaultListEntry from './collectionItems/DefaultListEntry'
 import ClassicRowListEntry from './collectionItems/ClassicRowListEntry'
 import TestimonialListEntry from './collectionItems/TestimonialListEntry'
 import EventListEntry from './collectionItems/EventListEntry'
 
-class CollectionItem extends React.Component {
-  constructor(props) {
-    super(props)
-    // _json_ fields
-    this.optionsData = JSON.parse(props.collectionItem.options.internal.content)
-    this.styleData = JSON.parse(props.collectionItem.style.internal.content)
-    // Colors
-    let { colorPalettes, colorCombo } = this.optionsData
-    // colorCombo = colorCombo
-    //   ? props.colors[`${colorCombo}Combo`]
-    //   : props.colors.classicCombo;
-    // const newColors = props.colors.computeColors(colorPalettes, colorCombo);
-    // this.colors = { ...props.colors, ...newColors };
-    this.colors = { ...props.colors }
+const CollectionItem = ({
+  collectionItem,
+  colors,
+  layout,
+  blockOptionsData,
+  passCSS,
+}) => {
+  const { options: optionsData, style: styleData } = collectionItem
+  // const options = internalJson(optionsData)
+  const style = mapStyle(internalJson(styleData))
+
+  if (Object.keys(collectionItem).length < 1) {
+    return null
+  }
+  if (!collectionItem.featuredImage || !collectionItem.name) {
+    return null
   }
 
-  render() {
-    const {
-      classicCombo,
-      contrastCombo,
-      funkyCombo,
-      funkyContrastCombo,
-    } = this.colors
+  const path =
+    collectionItem.path ||
+    (locales.length > 1
+      ? collectionItem.fields.localizedPath
+      : collectionItem.fields.shortPath)
 
-    let collectionItem = this.props.collectionItem
-    if (Object.keys(collectionItem).length < 1) {
+  const propsToPass = {
+    collectionItem: { ...collectionItem, path },
+    colors,
+    styleData: style,
+    layout,
+    blockOptionsData,
+    passCSS,
+  }
+
+  switch (layout.name) {
+    case `classicRow`:
+      return <ClassicRowListEntry {...propsToPass} />
+    case `testimonial`:
+      return <TestimonialListEntry {...propsToPass} />
+    case `event`:
+      return <EventListEntry {...propsToPass} />
+    case ``:
+    case `default`:
+      return <DefaultListEntry {...propsToPass} />
+    default:
       return null
-    }
-    if (!collectionItem.featuredImage || !collectionItem.name) {
-      return null
-    }
-
-    // const locale = collectionItem.fields.locale
-
-    // collectionItem.momentPublished = !collectionItem.datePublished
-    //   ? ""
-    //   : moment(collectionItem.datePublished)
-    //       .locale(locale)
-    //       .format("Do MMM YYYY")
-    collectionItem.path =
-      collectionItem.path ||
-      (locales.length > 1
-        ? collectionItem.fields.localizedPath
-        : collectionItem.fields.shortPath)
-
-    switch (this.props.layout.name) {
-      case `classicRow`:
-        return (
-          <ClassicRowListEntry
-            collectionItem={collectionItem}
-            colors={this.colors}
-            styleData={this.styleData}
-            layout={this.props.layout}
-            blockOptionsData={this.props.blockOptionsData}
-            passCSS={this.props.passCSS}
-          />
-        )
-        break
-      case `testimonial`:
-        return (
-          <TestimonialListEntry
-            collectionItem={collectionItem}
-            colors={this.colors}
-            styleData={this.styleData}
-            layout={this.props.layout}
-            blockOptionsData={this.props.blockOptionsData}
-            passCSS={this.props.passCSS}
-          />
-        )
-        break
-      case `event`:
-        return (
-          <EventListEntry
-            collectionItem={collectionItem}
-            colors={this.colors}
-            styleData={this.styleData}
-            layout={this.props.layout}
-            blockOptionsData={this.props.blockOptionsData}
-            passCSS={this.props.passCSS}
-          />
-        )
-        break
-      case ``:
-      case `default`:
-        return (
-          <DefaultListEntry
-            collectionItem={collectionItem}
-            colors={this.colors}
-            styleData={this.styleData}
-            layout={this.props.layout}
-            blockOptionsData={this.props.blockOptionsData}
-            passCSS={this.props.passCSS}
-          />
-        )
-        break
-      default:
-        return null
-    }
   }
 }
 
