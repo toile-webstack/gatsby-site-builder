@@ -11,12 +11,6 @@ import {
   // gridLayout,
   // listItemStyle,
 } from '../utils/computeGrid'
-// import colors from "../utils/colors"
-// import {
-//   replaceShortCodes,
-//   withSimpleLineBreaks,
-//   protectEmail
-// } from "../utils/processHtml"
 import { internalJson, useColors } from '../utils'
 
 import CollectionItem from './references/CollectionItem'
