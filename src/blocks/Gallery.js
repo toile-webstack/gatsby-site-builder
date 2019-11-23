@@ -20,6 +20,8 @@ import { internalJson, useColors } from '../utils'
 import Modal from '../atoms/Modal'
 import Link from '../atoms/Link'
 
+import { LBlockGallery } from '../t-layouts'
+
 const Gallery = ({
   block,
   colors: colorsLib,
@@ -54,20 +56,21 @@ const Gallery = ({
   const { id, name, links = [] } = options
 
   return (
-    <div
+    <LBlockGallery
       {...{
         id,
         name,
         className: `block blockGallery ${className || ''}`,
         css: {
-          padding: rhythm(1),
-          display: `flex`,
-          flexFlow: `row wrap`,
-          justifyContent: [`space-around`, `space-evenly`],
+          // padding: rhythm(1),
+          // display: `flex`,
+          // flexFlow: `row wrap`,
+          // justifyContent: [`space-around`, `space-evenly`],
+          // width: `100%`,
+          // maxWidth: `1000px`,
+          // margin: `0 auto`,
+
           alignItems: layout.align || `baseline`,
-          width: `100%`,
-          maxWidth: `1000px`,
-          margin: `0 auto`,
 
           ...passCSS,
           ...(isColored ? colors[classicCombo].style : {}),
@@ -146,7 +149,7 @@ const Gallery = ({
           </div>
         )
       })}
-    </div>
+    </LBlockGallery>
   )
 }
 

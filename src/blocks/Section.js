@@ -13,8 +13,8 @@ import internalJson from '../utils/internalJson'
 // import { FreeText, Form, Gallery, References } from '.'
 import BlockFreeText from './FreeText'
 import BlockForm from './Form'
-import BlockGallery from '../blocks/Gallery'
-import BlockReferences from '../blocks/References'
+import BlockGallery from './Gallery'
+import BlockReferences from './References'
 
 class Section extends React.Component {
   constructor(props) {

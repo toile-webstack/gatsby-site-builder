@@ -2,8 +2,9 @@ import React from 'react'
 import { graphql } from 'gatsby'
 
 import { mapStyle } from '../utils/processCss'
-import { rhythm } from '../utils/typography'
 import { internalJson, useColors } from '../utils'
+
+import { LBlockFreeText } from '../t-layouts'
 
 import Html from '../atoms/Html'
 
@@ -27,20 +28,12 @@ const FreeText = ({
   const { id, name } = options
 
   return (
-    <div
+    <LBlockFreeText
       {...{
         id,
         name,
         className: `block blockFreeText ${className || ''}`,
         css: {
-          padding: rhythm(1),
-          display: `flex`,
-          flexFlow: 'row wrap',
-          justifyContent: `center`,
-          alignItems: `center`,
-          width: `100%`,
-          maxWidth: `1000px`,
-          margin: `0 auto`,
           ...passCSS,
           ...(isColored ? colors[classicCombo].style : {}),
           // ...this.colors[classicCombo].style,
@@ -57,7 +50,7 @@ const FreeText = ({
         shortCodeMatchees={shortCodeMatchees}
       />
       {cookieButton && cookieButton({ style: colors[classicCombo].style })}
-    </div>
+    </LBlockFreeText>
   )
 }
 

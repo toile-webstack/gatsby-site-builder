@@ -13,6 +13,8 @@ import { internalJson, useColors } from '../utils'
 
 import Html from '../atoms/Html'
 
+import { LBlockForm } from '../t-layouts'
+
 const ERROR = 'error'
 const SUCCESS = 'success'
 const PENDING = 'pending'
@@ -252,7 +254,8 @@ const Form = ({
             />
           </div>
         )
-      } else if (type.match(/text|tel|email|date/)) {
+      }
+      if (type.match(/text|tel|email|date/)) {
         return (
           <div key={key}>
             <label htmlFor={type + name}>
@@ -268,7 +271,8 @@ const Form = ({
             />
           </div>
         )
-      } else if (type.match(/submit/)) {
+      }
+      if (type.match(/submit/)) {
         return (
           <input
             type={type}
@@ -282,7 +286,8 @@ const Form = ({
             }}
           />
         )
-      } else if (type.match(/radio/)) {
+      }
+      if (type.match(/radio/)) {
         return (
           <div key={key} css={attributes.css}>
             {options &&
@@ -312,7 +317,8 @@ const Form = ({
               })}
           </div>
         )
-      } else if (type.match(/checkbox/)) {
+      }
+      if (type.match(/checkbox/)) {
         return (
           <div key={key}>
             {options &&
@@ -355,7 +361,6 @@ const Form = ({
 
   const reactForm = (
     <div>
-      {/* {this.props.block.form.before} */}
       <form
         className={slugify(block.name.toLowerCase())}
         onSubmit={handleSubmit}
@@ -396,24 +401,12 @@ const Form = ({
   )
 
   return form ? (
-    <div
+    <LBlockForm
       id={id}
       name={name}
       className={`block blockForm ${className || ''}`}
       css={{
         ...colors[classicCombo].style,
-        padding: rhythm(1),
-        display: `flex`,
-        justifyContent: `center`,
-        alignItems: `center`,
-        width: `100%`,
-        maxWidth: `1000px`,
-        margin: `0 auto`,
-        '> div': {
-          width: `100%`,
-          maxWidth: `1000px`,
-          margin: `auto`,
-        },
         " input[type='radio'] + label > span, input[type='checkbox'] + label > span": {
           background:
             colors[classicCombo].background === colors.palettes[0].neutral
@@ -433,7 +426,7 @@ const Form = ({
       {successState === ERROR && error}
       {successState === SUCCESS && success}
       {successState === PENDING && reactForm}
-    </div>
+    </LBlockForm>
   ) : null
 }
 

@@ -15,6 +15,7 @@ import { internalJson, useColors } from '../utils'
 
 import CollectionItem from './references/CollectionItem'
 import PageReference from './references/PageReference'
+import { LBlockReferences } from '../t-layouts'
 
 const ColumnWrapper = ({ maxWidth, children, className }) => (
   <div
@@ -145,7 +146,7 @@ const References = ({
       {...{
         id,
         name,
-        className: `block blockReferences ${className}`,
+        className: `block-wrapper ${className}`,
         css: {
           width: `100%`,
           maxWidth: `1000px`,
@@ -153,7 +154,6 @@ const References = ({
           flexGrow: 1,
           display: `flex`,
           flexFlow: `column`,
-          // ...passCSS,
           ...(isColored ? colors[classicCombo].style : {}),
           ...style,
         },
@@ -200,41 +200,16 @@ const References = ({
             })}
         </div>
       )}
-      <div
+      <LBlockReferences
+        className="block blockReferences"
         css={{
-          padding: rhythm(1),
-          display: `flex`,
-          flexFlow: `row wrap`,
-          justifyContent: [`space-around`, `space-evenly`],
-          alignItems: `flex-start`,
-          width: `100%`,
-          margin: `0 auto`,
-          // "> a": {
-          //   width: `100%`,
-          //   maxWidth:
-          //     block.references.length < 3
-          //       ? `calc((1000px - ${rhythm(2)}) / ${block.references.length})`
-          //       : `calc((1000px - ${rhythm(2)}) / 3)`,
-          //   // margin: `auto`,
-          //   padding: `${rhythm(1 / 2)} ${rhythm(1 / 8)}`
-          // },
-          ' .image': {
-            // height: `200px` // TODO: check if it does not scew up block references but wes posing problem for Testimonials
-          },
-          ' h3': {
-            marginTop: 0,
-          },
           ...passCSS,
           ...colors[classicCombo].style,
           ...style,
-          // " a.button:hover": {
-          //   ...this.colors[funkyContrastCombo].style,
-          //   borderColor: this.colors[classicCombo].border
-          // }
         }}
       >
         {carouselDisplay ? <Carousel>{inner}</Carousel> : inner}
-      </div>
+      </LBlockReferences>
     </div>
   )
 }
