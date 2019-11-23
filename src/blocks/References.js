@@ -187,6 +187,10 @@ const References = ({
                   }}
                   tabIndex="0"
                   css={{
+                    margin: `${rhythm(1 / 4)} ${rhythm(1 / 4)}`,
+                    padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
+                    cursor: `pointer`,
+                    border: `solid 1px`,
                     ...colors[combo].style,
                   }}
                 >
