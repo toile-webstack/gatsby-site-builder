@@ -64,6 +64,13 @@ module.exports = {
         ],
       },
     },
+    // `gatsby-plugin-glamor`,
+    {
+      resolve: `gatsby-plugin-emotion`,
+      options: {
+        // Accepts all options defined by `babel-plugin-emotion` plugin.
+      },
+    },
     {
       resolve: `gatsby-plugin-typography`,
       options: {
@@ -71,7 +78,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-glamor`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-catch-links`,
     {
