@@ -37,6 +37,7 @@ import CookieAlert from '../atoms/CookieAlert'
 import Sidebar from '../molecules/Sidebar'
 
 import { SEO, Scripts } from '../atoms'
+import { LLayout } from '../t-layouts'
 
 // TODO: Handle Contact page differently
 // siteMapping.push({
@@ -56,18 +57,19 @@ const DefaultLayout = ({
   data: { settings, cookieAlert, footer } = {},
   location,
   children,
+  isSSR,
+  isLandingPage: islp,
 }) => {
   const { pathname } = location || {}
   const { options: optionsData, style: styleData, scripts } = settings
   const options = internalJson(optionsData)
   const style = mapStyle(internalJson(styleData))
-  const { isLandingPage: islp } = options
 
   // const landingRE = new RegExp(/\/landing\//)
   const currentLocale = getCurrentLocale(pathname) || defaultLocale
-  const isLandingPage = islp || /\/landing\//.test(pathname)
+  const isLandingPage =
+    islp || options.isLandingPage || /\/landing\//.test(pathname)
 
-  const isSSR = typeof window === 'undefined'
   const envIsDev =
     process.env.NODE_ENV === 'development' ||
     (!isSSR && window.location.href.match(/localhost|dev--.*netlify.com/gi))
@@ -76,78 +78,45 @@ const DefaultLayout = ({
   // const { isColored, classicCombo } = colors
 
   return (
-    <div
+    <LLayout
+      data-component="layout"
       className="layout"
       css={{
-        position: 'relative',
-        display: `flex`,
-        flexFlow: `column`,
-        minHeight: `100vh`,
-        width: `100%`,
-        // paddingTop: rhythm(1.6)
         ...style,
       }}
     >
-      <Helmet
-        defaultTitle={metadata.name}
-        titleTemplate={`%s | ${metadata.name}`}
-        title={metadata.title}
-        defer={false}
-        // meta={[
-        //   // { name: `twitter:site`, content: `@gatsbyjs` },
-        //   // { property: `og:type`, content: `website` },
-        //   // { property: `og:site_name`, content: metadata.name },
-        //   { name: `description`, content: metadata.description }
-        // ]}
+      <SEO
+        {...{
+          defer: false,
+          defaultTitle: metadata.name,
+          titleTemplate: `%s | ${metadata.name}`,
+          title: metadata.title,
+          name: metadata.name,
+          //
+          lang: currentLocale,
+          description: metadata.description,
+          canonicalUrl: metadata.url,
+          favicon,
+          socialImage: socialImageUrl,
+          // IDEA: use fullPath in sitePage fields for canonical url
+          ogType: metadata.ogType || 'website',
+        }}
       >
         {/* From HTML.js */}
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* TODO: Check if what is up here is not already implemented */}
-        <meta property="og:image" content={`${socialImageUrl}`} />
-        <link rel="icon" type="image/png" sizes="32x32" href={favicon} />
-        <meta property="og:type" content="website" />
-        {metadata.name && (
-          <meta property="og:site_name" content={`${metadata.name}`} />
-        )}
         {/* End from HTML.js */}
-
-        <meta name="description" content={metadata.description} />
-        <link rel="canonical" href={metadata.url} />
-        {scripts &&
-          !isSSR &&
-          scripts.map(
-            ({
-              id,
-              name,
-              type = 'text/javascript',
-              content: { content },
-              // charset, // src,
-              ...srcAndCharset
-            }) => {
-              const scriptProps = {
-                id: `${name}`,
-                type,
-              }
-              Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                if (a) scriptProps[attr] = a
-              })
-              return (
-                <script
-                  // defer
-                  async
-                  {...{
-                    key: id,
-                    ...scriptProps,
-                  }}
-                >
-                  {`${content}`}
-                </script>
-              )
-            }
-          )}
-      </Helmet>
+        <Scripts
+          {...{
+            scripts,
+            async: true,
+            dynamicOnly: true,
+            idPrefix: 'layout',
+          }}
+        />
+      </SEO>
 
       {isLandingPage ? null : (
         <Menu
@@ -159,70 +128,13 @@ const DefaultLayout = ({
         />
       )}
       {envIsDev && <ColorPalettesDemo />}
-      <div
-        css={{
-          margin: `auto`,
-          display: `flex`,
-          flexGrow: 1,
-          flexFlow: `column`,
-          justifyContent: `center`,
-          width: `100%`,
-          // for sidebar layout
-          // "@media(min-width: 800px)": {
-          //   flexFlow: `row`,
-          //   "> .layout-main": {
-          //     maxWidth: 1000,
-          //   },
-          //   "> .sidebar": {
-          //     width: 250,
-          //     marginLeft: rhythm(1 / 2),
-          //   },
-          // },
-          // "@media(min-width: 1270px)": {
-          //   "> .layout-main": {
-          //     maxWidth: 1000,
-          //   },
-          //   "> .sidebar": {
-          //     width: 250,
-          //     marginLeft: rhythm(1 / 2),
-          //   },
-          // },
-        }}
-      >
-        <main
-          className="layout-main"
-          css={{
-            flexGrow: 1,
-            display: `flex`,
-            flexFlow: `column`,
-            width: `100%`,
-            '> div': {
-              // pages
-              flexGrow: `1`,
-              display: `flex`,
-              flexFlow: `column`,
-              justifyContent: `center`,
-              padding: 0,
-              // padding: `${rhythm(1)} ${rhythm(1 / 2)}`,
-              position: `relative`,
-              '> div': {
-                // 1st line blocks OR blog article
-                ':first-child': {
-                  paddingTop: rhythm(2),
-                },
-                ':last-child': {
-                  paddingBottom: rhythm(2),
-                },
-              },
-            },
-          }}
-        >
-          {children}
-        </main>
+      <div className="layout-wrapper">
+        {/* wrapper was useful for sidebar */}
+        <main className="layout-main">{children}</main>
       </div>
       {isLandingPage ? null : <Footer section={footer} />}
       {!cookieAlert ? null : <CookieAlert section={cookieAlert} />}
-    </div>
+    </LLayout>
   )
 }
 

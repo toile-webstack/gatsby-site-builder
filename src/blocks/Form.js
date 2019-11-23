@@ -7,7 +7,7 @@ import _ from 'lodash'
 
 import { mapStyle } from '../utils/processCss'
 // import { metadata as siteMetadata } from '../utils/siteSettings.json'
-import { rhythm } from '../utils/typography'
+// import { rhythm } from '../utils/typography'
 // import colors from "../utils/colors"
 import { internalJson, useColors } from '../utils'
 
@@ -82,14 +82,12 @@ const Form = ({
   className = '',
   passCSS,
 }) => {
-  console.log(block)
   if (!block.form) return null
   if (Object.keys(block).length < 1) return null
 
   const { options: optionsData, style: styleData, form: formData } = block
   const form = internalJson(formData)
   const options = internalJson(optionsData)
-  const dataOptions = options
   const style = mapStyle(internalJson(styleData))
 
   const colors = useColors({ options, colorsLib })
@@ -150,7 +148,7 @@ const Form = ({
       //   ...fieldsToSend
       // })
       params: {
-        'form-name': this.formName,
+        'form-name': formName,
         ...fieldsToSend,
       },
     })

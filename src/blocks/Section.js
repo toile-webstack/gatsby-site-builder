@@ -1,5 +1,6 @@
 import React from 'react'
 import { graphql } from 'gatsby'
+import { For } from 'react-loops'
 
 import { mapStyle } from '../utils/processCss'
 import { rhythm } from '../utils/typography'
@@ -8,177 +9,119 @@ import {
   // gridLayout,
   // listItemStyle
 } from '../utils/computeGrid'
-import internalJson from '../utils/internalJson'
+import { internalJson, useColors } from '../utils'
 
-// import { FreeText, Form, Gallery, References } from '.'
-import BlockFreeText from './FreeText'
-import BlockForm from './Form'
-import BlockGallery from './Gallery'
-import BlockReferences from './References'
+import { FreeText, Form, Gallery, References } from '.'
+import { LSection } from '../t-layouts'
 
-class Section extends React.Component {
-  constructor(props) {
-    super(props)
-    // _json_ fields
-    const { options, style } = props.block
-    this.optionsData = internalJson(options)
-    this.styleData = mapStyle(internalJson(style))
+const Section = ({
+  block: section,
+  location,
+  colors: colorsLib,
+  passCSS,
+  className = '',
+  csss,
+  shortCodeMatchees,
+  cookieButton,
+  ...props
+}) => {
+  if (typeof section === `undefined` || !section) return null
 
-    // Colors
-    let { colorPalettes, colorCombo } = this.optionsData
-    this.isColored = !!colorPalettes || !!colorCombo
-    colorCombo = colorCombo
-      ? props.colors[`${colorCombo}Combo`]
-      : props.colors.classicCombo
-    colorPalettes = colorPalettes || props.colors.colorPalettes
-    const newColors = props.colors.computeColors(colorPalettes, colorCombo)
-    this.colors = { ...props.colors, ...newColors }
-  }
+  const { options: optionsData, style: styleData, blocks } = section
+  const options = internalJson(optionsData)
+  const style = mapStyle(internalJson(styleData))
 
-  render() {
-    const {
-      classicCombo,
-      contrastCombo,
-      funkyCombo,
-      funkyContrastCombo,
-    } = this.colors
+  const colors = useColors({ options, colorsLib })
+  const { isColored, classicCombo } = colors
+  const { id, name } = options
 
-    const section = this.props.block
-    if (typeof section === `undefined` || !section) return null
+  const parentMaxWidth = passCSS?.maxWidth || 1000
 
-    const parentMaxWidth =
-      (this.props.passCSS && this.props.passCSS.maxWidth) || 1000
+  const { layout, list } = addLayoutOptions(options, parentMaxWidth, blocks)
 
-    // const layout = gridLayout(this.optionsData, parentMaxWidth, section.blocks)
-    const { layout, list } = addLayoutOptions(
-      this.optionsData,
-      parentMaxWidth,
-      section.blocks
-    )
-    const { id: htmlId, name: htmlName } = this.optionsData
-    const { shortCodeMatchees } = this.props
-
-    return (
+  return (
+    <LSection
+      {...{
+        id,
+        name,
+        className: `block section ${className || ''}`,
+        css: {
+          ...csss,
+          ...(isColored ? colors[classicCombo].style : {}),
+          // ...colors[classicCombo].style,
+          ...style,
+        },
+      }}
+    >
       <div
-        id={htmlId}
-        name={htmlName}
-        className="block section"
         css={{
-          position: `relative`,
-          width: `100%`,
-          padding: `${rhythm(1)} 0`,
-          ...this.props.csss,
-          ...(this.isColored ? this.colors[classicCombo].style : {}),
-          // ...this.colors[classicCombo].style,
-          ...this.styleData,
+          alignItems: layout.align || `baseline`,
         }}
       >
-        <div
-          css={{
-            display: `flex`,
-            flexFlow: `row wrap`,
-            justifyContent: `space-around`,
-            justifyContent: `space-evenly`,
-            alignItems: layout.align || `baseline`,
-            margin: `auto`,
-            maxWidth: `1000px`,
-            padding: `0 ${rhythm(1)}`,
-          }}
-        >
-          {list &&
-            list.map((column, i, blocks) => {
-              if (Object.keys(column).length < 1) {
-                return null
-              }
-              // const itemStyle = listItemStyle(layout, i)
-              const itemStyle = column[0].itemStyle
+        {list &&
+          list.map((column, colI) => {
+            const { id: colFirstId } = (column && column[0]) || { id: colI }
+            if (Object.keys(column).length < 1) {
+              return null
+            }
+            // const itemStyle = listItemStyle(layout, i)
+            const { itemStyle } = column[0]
 
-              // console.log(itemStyle)
-              //
-              // const passCSS = {
-              //   maxWidth: layout.childMaxWidths[i],
-              //   width: `100%`,
-              //   margin: `0`
-              // }
+            // console.log(itemStyle)
+            //
+            // const passCSS = {
+            //   maxWidth: layout.childMaxWidths[i],
+            //   width: `100%`,
+            //   margin: `0`
+            // }
 
-              return (
-                <div
-                  key={i}
-                  className="column"
-                  css={{
-                    position: `relative`,
-                    display: `flex`,
-                    flexFlow: `column`,
-                    width: `100%`,
-                    // width: itemStyle.width,
-                    maxWidth: itemStyle.maxWidth,
+            return (
+              <div
+                key={colFirstId}
+                className="column section-column"
+                css={{
+                  maxWidth: itemStyle.maxWidth,
+                }}
+              >
+                <For
+                  of={column}
+                  as={block => {
+                    const blockProps = {
+                      key: block.id,
+                      block,
+                      colors,
+                      location,
+                      passCSS: itemStyle,
+                    }
 
-                    // justifyContent: `space-around`,
-                    // justifyContent: `space-evenly`,
-                    // alignItems: layout.align || `baseline`,
-                    // margin: `auto`,
-                    // maxWidth: `1000px`,
-                    // padding: `0 ${rhythm(1)}`
-                  }}
-                >
-                  {column.map((block, i) => {
                     switch (block.__typename) {
                       case `ContentfulBlockFreeText`:
                         return (
-                          <BlockFreeText
-                            key={i}
-                            block={block}
-                            colors={this.colors}
-                            location={this.props.location}
-                            passCSS={itemStyle}
-                            shortCodeMatchees={shortCodeMatchees}
-                            cookieButton={this.props.cookieButton}
+                          <FreeText
+                            {...{
+                              ...blockProps,
+                              shortCodeMatchees,
+                              cookieButton,
+                            }}
                           />
                         )
-                        break
                       case `ContentfulBlockForm`:
-                        return (
-                          <BlockForm
-                            key={i}
-                            block={block}
-                            colors={this.colors}
-                            location={this.props.location}
-                            passCSS={itemStyle}
-                          />
-                        )
-                        break
+                        return <Form {...{ ...blockProps }} />
                       case `ContentfulBlockGallery`:
-                        return (
-                          <BlockGallery
-                            key={i}
-                            block={block}
-                            colors={this.colors}
-                            location={this.props.location}
-                            passCSS={itemStyle}
-                          />
-                        )
-                        break
+                        return <Gallery {...{ ...blockProps }} />
                       case `ContentfulBlockReferences`:
-                        return (
-                          <BlockReferences
-                            key={i}
-                            block={block}
-                            colors={this.colors}
-                            location={this.props.location}
-                            passCSS={itemStyle}
-                          />
-                        )
-                        break
+                        return <References {...{ ...blockProps }} />
                       default:
+                        return null
                     }
-                  })}
-                </div>
-              )
-            })}
-        </div>
+                  }}
+                />
+              </div>
+            )
+          })}
       </div>
-    )
-  }
+    </LSection>
+  )
 }
 
 export default Section

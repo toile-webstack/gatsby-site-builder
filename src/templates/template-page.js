@@ -20,7 +20,7 @@ const TemplatePage = ({
 }) => {
   if (!page) return null
 
-  console.log(page)
+  // console.log(page)
 
   const {
     metadata: metadataData,
@@ -38,11 +38,10 @@ const TemplatePage = ({
   const { classicCombo } = colors
 
   const isSSR = typeof window === 'undefined'
-  const isLandingPage =
-    options.isLandingPage || /\/landing\//.test(location.pathname)
+  const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
 
   return (
-    <Layout {...{ location }}>
+    <Layout {...{ location, isSSR, isLandingPage }}>
       <SEO
         {...{
           lang: pageLocale,
