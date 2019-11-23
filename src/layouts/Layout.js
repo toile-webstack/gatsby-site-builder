@@ -57,7 +57,6 @@ const DefaultLayout = ({
   location,
   children,
 }) => {
-  return children
   const { pathname } = location || {}
   const { options: optionsData, style: styleData, scripts } = settings
   const options = internalJson(optionsData)
@@ -460,7 +459,7 @@ const DefaultLayout = ({
 
 // TODO: query for global styles and options in settings
 const QUERY = graphql`
-  query IndexLayout {
+  query Layout {
     settings: contentfulSettings {
       id
       name

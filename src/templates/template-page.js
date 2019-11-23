@@ -18,6 +18,8 @@ const TemplatePage = ({
 }) => {
   if (!page) return null
 
+  console.log(page)
+
   const {
     metadata: metadataData,
     options: optionsData,
@@ -32,6 +34,10 @@ const TemplatePage = ({
 
   const colors = useColors({ options, colorsLib })
   const { classicCombo } = colors
+
+  const isSSR = typeof window === 'undefined'
+  const isLandingPage =
+    options.isLandingPage || /\/landing\//.test(location.pathname)
 
   return (
     <>
@@ -56,6 +62,7 @@ const TemplatePage = ({
         />
       </SEO>
       <div
+        data-component="page"
         css={{
           ...colors[classicCombo].style,
           ...style,
