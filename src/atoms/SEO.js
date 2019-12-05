@@ -23,9 +23,7 @@ const SEO = ({
   defer = false,
   defaultTitle,
   titleTemplate,
-
-  charSet = 'utf-8',
-
+  // charSet = 'utf-8',
   lang,
   name,
   title,

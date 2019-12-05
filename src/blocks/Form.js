@@ -404,7 +404,7 @@ const Form = ({
       name={name}
       className={`block blockForm ${className || ''}`}
       css={{
-        ...colors[classicCombo].style,
+        ...(isColored ? colors[classicCombo].style : {}),
         " input[type='radio'] + label > span, input[type='checkbox'] + label > span": {
           background:
             colors[classicCombo].background === colors.palettes[0].neutral

@@ -3,7 +3,7 @@ import { graphql } from 'gatsby'
 import { For } from 'react-loops'
 
 import { mapStyle } from '../utils/processCss'
-import { rhythm } from '../utils/typography'
+// import { rhythm } from '../utils/typography'
 import {
   addLayoutOptions,
   // gridLayout,
@@ -23,7 +23,6 @@ const Section = ({
   csss,
   shortCodeMatchees,
   cookieButton,
-  ...props
 }) => {
   if (typeof section === `undefined` || !section) return null
 
@@ -48,7 +47,6 @@ const Section = ({
         css: {
           ...csss,
           ...(isColored ? colors[classicCombo].style : {}),
-          // ...colors[classicCombo].style,
           ...style,
         },
       }}
@@ -64,16 +62,7 @@ const Section = ({
             if (Object.keys(column).length < 1) {
               return null
             }
-            // const itemStyle = listItemStyle(layout, i)
             const { itemStyle } = column[0]
-
-            // console.log(itemStyle)
-            //
-            // const passCSS = {
-            //   maxWidth: layout.childMaxWidths[i],
-            //   width: `100%`,
-            //   margin: `0`
-            // }
 
             return (
               <div
