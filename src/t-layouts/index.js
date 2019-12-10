@@ -1,6 +1,13 @@
 import React from 'react'
 import { rhythm } from '../utils/typography'
 
+export {
+  LArticleDefault,
+  LArticleClassicRow,
+  LArticleEvent,
+  LArticleTestimonial,
+} from './LArticle'
+
 export const LLayout = ({ ...props }) => (
   <div
     {...{
