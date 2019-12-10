@@ -15,6 +15,7 @@ export default ({
   styleData,
   layout,
   blockOptionsData,
+  optionsData,
   passCSS,
 }) => {
   const { funkyCombo } = colors
@@ -117,6 +118,7 @@ export default ({
   return (
     <LinkOrNotCollectionItem
       blockOptionsData={blockOptionsData}
+      optionsData={optionsData}
       collectionItem={collectionItem}
       colors={colors}
     >

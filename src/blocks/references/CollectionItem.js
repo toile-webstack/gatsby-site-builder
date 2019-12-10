@@ -20,7 +20,7 @@ const CollectionItem = ({
   passCSS,
 }) => {
   const { options: optionsData, style: styleData } = collectionItem
-  // const options = internalJson(optionsData)
+  const options = internalJson(optionsData)
   const style = mapStyle(internalJson(styleData))
 
   if (Object.keys(collectionItem).length < 1) {
@@ -42,6 +42,7 @@ const CollectionItem = ({
     styleData: style,
     layout,
     blockOptionsData,
+    optionsData: options,
     passCSS,
   }
 

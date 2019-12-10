@@ -5,6 +5,7 @@ import { rhythm, scale } from '../utils/typography'
 
 const LinkOrNotCollectionItem = ({
   blockOptionsData,
+  optionsData,
   collectionItem,
   children,
   passCSS,
@@ -15,8 +16,8 @@ const LinkOrNotCollectionItem = ({
   const linkTo = blockOptionsData && blockOptionsData.linkTo
   const internalLink = collectionItem.path
 
-  const optionsData = JSON.parse(collectionItem.options.internal.content)
   const externalLink = optionsData && optionsData.linkTo
+  const { lang } = optionsData
 
   const css = {
     display: `flex`,
@@ -50,6 +51,7 @@ const LinkOrNotCollectionItem = ({
     case `external`:
       return (
         <a
+          {...{ ...(lang && { lang }) }}
           href={externalLink}
           target="_blank"
           rel="nofollow noopener noreferrer"
@@ -59,18 +61,21 @@ const LinkOrNotCollectionItem = ({
           {children}
         </a>
       )
-      break
     case `none`:
       return (
-        <div className="collectionItem" css={css}>
+        <div
+          {...{ ...(lang && { lang }) }}
+          className="collectionItem"
+          css={css}
+        >
           {children}
         </div>
       )
-      break
     case `page`:
     default:
       return (
         <Link
+          {...{ ...(lang && { lang }) }}
           to={internalLink}
           className="collectionItem stylishLink"
           css={css}
