@@ -12,10 +12,14 @@ const Meta = ({
   ...props
 }) => {
   if (!children && !content && !href) {
-    console.log(`No content to SEO tag ${name || property || rel}`)
+    // console.log(`No content to SEO tag ${name || property || rel}`)
     return null
   }
-  return <Tag {...{ children, property, name, content, rel, href, ...props }} />
+  return (
+    <Helmet>
+      <Tag {...{ children, property, name, content, rel, href, ...props }} />
+    </Helmet>
+  )
 }
 
 // Object type: https://developers.facebook.com/docs/reference/opengraph#object-type
@@ -34,14 +38,25 @@ const SEO = ({
   socialImage,
   children,
 }) => (
-  <Helmet
-    {...{
-      defer,
-      defaultTitle,
-      titleTemplate,
-    }}
-  >
-    {lang && <html lang={lang} />}
+  <>
+    <Helmet
+      {...{
+        ...(defer && { defer }),
+        ...(defaultTitle && { defaultTitle }),
+        ...(titleTemplate && { titleTemplate }),
+      }}
+    >
+      {lang && <html lang={lang} />}
+      {/* {title && <title>{title}</title>} */}
+      {/* {title && <meta property="og:title" content={`${title} | ${name}`} />} */}
+      {/* {description && <meta name="description" content={description} />} */}
+      {/* {description && <meta property="og:description" content={description} />} */}
+      {/* {canonicalUrl && <link rel="canonical" href={canonicalUrl} />} */}
+      {/* {canonicalUrl && <meta property="og:url" content={canonicalUrl} />} */}
+      {/* ogType && <meta property="og:type" content={ogType} />} */}
+
+      {children}
+    </Helmet>
     <Meta {...{ tag: 'title' }}>{title}</Meta>
     <Meta {...{ property: 'og:title', content: `${title} | ${name}` }} />
     <Meta {...{ property: 'og:site_name', content: name }} />
@@ -60,16 +75,7 @@ const SEO = ({
     />
     <Meta {...{ property: 'og:image', content: socialImage }} />
     <Meta {...{ property: 'og:type', content: ogType }} />
-    {/* {title && <title>{title}</title>} */}
-    {/* {title && <meta property="og:title" content={`${title} | ${name}`} />} */}
-    {/* {description && <meta name="description" content={description} />} */}
-    {/* {description && <meta property="og:description" content={description} />} */}
-    {/* {canonicalUrl && <link rel="canonical" href={canonicalUrl} />} */}
-    {/* {canonicalUrl && <meta property="og:url" content={canonicalUrl} />} */}
-    {/* ogType && <meta property="og:type" content={ogType} />} */}
-
-    {children}
-  </Helmet>
+  </>
 )
 
 export default SEO
