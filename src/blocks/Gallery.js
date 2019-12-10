@@ -18,7 +18,8 @@ import {
 import { internalJson, useColors } from '../utils'
 
 import Modal from '../atoms/Modal'
-import Link from '../atoms/Link'
+// import LinkSimple from '../atoms/LinkSimple'
+import { LinkWrapper } from '../atoms/Link'
 
 import { LBlockGallery } from '../t-layouts'
 
@@ -101,7 +102,7 @@ const Gallery = ({
             {column.map((image, imCount) => {
               const to = links[colCount]
               return (
-                <Link
+                <LinkWrapper
                   tag="div"
                   key={imCount}
                   onClick={() => {
@@ -143,7 +144,7 @@ const Gallery = ({
                   {options.gallery &&
                     options.gallery.showDescription &&
                     image.description && <div>{image.description}</div>}
-                </Link>
+                </LinkWrapper>
               )
             })}
           </div>
