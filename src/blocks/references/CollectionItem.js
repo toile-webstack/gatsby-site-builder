@@ -1,10 +1,10 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 
-import { locales } from '../../utils/siteSettings.json'
+// import { locales } from '../../utils/siteSettings.json'
 
-import { internalJson } from '../../utils'
-import { mapStyle } from '../../utils/processCss'
+// import { internalJson } from '../../utils'
+// import { mapStyle } from '../../utils/processCss'
 
 // import MusicListEntry from "./collectionItems/MusicListEntry";
 import DefaultListEntry from './collectionItems/DefaultListEntry'
@@ -12,29 +12,45 @@ import ClassicRowListEntry from './collectionItems/ClassicRowListEntry'
 import TestimonialListEntry from './collectionItems/TestimonialListEntry'
 import EventListEntry from './collectionItems/EventListEntry'
 
+import CArticle from '../../t-logic/CArticle'
+import LArticle from '../../t-layouts/LArticle'
+
 const CollectionItem = ({
   collectionItem,
   colors,
   layout,
-  blockOptionsData,
+  blockOptions,
   passCSS,
 }) => {
-  const { options: optionsData, style: styleData } = collectionItem
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  const { options, style, to, className, lang } = CArticle({
+    article: collectionItem,
+    blockOptions,
+  })
 
   if (Object.keys(collectionItem).length < 1) {
     return null
   }
+  // TODO: weak to return null if no featuredImage
   if (!collectionItem.featuredImage || !collectionItem.name) {
     return null
   }
 
-  const path =
-    collectionItem.path ||
-    (locales.length > 1
-      ? collectionItem.fields.localizedPath
-      : collectionItem.fields.shortPath)
+  return (
+    <LArticle
+      {...{
+        article: collectionItem,
+        blockOptions,
+        options,
+        style,
+        to,
+        className,
+        lang,
+        colors,
+        layout,
+        passCSS,
+      }}
+    />
+  )
 
   const propsToPass = {
     collectionItem: { ...collectionItem, path },

@@ -131,7 +131,7 @@ const References = ({
                   colors,
                   location,
                   layout,
-                  blockOptionsData: options,
+                  blockOptions: options,
                   passCSS: imageStyle,
                 }}
               />

@@ -125,48 +125,4 @@ export default ({
       {inner}
     </LinkOrNotCollectionItem>
   )
-  // linkToPage ? (
-  //   <Link
-  //     to={collectionItem.path}
-  //     className="collectionItem stylishLink"
-  //     css={{
-  //       display: `flex`,
-  //       flexFlow: `row wrap`,
-  //       justifyContent: `center`,
-  //       textAlign: `left`,
-  //       " h2, h3, h4, h5, h6, p": {
-  //         color: `inherit`,
-  //         textAlign: `left`,
-  //         margin: 0,
-  //       },
-  //       padding: `${rhythm(1)} 0`,
-  //       // ...passCSS
-  //       // ...colors[classicCombo].style,
-  //       // ...styleData
-  //     }}
-  //   >
-  //     {inner}
-  //   </Link>
-  // ) : (
-  //   <div
-  //     className="collectionItem stylishLink"
-  //     css={{
-  //       display: `flex`,
-  //       flexFlow: `row wrap`,
-  //       justifyContent: `center`,
-  //       textAlign: `left`,
-  //       " h2, h3, h4, h5, h6, p": {
-  //         color: `inherit`,
-  //         textAlign: `left`,
-  //         margin: 0,
-  //       },
-  //       padding: `${rhythm(1)} 0`,
-  //       // ...passCSS
-  //       // ...colors[classicCombo].style,
-  //       // ...styleData
-  //     }}
-  //   >
-  //     {inner}
-  //   </div>
-  // )
 }

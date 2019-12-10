@@ -1,0 +1,1 @@
+export CArticle from './CArticle'
