@@ -1,96 +1,88 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Img from 'gatsby-image'
-import { Helmet } from 'react-helmet'
-import moment from 'moment'
 import Moment from 'react-moment'
 
-import { mapStyle } from '../utils/processCss'
-import { metadata as siteMetadata } from '../utils/siteSettings.json'
-import { rhythm, scale } from '../utils/typography'
-import colors from '../utils/colors'
-import {
-  addLayoutOptions,
-  gridLayout,
-  listItemStyle,
-} from '../utils/computeGrid'
-import internalJson from '../utils/internalJson'
+import { rhythm } from '../utils/typography'
+// import {
+//   addLayoutOptions,
+//   gridLayout,
+//   listItemStyle,
+// } from '../utils/computeGrid'
 
-import BlockFreeText from '../blocks/FreeText'
-import BlockGallery from '../blocks/Gallery'
 import Html from '../atoms/Html'
-// import TextNode from "../molecules/TextNode"
 
-class ItemPageTemplate extends React.Component {
-  constructor(props) {
-    super(props)
-    // _json_ fields
-    const {
-      metadata: metadataData,
-      options: optionsData,
-      style: styleData,
-      // scripts,
-      // node_locale: pageLocale
-    } = props.data.collectionItem
+import { metadata as siteMetadata } from '../utils/siteSettings.json'
 
-    this.metadata = internalJson(metadataData)
-    this.optionsData = internalJson(optionsData)
-    this.styleData = mapStyle(internalJson(styleData))
+import { Gallery } from '../blocks'
 
-    // Colors
-    let { colorPalettes, colorCombo } = this.optionsData
-    // colorCombo = colorCombo && colors[`${colorCombo}Combo`]
-    colorCombo = colorCombo ? colors[`${colorCombo}Combo`] : colors.classicCombo
-    const newColors = colors.computeColors(colorPalettes, colorCombo)
-    this.colors = { ...colors, ...newColors }
+import { SEO, Scripts } from '../atoms'
+import { mapStyle } from '../utils/processCss'
+import { colors as colorsLib, useColors, internalJson } from '../utils'
+
+import Layout from '../layouts/Layout'
+
+const ItemPageTemplate = ({
+  data: { collectionItem = {} } = {},
+  location,
+  // children,
+  path,
+}) => {
+  if (!collectionItem.name) return null
+
+  const {
+    metadata: metadataData,
+    options: optionsData,
+    style: styleData,
+    scripts,
+    node_locale: pageLocale,
+  } = collectionItem
+  // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
+  const metadata = internalJson(metadataData)
+  const options = internalJson(optionsData)
+  const style = mapStyle(internalJson(styleData))
+
+  const colors = useColors({ options, colorsLib })
+  const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
+
+  const isSSR = typeof window === 'undefined'
+  // const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
+
+  const { lang, hideFeaturedImage, hideTitle, hideDate, hideGallery } = options
+
+  const galleryOptions = options.gallery || {}
+  galleryOptions.layout = galleryOptions.layout || {}
+  galleryOptions.layout.columns = galleryOptions.layout.columns ||
+    galleryOptions.columns || ['1/3']
+
+  const blockGallery = {
+    gallery: collectionItem.gallery,
+    options: galleryOptions,
+    style: {},
   }
 
-  render() {
-    const {
-      classicCombo,
-      contrastCombo,
-      funkyCombo,
-      funkyContrastCombo,
-    } = this.colors
-    const collectionItem = this.props.data.collectionItem
-    const metadata = this.metadata
-
-    if (!collectionItem.featuredImage || !collectionItem.name) {
-      return null
-    }
-
-    // const locale = collectionItem.node_locale
-    // const date = !collectionItem.datePublished
-    //   ? ""
-    //   : moment(collectionItem.datePublished)
-    //       .locale(locale)
-    //       .format("Do MMM YYYY")
-    // console.log("TEMPLATE PROPS", this.props)
-    // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
-
-    const {
-      lang,
-      hideFeaturedImage,
-      hideTitle,
-      hideDate,
-      hideGallery,
-    } = this.optionsData
-
-    let galleryOptions = this.optionsData.gallery || {}
-    // console.log(galleryOptions)
-    galleryOptions.layout = galleryOptions.layout || {}
-    galleryOptions.layout.columns = galleryOptions.layout.columns ||
-      galleryOptions.columns || ['1/3']
-
-    const blockGallery = {
-      gallery: collectionItem.gallery,
-      options: galleryOptions,
-      style: {},
-    }
-
-    const { scripts } = this.props.data.collectionItem
-
-    return (
+  return (
+    <Layout {...{ location, isSSR }}>
+      <SEO
+        {...{
+          lang: lang || pageLocale,
+          name: siteMetadata.name,
+          title: collectionItem.name,
+          description: metadata.description,
+          canonicalUrl: siteMetadata.url + path,
+          // IDEA: use fullPath in sitePage fields for canonical url
+          ogType: metadata.ogType,
+        }}
+      >
+        <Scripts
+          {...{
+            scripts,
+            async: true,
+            dynamicOnly: true,
+            idPrefix: path,
+          }}
+        />
+      </SEO>
       <div
         className="page page-collectionItem"
         css={{
@@ -106,67 +98,10 @@ class ItemPageTemplate extends React.Component {
             padding: rhythm(1),
             flexGrow: 1,
           },
-          ...this.colors[classicCombo].style,
-          ...this.styleData,
+          ...colors[classicCombo].style,
+          ...style,
         }}
       >
-        <Helmet>
-          <html lang={lang || collectionItem.node_locale} />
-          <title>{collectionItem.name}</title>
-          <meta
-            property="og:title"
-            content={`${collectionItem.name} | ${siteMetadata.name}`}
-          />
-          {metadata.description && (
-            <meta name="description" content={metadata.description} />
-          )}
-          {metadata.description && (
-            <meta property="og:description" content={metadata.description} />
-          )}
-          {this.props.location && (
-            <link
-              rel="canonical"
-              href={siteMetadata.url + this.props.location.pathname}
-            />
-          )}
-          {this.props.location && (
-            <meta
-              property="og:url"
-              content={siteMetadata.url + this.props.location.pathname}
-            />
-          )}
-          {// Object type: https://developers.facebook.com/docs/reference/opengraph#object-type
-          metadata.ogType && (
-            <meta property="og:type" content={metadata.ogType} />
-          )}
-          {scripts &&
-            scripts.map(
-              ({
-                id,
-                name,
-                type = 'text/javascript',
-                content: { content },
-                // charset, // src,
-                ...srcAndCharset
-              }) => {
-                const scriptProps = { id: name, type }
-                Object.entries(srcAndCharset).forEach(([attr, a]) => {
-                  if (a) scriptProps[attr] = a
-                })
-                return (
-                  <script
-                    defer
-                    {...{
-                      key: id,
-                      ...scriptProps,
-                    }}
-                  >
-                    {`${content}`}
-                  </script>
-                )
-              }
-            )}
-        </Helmet>
         <div
           css={{
             display: `flex`,
@@ -248,21 +183,19 @@ class ItemPageTemplate extends React.Component {
           className="collectionItem--content"
         />
         {collectionItem.gallery && !hideGallery && (
-          <BlockGallery
+          <Gallery
             block={blockGallery}
-            colors={this.colors}
-            location={this.props.location}
+            colors={colors}
+            location={location}
             // passCSS={}
           />
         )}
       </div>
-    )
-  }
+    </Layout>
+  )
 }
 
 export default ItemPageTemplate
-
-// TODO: query for metadata, style, options
 
 export const itemPageQuery = graphql`
   query ItemPageTemplate($id: String!) {

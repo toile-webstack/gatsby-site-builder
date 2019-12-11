@@ -13,12 +13,12 @@ import { colors as colorsLib, useColors, internalJson } from '../utils'
 import Layout from '../layouts/Layout'
 
 const TemplatePage = ({
-  data: { contentfulPage: page = {} } = {},
+  data: { contentfulPage: page } = {},
   location,
   // children,
   path,
 }) => {
-  if (!page) return null
+  if (!page.path) return null
 
   // console.log(page)
 
