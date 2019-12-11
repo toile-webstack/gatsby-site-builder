@@ -1,15 +1,15 @@
-import React from "react";
-import { Link } from "gatsby";
+import React from 'react'
+import { Link } from 'gatsby'
 
-import { rhythm, scale } from "../utils/typography";
+import { rhythm, scale } from '../utils/typography'
 
 export default props => {
   const {
     classicCombo,
     contrastCombo,
     funkyCombo,
-    funkyContrastCombo
-  } = props.colors;
+    funkyContrastCombo,
+  } = props.colors
   return (
     <nav
       css={{
@@ -18,23 +18,23 @@ export default props => {
         top: rhythm(1.7),
         right: rhythm(1),
         border: `solid 1px`,
-        borderTop: "none",
+        borderTop: 'none',
         listStyleType: `none`,
         margin: 0,
         // padding: `0 ${rhythm(1)}`,
         zIndex: 99,
         textAlign: `center`,
         display: props.open ? `block` : `none`,
-        ...props.passCSS
+        ...props.passCSS,
       }}
     >
       <div
         css={{
           display: `flex`,
           borderBottom: `solid 1px ${props.colors[funkyContrastCombo].border}`,
-          "> *": {
-            flexGrow: 1
-          }
+          '> *': {
+            flexGrow: 1,
+          },
         }}
       />
       {props.currentMenu.map(page => {
@@ -43,7 +43,7 @@ export default props => {
             key={page.path}
             className="unstyledLink"
             onClick={() => {
-              props.close();
+              props.close()
             }}
             to={page.path}
           >
@@ -51,16 +51,16 @@ export default props => {
               css={{
                 margin: 0,
                 padding: `${rhythm(1 / 4)} ${rhythm(1)}`,
-                ":hover": {
-                  ...props.colors[funkyContrastCombo].style
-                }
+                ':hover': {
+                  ...props.colors[funkyContrastCombo].style,
+                },
               }}
             >
               {page.name}
             </li>
           </Link>
-        );
+        )
       })}
     </nav>
-  );
-};
+  )
+}
