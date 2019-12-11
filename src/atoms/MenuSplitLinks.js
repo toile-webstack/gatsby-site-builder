@@ -1,16 +1,16 @@
-import React from "react"
-import { Link } from "gatsby"
+import React from 'react'
+import { Link } from 'gatsby'
 
-import { rhythm, scale } from "../utils/typography"
+import { rhythm, scale } from '../utils/typography'
 
-import MenuDrawer from "./MenuDrawerTop"
+import MenuDrawer from './MenuDrawerTop'
 
 export default props => {
   const {
     classicCombo,
     contrastCombo,
     funkyCombo,
-    funkyContrastCombo
+    funkyContrastCombo,
   } = props.colors
   return (
     <nav
@@ -36,22 +36,24 @@ export default props => {
         display: `flex`,
         listStyleType: `none`,
         visibility: props.show ? `visible` : `hidden`,
-        ...props.passCSS
+        ...props.passCSS,
       }}
     >
       {props.currentMenu.map(page => {
         const highlighted =
-          typeof window === "undefined"
+          typeof window === 'undefined'
             ? false
             : page.homepage
-              ? page.path === props.location.pathname
-              : props.location.pathname.match(page.path)
+            ? page.path === props.location.pathname
+            : props.location.pathname.match(page.path)
         return (
           <div
             key={page.path}
-            css={{
-              // position: `relative`
-            }}
+            css={
+              {
+                // position: `relative`
+              }
+            }
           >
             <Link
               className="unstyledLink"
@@ -63,21 +65,21 @@ export default props => {
                 display: `block`,
                 color:
                   props.colors[classicCombo][
-                    highlighted ? "linkHover" : "body"
+                    highlighted ? 'linkHover' : 'body'
                   ],
-                fontWeight: `bold`
+                fontWeight: `bold`,
               }}
             >
               <li
                 css={{
                   margin: 0,
-                  padding: `0 ${rhythm(1 / 2)}`
+                  padding: `0 ${rhythm(1 / 2)}`,
                   // ":hover": {
                   //   ...props.colors[funkyContrastCombo].style
                   // }
                 }}
               >
-                {page.name}
+                {props.show ? page.name : ''}
               </li>
             </Link>
             {/* {!!page.children.length && (

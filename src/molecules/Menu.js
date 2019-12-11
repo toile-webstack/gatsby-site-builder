@@ -50,6 +50,7 @@ class Menu extends React.Component {
       window.addEventListener('resize', this.listen)
     }
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.listen)
   }
