@@ -22,7 +22,7 @@ module.exports = {
         // Setting a color is optional.
         // color: `tomato`,
         // Disable the loading spinner.
-        // showSpinner: false,
+        showSpinner: false,
       },
     },
     `gatsby-transformer-sharp`,
@@ -64,7 +64,6 @@ module.exports = {
         ],
       },
     },
-    // `gatsby-plugin-glamor`,
     {
       resolve: `gatsby-plugin-emotion`,
       options: {

@@ -38,6 +38,8 @@ import Sidebar from '../molecules/Sidebar'
 
 import { SEO, Scripts } from '../atoms'
 
+import Layout from './Layout'
+
 // TODO: Handle Contact page differently
 // siteMapping.push({
 //   name: "Contact",
@@ -52,12 +54,14 @@ const getCurrentLocale = pathname => {
   return currentLocale
 }
 
+// const DefaultLayout = ({ location, children }) => (
+//   <Layout {...{ location }}>{children}</Layout>
+// )
 const DefaultLayout = ({
   data: { settings, cookieAlert, footer } = {},
   location,
   children,
 }) => {
-  return children
   const { pathname } = location || {}
   const { options: optionsData, style: styleData, scripts } = settings
   const options = internalJson(optionsData)

@@ -1,6 +1,5 @@
 import React from 'react'
-import { graphql, Link, StaticQuery } from 'gatsby'
-import { Helmet } from 'react-helmet'
+import { graphql, StaticQuery } from 'gatsby'
 import _ from 'lodash'
 
 // import * as themes from "./typography-themes"
@@ -13,28 +12,28 @@ import _ from 'lodash'
 // const typographyTheme = require("./typography-themes/typography-theme-alton/src/index.js")
 // console.log(themes)
 import { mapStyle } from '../utils/processCss'
-import { rhythm, scale } from '../utils/typography'
 import {
   defaultLocale,
   locales,
   metadata,
   favicon,
   socialImageUrl,
-  pages,
   menu,
-  colors,
-  fonts,
-  contact,
+  // pages,
+  // colors,
+  // fonts,
+  // contact,
 } from '../utils/siteSettings.json'
 import internalJson from '../utils/internalJson'
 
 import Menu from '../molecules/Menu'
+import MenuReel from '../atoms/MenuReel'
 import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
-import ContactInfos from '../molecules/ContactInfos'
-import FooterFeed from '../molecules/FooterFeed'
+// import ContactInfos from '../molecules/ContactInfos'
+// import FooterFeed from '../molecules/FooterFeed'
 import Footer from '../molecules/Footer'
 import CookieAlert from '../atoms/CookieAlert'
-import Sidebar from '../molecules/Sidebar'
+// import Sidebar from '../molecules/Sidebar'
 
 import { SEO, Scripts } from '../atoms'
 import { LLayout } from '../t-layouts'
@@ -57,7 +56,7 @@ const DefaultLayout = ({
   data: { settings, cookieAlert, footer } = {},
   location,
   children,
-  isSSR,
+  // isSSR,
   isLandingPage: islp,
 }) => {
   const { pathname } = location || {}
@@ -69,6 +68,8 @@ const DefaultLayout = ({
   const currentLocale = getCurrentLocale(pathname) || defaultLocale
   const isLandingPage =
     islp || options.isLandingPage || /\/landing\//.test(pathname)
+
+  const isSSR = typeof window === 'undefined'
 
   const envIsDev =
     process.env.NODE_ENV === 'development' ||
@@ -118,6 +119,15 @@ const DefaultLayout = ({
         />
       </SEO>
 
+      {isLandingPage ? null : (
+        <MenuReel
+          icon={favicon}
+          name={metadata.name}
+          menu={menu}
+          currentLocale={currentLocale}
+          location={location}
+        />
+      )}
       {isLandingPage ? null : (
         <Menu
           icon={favicon}

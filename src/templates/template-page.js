@@ -37,11 +37,11 @@ const TemplatePage = ({
   const colors = useColors({ options, colorsLib })
   const { classicCombo } = colors
 
-  const isSSR = typeof window === 'undefined'
+  // const isSSR = typeof window === 'undefined'
   const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
 
   return (
-    <Layout {...{ location, isSSR, isLandingPage }}>
+    <Layout {...{ location, isLandingPage }}>
       <SEO
         {...{
           lang: pageLocale,

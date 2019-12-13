@@ -45,7 +45,7 @@ const ItemPageTemplate = ({
   const colors = useColors({ options, colorsLib })
   const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
 
-  const isSSR = typeof window === 'undefined'
+  // const isSSR = typeof window === 'undefined'
   // const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
 
   const { lang, hideFeaturedImage, hideTitle, hideDate, hideGallery } = options
@@ -62,7 +62,7 @@ const ItemPageTemplate = ({
   }
 
   return (
-    <Layout {...{ location, isSSR }}>
+    <Layout {...{ location }}>
       <SEO
         {...{
           lang: lang || pageLocale,
