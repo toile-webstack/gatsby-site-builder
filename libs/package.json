@@ -4,7 +4,7 @@
   "homepage": "https://bit.dev/marccoet/toile/nuds-layout-primitives",
   "main": "nuds-layout-primitives.js",
   "dependencies": {
-    "@bit/marccoet.toile.use-resize-observer": "0.0.3"
+    "@bit/marccoet.toile.use-resize-observer": "file:../components/use-resize-observer"
   },
   "devDependencies": {},
   "peerDependencies": {

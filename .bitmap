@@ -14,5 +14,18 @@
         "origin": "IMPORTED",
         "originallySharedDir": "libs"
     },
+    "marccoet.toile/use-resize-observer@0.0.3": {
+        "files": [
+            {
+                "name": "useResizeObserver.js",
+                "relativePath": "useResizeObserver.js",
+                "test": false
+            }
+        ],
+        "mainFile": "useResizeObserver.js",
+        "rootDir": "components/use-resize-observer",
+        "origin": "IMPORTED",
+        "originallySharedDir": "libs"
+    },
     "version": "14.7.0"
 }
