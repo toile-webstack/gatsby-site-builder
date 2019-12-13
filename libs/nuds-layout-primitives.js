@@ -553,7 +553,7 @@ export const Grid = ({
       ],
       ...props,
     },
-    flexboxInstead ? <div>{children}</div> : children
+    flexboxInstead ? jsx('div', {}, children) : children
   )
   // return jsxHelper({
   //   layoutComp: 'grid',
