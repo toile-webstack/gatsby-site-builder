@@ -26,7 +26,7 @@ import {
 } from '../utils/siteSettings.json'
 import internalJson from '../utils/internalJson'
 
-import Menu from '../molecules/Menu'
+// import Menu from '../molecules/Menu'
 import MenuReel from '../atoms/MenuReel'
 import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
 // import ContactInfos from '../molecules/ContactInfos'
@@ -128,7 +128,7 @@ const DefaultLayout = ({
           location={location}
         />
       )}
-      {isLandingPage ? null : (
+      {/* {isLandingPage ? null : (
         <Menu
           icon={favicon}
           name={metadata.name}
@@ -136,7 +136,7 @@ const DefaultLayout = ({
           currentLocale={currentLocale}
           location={location}
         />
-      )}
+      )} */}
       {envIsDev && <ColorPalettesDemo />}
       <div className="layout-wrapper">
         {/* wrapper was useful for sidebar */}

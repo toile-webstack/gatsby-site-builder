@@ -52,23 +52,28 @@ export const layoutStyles = {
     space = ['1rem', 'var(--s0, 1rem)'], // The space (margin) between successive sibling elements
     recursive = false, // Whether the spaces apply recursively (i.e. regardless of nesting level)
     splitAfter = null, // The element index after which to split the stack. Leave empty for no splitting
-  } = {}) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    [recursive ? ' *' : '> *']: {
-      marginTop: 0,
-      marginBottom: 0,
-    },
-    [recursive ? ' * + *' : '> * + *']: {
-      marginTop: space,
-    },
-    ...(typeof splitAfter === 'number' && {
-      [`> :nth-child(${splitAfter})`]: {
-        marginBottom: 'auto',
+    horizontal = false, // To make it flow horizontally and not wrapping.
+  } = {}) => {
+    const marginStart = horizontal ? 'marginLeft' : 'marginTop'
+    const marginEnd = horizontal ? 'marginRight' : 'marginBottom'
+    return {
+      display: 'flex',
+      flexDirection: horizontal ? 'row' : 'column',
+      justifyContent: 'flex-start',
+      [recursive ? ' *' : '> *']: {
+        [marginStart]: 0,
+        [marginEnd]: 0,
       },
-    }),
-  }),
+      [recursive ? ' * + *' : '> * + *']: {
+        [marginStart]: space,
+      },
+      ...(typeof splitAfter === 'number' && {
+        [`> :nth-child(${splitAfter})`]: {
+          [marginEnd]: 'auto',
+        },
+      }),
+    }
+  },
 
   box: ({
     padding = ['1rem', 'var(--s0, 1rem)'], // The amount by with the Box is padded on all sides
@@ -183,7 +188,7 @@ export const layoutStyles = {
       '> * > *': {
         flexBasis: mapIfArray(
           g,
-          o => `calc((${o.main} - (100% - ${o.second})) * 999)`,
+          o => `calc((${o.main} - (100% - ${o.second})) * 999)`
         ),
         flexGrow: 1,
         margin: mapIfArray(space, s => `calc(${s} / 2)`),
@@ -231,7 +236,7 @@ export const layoutStyles = {
     const gtc = {
       gridTemplateColumns: mapIfArray(
         min,
-        m => `repeat(auto-fill, minmax(${m}, 1fr))`,
+        m => `repeat(auto-fill, minmax(${m}, 1fr))`
       ),
     }
 
@@ -263,7 +268,7 @@ export const layoutStyles = {
           [`@supports (width: min(${min[0] || min}, 100%))`]: {
             gridTemplateColumns: mapIfArray(
               min,
-              m => `repeat(auto-fit, minmax(min(${m}, 100%), 1fr))`,
+              m => `repeat(auto-fit, minmax(min(${m}, 100%), 1fr))`
             ),
           },
           ...(applyAnyway && gtc),
@@ -332,8 +337,8 @@ export const layoutStyles = {
     height = 'auto', // The height of the parent (Reel) element
     space = ['1rem', 'var(--s0, 1rem)'], // The space between each child element, and between the child elements and the scrollbar
     noBar = false, // Whether to display the scrollbar
-    trackColor = ['#000', 'var(--color-text, #000)'],
-    thumbColor = ['#fff', 'var(--color-background, #fff)'],
+    trackColor = 'currentcolor',
+    thumbColor = 'white',
     noJS = false, // Wether the observer has been setup to manage the "overflowing" classname
   } = {}) => {
     const g = groupTwoParams(thumbColor, trackColor)
@@ -384,7 +389,7 @@ export const layoutStyles = {
         backgroundImage: mapIfArray(
           g,
           o =>
-            `linear-gradient(${o.second} 0, ${o.second} 0.25rem, ${o.main} 0.25rem, ${o.main} 0.75rem, ${o.second} 0.75rem)`,
+            `linear-gradient(${o.second} 0, ${o.second} 0.25rem, ${o.main} 0.25rem, ${o.main} 0.75rem, ${o.second} 0.75rem)`
         ),
       },
     }
@@ -403,16 +408,17 @@ const jsxHelper = ({ children, layoutProps, layoutComp, as, css, ...props }) =>
       'data-layout-primitive': layoutComp,
       ...props,
     },
-    children,
+    children
   )
 
-export const Stack = ({ space, recursive, splitAfter, ...rest }) =>
+export const Stack = ({ space, recursive, splitAfter, horizontal, ...rest }) =>
   jsxHelper({
     layoutComp: 'stack',
     layoutProps: {
       space,
       recursive,
       splitAfter,
+      horizontal,
     },
     ...rest,
   })
@@ -547,7 +553,7 @@ export const Grid = ({
       ],
       ...props,
     },
-    flexboxInstead ? <div>{children}</div> : children,
+    flexboxInstead ? <div>{children}</div> : children
   )
   // return jsxHelper({
   //   layoutComp: 'grid',
