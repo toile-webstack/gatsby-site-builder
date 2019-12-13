@@ -84,15 +84,6 @@ const LinkOrNotCollectionItem = ({
         </Link>
       )
   }
-  // return linkToPage ? (
-  //   <Link to={to} className="collectionItem stylishLink" css={css}>
-  //     {children}
-  //   </Link>
-  // ) : (
-  //   <div className="collectionItem" css={css}>
-  //     {children}
-  //   </div>
-  // )
 }
 
 export default LinkOrNotCollectionItem

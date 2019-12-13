@@ -8,7 +8,7 @@
     "develop": "gatsby develop",
     "dev": "gatsby clean && gatsby develop",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf .cache public",
+    "clean": "gatsby clean",
     "schema-update": "rm -f schema.gql && GATSBY_UPDATE_SCHEMA_SNAPSHOT=true && gatsby build"
   },
   "repository": {
@@ -26,7 +26,7 @@
     "@emotion/styled": "^10.0.23",
     "axios": "^0.16.2",
     "compass-vertical-rhythm": "^1.3.1",
-    "gatsby": "^2.17.10",
+    "gatsby": "^2.18.10",
     "gatsby-image": "^2",
     "gatsby-plugin-catch-links": "^2",
     "gatsby-plugin-emotion": "^4.1.15",
