@@ -462,7 +462,7 @@ export const Cluster = ({
       alignContent,
       space,
     },
-    children: () => <div {...{ css }}>{children}</div>,
+    children: jsx('div', { css }, children),
     ...rest,
   })
 
@@ -485,7 +485,7 @@ export const Sidebar = ({
       space,
       noStretch,
     },
-    children: () => <div {...{ css }}>{children}</div>,
+    children: jsx('div', { css }, children),
     ...rest,
   })
 
@@ -497,7 +497,7 @@ export const Switcher = ({ children, css, treshold, space, limit, ...rest }) =>
       space,
       limit,
     },
-    children: () => <div {...{ css }}>{children}</div>,
+    children: jsx('div', { css }, children),
     ...rest,
   })
 
