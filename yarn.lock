@@ -1491,6 +1491,14 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@bit/marccoet.toile.nuds-layout-primitives@file:./libs":
+  version "0.0.3"
+  dependencies:
+    "@bit/marccoet.toile.use-resize-observer" "file:../../../.cache/yarn/v6/npm-@bit-marccoet-toile-nuds-layout-primitives-0.0.3-395a09c8-1f6b-4b8e-902c-dfbefd74f4ed-1576790905503/node_modules/@bit/components/use-resize-observer"
+
+"@bit/marccoet.toile.use-resize-observer@file:./components/use-resize-observer", "@bit/marccoet.toile.use-resize-observer@file:components/use-resize-observer":
+  version "0.0.3"
+
 "@contentful/axios@^0.18.0":
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/@contentful/axios/-/axios-0.18.0.tgz#576e0e6047411a66971e82d40688a8c795e62f27"

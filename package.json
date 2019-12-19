@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/toile-webstack/gatsby-site-builder#readme",
   "dependencies": {
+    "@bit/marccoet.toile.nuds-layout-primitives": "file:./libs",
+    "@bit/marccoet.toile.use-resize-observer": "file:./components/use-resize-observer",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
     "axios": "^0.16.2",
@@ -65,9 +67,7 @@
     "slugify": "^1.1.0",
     "tinycolor2": "^1.4.1",
     "typography": "^0.16.19",
-    "typography-breakpoint-constants": "^0.14.0",
-    "@bit/marccoet.toile.nuds-layout-primitives": "file:./libs",
-    "@bit/marccoet.toile.use-resize-observer": "file:./components/use-resize-observer"
+    "typography-breakpoint-constants": "^0.14.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",

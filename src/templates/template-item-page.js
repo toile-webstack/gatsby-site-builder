@@ -217,6 +217,11 @@ export const itemPageQuery = graphql`
       }
       datePublished
       dateLastEdit
+      data {
+        internal {
+          content
+        }
+      }
       categories
       content {
         id

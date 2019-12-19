@@ -11,6 +11,7 @@ import DefaultListEntry from './collectionItems/DefaultListEntry'
 import ClassicRowListEntry from './collectionItems/ClassicRowListEntry'
 import TestimonialListEntry from './collectionItems/TestimonialListEntry'
 import EventListEntry from './collectionItems/EventListEntry'
+import ImgUnderListEntry from './collectionItems/ImgUnderListEntry'
 
 const CollectionItem = ({
   collectionItem,
@@ -53,6 +54,8 @@ const CollectionItem = ({
       return <TestimonialListEntry {...propsToPass} />
     case `event`:
       return <EventListEntry {...propsToPass} />
+    case 'imgUnder':
+      return <ImgUnderListEntry {...propsToPass} />
     case ``:
     case `default`:
       return <DefaultListEntry {...propsToPass} />
@@ -94,6 +97,11 @@ export const collectionItemsFragment = graphql`
     }
     datePublished
     dateLastEdit
+    data {
+      internal {
+        content
+      }
+    }
     categories
     metadata {
       internal {

@@ -203,6 +203,7 @@ const References = ({
       <LBlockReferences
         className="block blockReferences"
         css={{
+          ...(layout.align && { alignItems: layout.align }),
           ...passCSS,
           ...colors[classicCombo].style,
           ...style,
