@@ -1,9 +1,7 @@
 import React from 'react'
 import Moment from 'react-moment'
 
-import { rhythm, scale } from '../utils/typography'
-
-const EventDates = ({ start, end, locale, altColor }) => {
+const EventDates = ({ start, end, locale }) => {
   const [startDate, startTime] = start.split('T')
   const [endDate, endTime] = end.split('T')
 
@@ -18,12 +16,7 @@ const EventDates = ({ start, end, locale, altColor }) => {
           {...{
             locale,
             format: 'Do MMM YYYY',
-            css: {
-              ...scale(-0.2),
-              lineHeight: rhythm(1 / 2),
-              marginBottom: rhythm(1 / 2),
-              // padding: rhythm(1 / 2),
-            },
+            className: `eventdates-date eventdates-start`,
           }}
         >
           {start}
@@ -36,13 +29,7 @@ const EventDates = ({ start, end, locale, altColor }) => {
             {...{
               locale,
               format: 'HH:mm',
-              css: {
-                ...scale(-0.2),
-                lineHeight: rhythm(1 / 2),
-                marginBottom: rhythm(1 / 2),
-                // padding: rhythm(1 / 2),
-                ...altColor,
-              },
+              className: `eventdates-time eventdates-start`,
             }}
           >
             {start}
@@ -50,19 +37,14 @@ const EventDates = ({ start, end, locale, altColor }) => {
         </>
       )}
       {start && (showEnd || showEndTime) && (
-        <span {...{ css: { ...altColor } }}>{` > `}</span>
+        <span {...{ className: `eventdates-chevron` }}>{` > `}</span>
       )}
       {showEnd && (
         <Moment
           {...{
             locale,
             format: 'Do MMM YYYY',
-            css: {
-              ...scale(-0.2),
-              lineHeight: rhythm(1 / 2),
-              marginBottom: rhythm(1 / 2),
-              // padding: rhythm(1 / 2),
-            },
+            className: `eventdates-date eventdates-end`,
           }}
         >
           {end}
@@ -75,13 +57,7 @@ const EventDates = ({ start, end, locale, altColor }) => {
             {...{
               locale,
               format: 'HH:mm',
-              css: {
-                ...scale(-0.2),
-                lineHeight: rhythm(1 / 2),
-                marginBottom: rhythm(1 / 2),
-                // padding: rhythm(1 / 2),
-                ...altColor,
-              },
+              className: `eventdates-time eventdates-end`,
             }}
           >
             {end}

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { graphql } from 'gatsby'
 import Img from 'gatsby-image'
-import Moment from 'react-moment'
 // import 'moment/locale/fr'
 
 import { rhythm } from '../utils/typography'
@@ -22,6 +21,7 @@ import { mapStyle } from '../utils/processCss'
 import { colors as colorsLib, useColors, internalJson } from '../utils'
 
 import Layout from '../layouts/Layout'
+import EventDates from '../molecules/EventDates'
 
 const ItemPageTemplate = ({
   data: { collectionItem = {} } = {},
@@ -38,13 +38,9 @@ const ItemPageTemplate = ({
     scripts,
     node_locale: pageLocale,
     categories: categoriesRaw = [],
+    datePublished,
+    dateLastEdit,
   } = collectionItem
-  // const [momentLocaleStatus, setMomentLocaleStatus] = useState('LOADING')
-  // useEffect(() => {
-  //   import(`moment/locale/${pageLocale}`).then(() => {
-  //     setMomentLocaleStatus('LOADED')
-  //   })
-  // }, [pageLocale])
 
   // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
   const metadata = internalJson(metadataData)
@@ -153,22 +149,28 @@ const ItemPageTemplate = ({
           >
             {collectionItem.name}
           </h1>
-          {collectionItem.datePublished && (
-            <Moment
-              locale={collectionItem.fields.locale}
-              format="Do MMM YYYY"
-              css={
-                {
+          <div
+            {...{
+              css: {
+                '& time': {
                   // ...scale(-0.2),
                   // lineHeight: rhythm(1 / 2),
                   // marginBottom: rhythm(1 / 2),
-                  // padding: rhythm(1 / 2),
-                }
-              }
-            >
-              {collectionItem.datePublished}
-            </Moment>
-          )}
+                },
+                '& .eventdates-time, & .eventdates-chevron': {
+                  color: colors[funkyCombo].body,
+                },
+              },
+            }}
+          >
+            <EventDates
+              {...{
+                locale: pageLocale,
+                start: datePublished,
+                end: dateLastEdit,
+              }}
+            />
+          </div>
           <hr
             css={{
               width: `100%`,

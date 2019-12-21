@@ -44,8 +44,6 @@ export default ({
   )
   const { imageStyle, itemStyle } = childrenList[0][0]
 
-  const altColor = { color: colors[funkyCombo].body }
-
   const inner = (
     <div
       css={{
@@ -61,14 +59,28 @@ export default ({
       >
         {collectionItem.name}
       </h4>
-      <EventDates
+      <div
         {...{
-          start: datePublished,
-          end: dateLastEdit,
-          locale: collectionItemLocale,
-          altColor,
+          css: {
+            '& time': {
+              ...scale(-0.2),
+              lineHeight: rhythm(1 / 2),
+              marginBottom: rhythm(1 / 2),
+            },
+            '& .eventdates-time, & .eventdates-chevron': {
+              color: colors[funkyCombo].body,
+            },
+          },
         }}
-      />
+      >
+        <EventDates
+          {...{
+            start: datePublished,
+            end: dateLastEdit,
+            locale: collectionItemLocale,
+          }}
+        />
+      </div>
       <hr
         css={{
           flexShrink: 0,
