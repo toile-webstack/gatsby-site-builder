@@ -1,7 +1,7 @@
-import React from "react"
-import MdClose from "react-icons/lib/md/close"
+import React from 'react'
+// import {MdClose} from "react-icons/md/"
 
-import { rhythm, scale } from "../utils/typography"
+import { rhythm, scale } from '../utils/typography'
 
 class Carousel extends React.Component {
   constructor(props) {

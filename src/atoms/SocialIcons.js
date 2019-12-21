@@ -1,12 +1,13 @@
 import React from 'react'
-import FaFacebookSquare from 'react-icons/lib/fa/facebook-square'
-import FaLinkedinSquare from 'react-icons/lib/fa/linkedin-square'
-import FaInstagram from 'react-icons/lib/fa/instagram'
-import FaYoutubeSquare from 'react-icons/lib/fa/youtube-square'
-import FaSoundcloud from 'react-icons/lib/fa/soundcloud'
-import FaTwitterSquare from 'react-icons/lib/fa/twitter-square'
-import FaGithub from 'react-icons/lib/fa/github'
-
+import {
+  FaFacebookSquare,
+  FaLinkedin,
+  FaInstagram,
+  FaYoutubeSquare,
+  FaSoundcloud,
+  FaTwitterSquare,
+  FaGithub,
+} from 'react-icons/fa'
 // import IconBandcamp from "../atoms/bandcamp-button-circle-whiteblack-32.png";
 
 export default ({ contact }) => (
@@ -27,7 +28,7 @@ export default ({ contact }) => (
     )}
     {contact.linkedin && (
       <a href={contact.linkedin} target="_blank" rel="me noopener">
-        <FaLinkedinSquare />
+        <FaLinkedin />
       </a>
     )}
     {contact.instagram && (

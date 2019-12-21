@@ -1,16 +1,16 @@
-import Typography from "typography";
-import verticalRhythm from "compass-vertical-rhythm";
+import Typography from 'typography'
+import verticalRhythm from 'compass-vertical-rhythm'
 
 import {
   MOBILE_MEDIA_QUERY,
-  TABLET_MEDIA_QUERY
-} from "typography-breakpoint-constants";
+  TABLET_MEDIA_QUERY,
+} from 'typography-breakpoint-constants'
 import {
   fonts,
   typography as typographyOptions,
-  style
-} from "./siteSettings.json";
-import colors from "./colors.js";
+  style,
+} from './siteSettings.json'
+import colors from './colors.js'
 
 const {
   classicCombo,
@@ -19,12 +19,12 @@ const {
   funkyContrastCombo,
   palettes,
   classic,
-  contrast
-} = colors;
+  contrast,
+} = colors
 
 const options = {
   // title: ,//The theme title.
-  baseFontSize: "16px", //The base font size in pixels, defaults to 16px.
+  baseFontSize: '16px', //The base font size in pixels, defaults to 16px.
   baseLineHeight: 1.45, //The base line height using the css unitless number, defaults to 1.45.
   // scaleRatio: 2.15,//The "scale ratio" for the theme. This value is the ratio between the h1 font size and the baseFontSize. So if the scale ratio is 2 and the baseFontSize is 16px then the h1 font size is 32px.
   // scaleRatio: `major twelfth`, // We can also use modular scales https://github.com/KyleAMathews/modularscale/blob/master/src/index.coffee
@@ -70,50 +70,50 @@ const options = {
       // },
       ////////
       html: {
-        scrollBehavior: "smooth"
+        scrollBehavior: 'smooth',
       },
       body: {
         // background: colors[classicCombo].background,
         // textAlign: `center`,
-        ...colors[classicCombo].style
+        ...colors[classicCombo].style,
       },
-      " :focus": {
-        outline: `none`
+      ' :focus': {
+        outline: `none`,
       },
       // "*::selection": {
       //   background: colors[classicCombo].linkHover,
       //   color: colors[classicCombo].background
       // },
-      "#___gatsby > div": {
+      '#___gatsby > div': {
         // display: `flex`,
         // position: `relative`
       },
       h1: {
         marginBottom: rhythm(1),
-        textAlign: `center`
+        textAlign: `center`,
       },
       h2: {
         marginBottom: rhythm(1 / 2),
-        marginTop: rhythm(1)
+        marginTop: rhythm(1),
         // display: `inline`
       },
-      " h3, h4": {
+      ' h3, h4': {
         marginBottom: rhythm(1 / 4),
-        marginTop: rhythm(1)
+        marginTop: rhythm(1),
         // display: `inline`
       },
-      " p, ul": {
-        marginBottom: rhythm(1 / 2)
+      ' p, ul': {
+        marginBottom: rhythm(1 / 2),
         // display: `inline`
       },
-      ".blockFreeText > div > :first-child": {
-        marginTop: 0
+      '.blockFreeText > div > :first-child': {
+        marginTop: 0,
       },
-      ".blockFreeText > div > :last-child": {
-        marginBottom: 0
+      '.blockFreeText > div > :last-child': {
+        marginBottom: 0,
       },
       li: {
-        marginBottom: 0
+        marginBottom: 0,
       },
       img: {
         // display: `block`,
@@ -121,63 +121,68 @@ const options = {
         width: `100%`,
         maxWidth: `300px`,
         maxHeight: `200px`,
-        objectFit: `contain`
+        objectFit: `contain`,
       },
-      ".gatsby-image-wrapper": {
-        margin: `auto`
+      '.gatsby-image-wrapper': {
+        margin: `auto`,
         // width: `100%`
       },
-      ".gatsby-image-wrapper img": {
+      '.gatsby-image-wrapper img': {
         display: `inline`,
         maxWidth: `none`,
-        maxHeight: `none`
+        maxHeight: `none`,
       },
       ul: {
-        textAlign: `initial`
+        textAlign: `initial`,
       },
       a: {
         cursor: `pointer`,
         color: `inherit`,
         textShadow: `none`,
         backgroundImage: `none`,
-        textDecoration: `underline`
+        textDecoration: `underline`,
       },
-      "a:hover": {
+      'a:hover': {
         // color: colors[funkyCombo].body,
-        textDecoration: `none`
+        textDecoration: `none`,
       },
       form: {
         display: `flex`,
         flexFlow: `column`,
         marginBottom: 0,
-        position: `relative`
+        position: `relative`,
       },
-      "form > *": {
+      'form > *': {
         width: `100%`,
-        marginBottom: rhythm(1 / 3)
+        marginBottom: rhythm(1 / 3),
       },
-      "input, textarea": {
+      'input, textarea': {
         width: `100%`,
         padding: `0 5px`,
         border: `solid 1px ${colors[classicCombo].border}`,
-        borderRadius: `10px`
+        borderRadius: `10px`,
         // background: colors.palettes[0].neutral
       },
-      "a.button, button, input[type='submit']": {
+      "a.button, button, input[type='submit'], html [type='button'], html [role='button']": {
+        background: 'none',
         textDecoration: `none`,
         cursor: `pointer`,
+        display: `inline-block`,
+        '-webkit-appearance': 'none',
+        '-moz-appearance': 'none',
+      },
+      "a.button, button, input[type='submit']": {
         border: `solid 2px`,
         borderRadius: `10px`,
         padding: `5px 10px`,
         // display: `inline`,
-        display: `inline-block`
         // ...colors[classicCombo].style
       },
       "input[type='submit']": {
-        marginTop: rhythm(1)
+        marginTop: rhythm(1),
       },
-      "input:invalid, textarea:invalid": {
-        boxShadow: `none`
+      'input:invalid, textarea:invalid': {
+        boxShadow: `none`,
       },
       "a.button:hover, button:hover, input[type='submit']:hover": {
         // ...colors[funkyContrastCombo].style,
@@ -189,7 +194,7 @@ const options = {
         appearance: `none`,
         opacity: 0,
         position: `absolute`,
-        width: `100%`
+        width: `100%`,
       },
       "input[type='radio'] + label > span, input[type='checkbox'] + label > span": {
         display: `inline-block`,
@@ -198,12 +203,12 @@ const options = {
         // background: colors[classicCombo].background,
         border: `solid 3px`,
         borderRadius: `50%`,
-        marginRight: rhythm(1 / 6)
+        marginRight: rhythm(1 / 6),
       },
       "input[type='checkbox'] + label > span": {
-        borderRadius: `0`
+        borderRadius: `0`,
       },
-      "input::placeholder, textarea::placeholder": {
+      'input::placeholder, textarea::placeholder': {
         // color: colors.palettes[0].primary
       },
       blockquote: {
@@ -212,62 +217,62 @@ const options = {
         // borderLeftWidth: `${rhythm(6 / 16)}`,
         // borderLeft: `${rhythm(6 / 16)} solid ${colors[classicCombo].border}`,
         // paddingLeft: rhythm(10 / 16),
-        fontStyle: "italic",
-        margin: `0`
+        fontStyle: 'italic',
+        margin: `0`,
         // marginLeft: 0,
         // marginRight: 0
       },
-      "blockquote small": {
-        float: `right`
+      'blockquote small': {
+        float: `right`,
       },
-      ".unstyledLink": {
+      '.unstyledLink': {
         color: `inherit`,
-        textDecoration: `inherit`
+        textDecoration: `inherit`,
       },
-      ".stylishLink": {
+      '.stylishLink': {
         fontWeight: `bold`,
-        textDecoration: `none`
+        textDecoration: `none`,
       },
-      ".announcement1": {
+      '.announcement1': {
         display: `block`,
         maxWidth: `800px`,
         margin: `${rhythm(1)} auto`,
         padding: rhythm(1),
         borderStyle: `solid`,
         borderWidth: `thick`,
-        fontWeight: `bold`
+        fontWeight: `bold`,
       },
-      ".block": {
-        boxSizing: `border-box`
+      '.block': {
+        boxSizing: `border-box`,
       },
       table: {
         marginBottom: rhythm(1 / 2),
-        border: `none`
+        border: `none`,
       },
-      "th, td": {
+      'th, td': {
         borderColor: `inherit`,
         borderRight: `1px solid`,
-        textAlign: `center!important`
+        textAlign: `center!important`,
       },
-      "th:last-child, td:last-child": {
-        borderRight: `none`
+      'th:last-child, td:last-child': {
+        borderRight: `none`,
       },
       td: {
-        borderBottom: `none`
+        borderBottom: `none`,
       },
       iframe: {
-        maxWidth: "100%"
+        maxWidth: '100%',
       },
-      ...style
-    };
-  }
-};
+      ...style,
+    }
+  },
+}
 
-const typography = new Typography(options);
+const typography = new Typography(options)
 
 // Rhythm(1) in pixels
 const typoRhythm =
-  parseFloat(options.baseFontSize) * parseFloat(typography.rhythm(1));
+  parseFloat(options.baseFontSize) * parseFloat(typography.rhythm(1))
 
 // Hot reload typography in development.
 // if (process.env.NODE_ENV !== `production`) {
@@ -276,5 +281,5 @@ const typoRhythm =
 
 // typography.colors = { colorOption, palettes, ...colors }
 
-const { rhythm, scale } = typography;
-export { rhythm, scale, typoRhythm, typography as default };
+const { rhythm, scale } = typography
+export { rhythm, scale, typoRhythm, typography as default }

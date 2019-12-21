@@ -20,7 +20,7 @@ import { SEO, Scripts } from '../atoms'
 import { mapStyle } from '../utils/processCss'
 import { colors as colorsLib, useColors, internalJson } from '../utils'
 
-import Layout from '../layouts/Layout'
+// import Layout from '../layouts/Layout'
 import EventDates from '../molecules/EventDates'
 
 const ItemPageTemplate = ({
@@ -81,7 +81,8 @@ const ItemPageTemplate = ({
   }
 
   return (
-    <Layout {...{ location }}>
+    // <Layout {...{ location }}>
+    <>
       <SEO
         {...{
           lang: lang || pageLocale,
@@ -214,7 +215,7 @@ const ItemPageTemplate = ({
           />
         )}
       </div>
-    </Layout>
+    </>
   )
 }
 

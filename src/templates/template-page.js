@@ -10,7 +10,7 @@ import { SEO, Scripts } from '../atoms'
 import { mapStyle } from '../utils/processCss'
 import { colors as colorsLib, useColors, internalJson } from '../utils'
 
-import Layout from '../layouts/Layout'
+// import Layout from '../layouts/Layout'
 
 const TemplatePage = ({
   data: { contentfulPage: page } = {},
@@ -41,7 +41,8 @@ const TemplatePage = ({
   const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
 
   return (
-    <Layout {...{ location, isLandingPage }}>
+    // <Layout {...{ location, isLandingPage }}>
+    <>
       <SEO
         {...{
           lang: pageLocale,
@@ -89,7 +90,7 @@ const TemplatePage = ({
           }}
         />
       </div>
-    </Layout>
+    </>
   )
 }
 

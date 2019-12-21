@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'gatsby-link'
 import Img from 'gatsby-image'
 import Moment from 'react-moment'
-import MdFormatQuote from 'react-icons/lib/md/format-quote'
+import { MdFormatQuote } from 'react-icons/md'
 
 import { rhythm, scale } from '../../../utils/typography'
 // import colors from "../utils/colors"

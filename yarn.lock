@@ -1494,7 +1494,7 @@
 "@bit/marccoet.toile.nuds-layout-primitives@file:./libs":
   version "0.0.3"
   dependencies:
-    "@bit/marccoet.toile.use-resize-observer" "file:../../../.cache/yarn/v6/npm-@bit-marccoet-toile-nuds-layout-primitives-0.0.3-395a09c8-1f6b-4b8e-902c-dfbefd74f4ed-1576790905503/node_modules/@bit/components/use-resize-observer"
+    "@bit/marccoet.toile.use-resize-observer" "file:../../../.cache/yarn/v6/npm-@bit-marccoet-toile-nuds-layout-primitives-0.0.3-b5249d96-d976-44a6-a868-d1850364e245-1576946839665/node_modules/@bit/components/use-resize-observer"
 
 "@bit/marccoet.toile.use-resize-observer@file:./components/use-resize-observer", "@bit/marccoet.toile.use-resize-observer@file:components/use-resize-observer":
   version "0.0.3"
@@ -4890,6 +4890,11 @@ devcert-san@^0.3.3:
     mkdirp "^0.5.1"
     tmp "^0.0.31"
     tslib "^1.6.0"
+
+dialog-polyfill@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/dialog-polyfill/-/dialog-polyfill-0.5.0.tgz#bf67bc67abaf538e44fff80f2f71ff132befadd7"
+  integrity sha512-fOj68T8KB6UIsDFmK7zYbmORJMLYkRmtsLM1W6wbCVUWu4Hdcud5bqbvuueTxO84JXtK9HcpCHV9vNwlWUdCIw==
 
 diffie-hellman@^5.0.0:
   version "5.0.3"
@@ -11647,17 +11652,12 @@ react-hot-loader@^4.12.18:
     shallowequal "^1.1.0"
     source-map "^0.7.3"
 
-react-icon-base@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-icon-base/-/react-icon-base-2.1.0.tgz#a196e33fdf1e7aaa1fda3aefbb68bdad9e82a79d"
-  integrity sha1-oZbjP98eeqof2jrvu2i9rZ6Cp50=
-
-react-icons@^2.2.5:
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-2.2.7.tgz#d7860826b258557510dac10680abea5ca23cf650"
-  integrity sha512-0n4lcGqzJFcIQLoQytLdJCE0DKSA9dkwEZRYoGrIDJZFvIT6Hbajx5mv9geqhqFiNjUgtxg8kPyDfjlhymbGFg==
+react-icons@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.8.0.tgz#229de5904809696c9f46932bd9b6126b2522866e"
+  integrity sha512-rA/8GRKjPulft8BSBSMsHkE1AGPqJ7LjNsyk0BE7XjG70Iz62zOled2SJk7LDo8x9z86a3xOstDlKlMZ4pAy7A==
   dependencies:
-    react-icon-base "2.1.0"
+    camelcase "^5.0.0"
 
 react-is@^16.7.0, react-is@^16.8.1:
   version "16.11.0"
