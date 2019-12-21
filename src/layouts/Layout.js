@@ -25,7 +25,7 @@ import {
   // contact,
 } from '../utils/siteSettings.json'
 import internalJson from '../utils/internalJson'
-
+import useMomentLocaleImport from '../utils/useMomentLocaleImport'
 // import Menu from '../molecules/Menu'
 import MenuReel from '../atoms/MenuReel'
 import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
@@ -66,6 +66,7 @@ const DefaultLayout = ({
 
   // const landingRE = new RegExp(/\/landing\//)
   const currentLocale = getCurrentLocale(pathname) || defaultLocale
+  useMomentLocaleImport({ locale: currentLocale })
   const isLandingPage =
     islp || options.isLandingPage || /\/landing\//.test(pathname)
 

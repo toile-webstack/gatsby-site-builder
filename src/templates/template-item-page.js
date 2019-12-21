@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { graphql } from 'gatsby'
 import Img from 'gatsby-image'
 import Moment from 'react-moment'
+// import 'moment/locale/fr'
 
 import { rhythm } from '../utils/typography'
 // import {
@@ -36,7 +37,15 @@ const ItemPageTemplate = ({
     style: styleData,
     scripts,
     node_locale: pageLocale,
+    categories: categoriesRaw = [],
   } = collectionItem
+  // const [momentLocaleStatus, setMomentLocaleStatus] = useState('LOADING')
+  // useEffect(() => {
+  //   import(`moment/locale/${pageLocale}`).then(() => {
+  //     setMomentLocaleStatus('LOADED')
+  //   })
+  // }, [pageLocale])
+
   // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
   const metadata = internalJson(metadataData)
   const options = internalJson(optionsData)
@@ -44,6 +53,20 @@ const ItemPageTemplate = ({
 
   const colors = useColors({ options, colorsLib })
   const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
+
+  const categories = categoriesRaw.map(raw => {
+    if (!/:/.test(raw)) {
+      return {
+        label: raw,
+        raw,
+        family: 'main',
+        familyIndex: null,
+      }
+    }
+    const [famIndexed, label] = raw.split(':')
+    const [family, familyIndex] = famIndexed.split('|')
+    return { label, raw, family, familyIndex }
+  })
 
   // const isSSR = typeof window === 'undefined'
   // const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
@@ -160,22 +183,20 @@ const ItemPageTemplate = ({
               flexFlow: `row wrap`,
             }}
           >
-            {collectionItem.categories &&
-              collectionItem.categories[0] &&
-              collectionItem.categories.map((cat, i) => {
-                return (
-                  <div
-                    key={i}
-                    css={{
-                      margin: `${rhythm(1 / 4)} ${rhythm(1 / 8)}`,
-                      padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
-                      ...colors[funkyContrastCombo].style,
-                    }}
-                  >
-                    {cat}
-                  </div>
-                )
-              })}
+            {categories.map(({ label: cat, raw }) => {
+              return (
+                <div
+                  key={raw}
+                  css={{
+                    margin: `${rhythm(1 / 4)} ${rhythm(1 / 8)}`,
+                    padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
+                    ...colors[funkyContrastCombo].style,
+                  }}
+                >
+                  {cat}
+                </div>
+              )
+            })}
           </div>
         </div>
         <Html
