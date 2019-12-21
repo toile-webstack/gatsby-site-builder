@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { graphql } from 'gatsby'
 import _ from 'lodash'
 
@@ -43,6 +43,19 @@ const wordAll = {
   en: 'All',
   nl: 'Alles',
 }
+const messageNoMatch = {
+  fr: 'Aucun élément ne correspond à votre recherche',
+  en: 'There is no match with this search',
+  nl: 'Er is geen overeenkomst met deze zoekopdracht',
+}
+
+const decomposeCategory = cat => {
+  const catSplit = cat.split(':')
+  const [family, familyIndex] =
+    catSplit.length > 1 ? catSplit[0].split('|') : ['main']
+  const label = catSplit[catSplit.length - 1]
+  return { family, familyIndex, label }
+}
 
 const References = ({
   block,
@@ -61,27 +74,181 @@ const References = ({
   } = block
   const options = internalJson(optionsData)
   const style = mapStyle(internalJson(styleData))
-
+  const locale = node_locale.split('-')[0]
+  const wAll = wordAll[locale]
+  const mNoMatch = messageNoMatch[locale]
   const colors = useColors({ options, colorsLib })
   const { isColored, classicCombo, funkyCombo, funkyContrastCombo } = colors
-  const { id, name, hideCategories, mode } = options
+  const {
+    id,
+    name,
+    hideCategories,
+    mode,
+    categories: { families: catFamiliesOptions } = {},
+  } = options
 
   // CATEGORIES
-  // TODO: do this at build time
-  let categories = ['']
-  if (hideCategories !== true) {
-    references.forEach(reference => {
-      if (!reference.categories || !reference.categories[0]) return null
+  // TODO: do this at build time or using memo
+  const categories = useMemo(() => {
+    let showCategories = false
+    let all = []
+    // catFamiliesOptions can be set to something like ["place", "main"]
+    // to indicate we want to show the place family first
+    const byFamily = new Map()
+    // Initialize families with a null value corresponding to "All"
+    if (Array.isArray(catFamiliesOptions)) {
+      catFamiliesOptions.forEach(catFamily => {
+        byFamily.set(
+          catFamily,
+          new Map([
+            [
+              '',
+              {
+                family: catFamily,
+                // raw: `${catFamily}:${wAll}`,
+                label: wAll,
+              },
+            ],
+          ])
+        )
+      })
+    } else {
+      byFamily.set(
+        'main',
+        new Map([
+          [
+            '',
+            {
+              family: 'main',
+              // raw: `main:${wAll}`,
+              label: wAll,
+            },
+          ],
+        ])
+      )
+    }
+    if (!byFamily.has('main') || byFamily.get('main').length < 1) {
+      // if we use categories families, we need to initialize the main array with an empty string
+      byFamily.set(
+        'main',
+        new Map([
+          [
+            '',
+            {
+              family: 'main',
+              // raw: `main:${wAll}`,
+              label: wAll,
+            },
+          ],
+        ])
+      )
+    }
+    // End initialize
+    // const initialState = new Map(byFamily)
+    // fill in the arrays "all" and each one in "byFamily"
+    if (hideCategories !== true) {
+      references.forEach(reference => {
+        const refCats = reference.categories || []
 
-      reference.categories.forEach(cat => {
-        if (cat !== '' && _.indexOf(categories, cat) === -1) {
-          categories.push(cat)
+        refCats.forEach(cat => {
+          const { family, familyIndex, label } = decomposeCategory(cat)
+          // This is the shape of a cat
+          const catSmart = { raw: cat, family, familyIndex, label }
+
+          const familyMap = byFamily.get(family)
+          if (cat && !familyMap.has(cat)) {
+            all = [...all, catSmart]
+            familyMap.set(cat, catSmart)
+            // byFamily.set(family, [...(byFamily.get || []), catSmart])
+          }
+
+          // if (cat !== '' && _.indexOf(categories.main, cat) === -1) {
+          //   categories.main = [...categories.main, cat]
+          // }
+        })
+      })
+
+      const catFamilies = Array.from(byFamily.keys())
+      catFamilies.forEach(family => {
+        const familyMap = byFamily.get(family)
+        if (familyMap.size > 1) {
+          showCategories = true
+        }
+        familyMap.set(family, [...familyMap.entries()].sort())
+        // familyMap.sort()
+        // byFamily.set(family, _.sortBy(familyArray))
+      })
+
+      // categories.main = _.sortBy(categories.main)
+    }
+
+    return {
+      all, // [ ...allCats ]
+      byFamily, // Map(
+      //     place: [ ...someCats ],
+      //     main: [ ...someOtherCats ],
+      //   )
+      show: showCategories, // bool
+      // initialState, // Map(
+      //     place: [],
+      //     main: [],
+      //   )
+    }
+  }, [catFamiliesOptions, hideCategories])
+
+  // Declare state when categories are empty
+  const [stateCategories, setCatState] = useState(new Map(categories.byFamily))
+  const resetFamilyCategories = family => {
+    setCatState(prevState => {
+      const newState = new Map(prevState)
+      const familyMap = newState.get(family)
+      familyMap.forEach(catSmart => {
+        if (Array.isArray(catSmart)) return null
+        // familyMap.set(mapKey, { ...catSmart, isSelected: false })
+        catSmart.isSelected = false
+      })
+      return newState
+    })
+  }
+  const selectCategory = ({ family, raw }) => {
+    if (!raw) {
+      resetFamilyCategories(family)
+    } else {
+      setCatState(prevState => {
+        const newState = new Map(prevState)
+        const catToSelect = newState.get(family).get(raw)
+        catToSelect.isSelected = !catToSelect.isSelected
+        return newState
+      })
+    }
+  }
+
+  const showRef = refCats => {
+    let filter = false
+    const byFamily = {}
+    // Loop over each family in stateCategories
+    stateCategories.forEach((familyMap, family) => {
+      familyMap.forEach(catSmart => {
+        // if no tag is selected in a family, we don't care about it
+        if (catSmart.isSelected) {
+          filter = true
+          byFamily[family] = [...(byFamily[family] || []), catSmart.raw]
         }
       })
     })
-    categories = _.sortBy(categories)
+
+    if (!filter) return true
+
+    // construct a condition to show based on selected
+    // // in one family, can have any cat selected
+    // // must have a corresponding tag if something is selected in a family
+    const showByFamily = Object.entries(byFamily).map(
+      ([family, catRawArray]) => {
+        return catRawArray.some(cat => refCats.indexOf(cat) > -1)
+      }
+    )
+    return showByFamily.every(bool => bool)
   }
-  const [selectedCategory, setSelectedCategory] = useState('')
 
   const parentMaxWidth = passCSS?.maxWidth || 1000
 
@@ -89,57 +256,55 @@ const References = ({
   const { layout, list } = addLayoutOptions(
     options,
     parentMaxWidth,
-    block.references
+    block.references.filter(ref => showRef(ref.categories))
   )
   const carouselDisplay = mode === `carousel`
 
-  const inner = list.map(column => {
-    const { itemStyle, imageStyle } = column[0]
+  const inner =
+    list.length < 1 ? (
+      <div>{mNoMatch}</div>
+    ) : (
+      list.map(column => {
+        const { itemStyle, imageStyle } = column[0]
 
-    return column.map((reference, key) => {
-      if (
-        selectedCategory &&
-        _.indexOf(reference.categories, selectedCategory) === -1
-      ) {
-        return null
-      }
-
-      switch (reference.__typename) {
-        case `ContentfulPage`:
-          return (
-            <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
-              <PageReference
-                {...{
-                  key,
-                  page: reference,
-                  colors,
-                  location,
-                  layout,
-                  blockOptionsData: options,
-                  passCSS: imageStyle,
-                }}
-              />
-            </ColumnWrapper>
-          )
-        default:
-          return (
-            <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
-              <CollectionItem
-                {...{
-                  key,
-                  collectionItem: reference,
-                  colors,
-                  location,
-                  layout,
-                  blockOptionsData: options,
-                  passCSS: imageStyle,
-                }}
-              />
-            </ColumnWrapper>
-          )
-      }
-    })
-  })
+        return column.map((reference, key) => {
+          switch (reference.__typename) {
+            case `ContentfulPage`:
+              return (
+                <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
+                  <PageReference
+                    {...{
+                      key,
+                      page: reference,
+                      colors,
+                      location,
+                      layout,
+                      blockOptionsData: options,
+                      passCSS: imageStyle,
+                    }}
+                  />
+                </ColumnWrapper>
+              )
+            default:
+              return (
+                <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
+                  <CollectionItem
+                    {...{
+                      key,
+                      collectionItem: reference,
+                      colors,
+                      location,
+                      layout,
+                      blockOptionsData: options,
+                      passCSS: imageStyle,
+                    }}
+                  />
+                </ColumnWrapper>
+              )
+          }
+        })
+      })
+    )
 
   return (
     <div
@@ -159,47 +324,68 @@ const References = ({
         },
       }}
     >
-      {categories.length > 1 && (
-        <div
-          className="blockReferences-categories"
-          css={{
-            display: `flex`,
-            flexFlow: `row wrap`,
-            justifyContent: `center`,
-          }}
-        >
-          {categories &&
-            categories.map(cat => {
-              const combo =
-                selectedCategory === cat ? funkyContrastCombo : funkyCombo
-              // const combo = funkyContrastCombo
-              const category = cat || wordAll[node_locale.split('-')[0]]
+      {categories.show &&
+        Array.from(stateCategories.entries()).map(([family, familyMap], i) => {
+          // console.log(Array.from(familyMap.values()))
+          const noCatSelected = Array.from(familyMap.values()).reduce(
+            (acc, currVal) => {
+              if (acc === false) return false
+              return !currVal.isSelected
+            },
+            true
+          )
+          return (
+            <div
+              key={family}
+              className="blockReferences-categories"
+              css={{
+                display: `flex`,
+                flexFlow: `row wrap`,
+                justifyContent: `center`,
+                marginTop: i > 0 ? rhythm(1 / 2) : 0,
+              }}
+            >
+              {Array.from(familyMap.values()).map(catSmart => {
+                // TODO: understand why the whole family is put as an array inside this family mapping
+                if (Array.isArray(catSmart)) return null
 
-              return (
-                <div
-                  key={category}
-                  role="button"
-                  onClick={() => {
-                    setSelectedCategory(cat)
-                  }}
-                  onKeyPress={() => {
-                    setSelectedCategory(cat)
-                  }}
-                  tabIndex="0"
-                  css={{
-                    margin: `${rhythm(1 / 4)} ${rhythm(1 / 4)}`,
-                    padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
-                    cursor: `pointer`,
-                    border: `solid 1px`,
-                    ...colors[combo].style,
-                  }}
-                >
-                  {category}
-                </div>
-              )
-            })}
-        </div>
-      )}
+                const { isSelected, label, raw } = catSmart
+                // || {
+                //  raw: null,
+                //  family,
+                //  label: wAll,
+                // }
+                const combo =
+                  isSelected || (noCatSelected && !raw)
+                    ? funkyContrastCombo
+                    : funkyCombo
+
+                return (
+                  <div
+                    key={raw || label}
+                    role="button"
+                    onClick={() => {
+                      selectCategory(catSmart)
+                    }}
+                    onKeyPress={() => {
+                      selectCategory(catSmart)
+                    }}
+                    tabIndex="0"
+                    css={{
+                      margin: `${rhythm(1 / 4)} ${rhythm(1 / 4)}`,
+                      padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
+                      cursor: `pointer`,
+                      border: `solid 1px`,
+                      ...colors[combo].style,
+                    }}
+                  >
+                    {label}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
       <LBlockReferences
         className="block blockReferences"
         css={{
