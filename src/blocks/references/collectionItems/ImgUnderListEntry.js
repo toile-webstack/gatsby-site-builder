@@ -1,6 +1,5 @@
 import React from 'react'
 import Img from 'gatsby-image'
-import Moment from 'react-moment'
 
 import { rhythm, scale } from '../../../utils/typography'
 // import colors from "../utils/colors"
@@ -8,6 +7,7 @@ import { addLayoutOptions } from '../../../utils/computeGrid'
 
 // import Html from '../../../atoms/Html'
 import LinkOrNotCollectionItem from '../../../atoms/LinkOrNotCollectionItem'
+import EventDates from '../../../molecules/EventDates'
 
 export default ({
   collectionItem,
@@ -25,12 +25,6 @@ export default ({
     dateLastEdit,
     fields: { locale: collectionItemLocale },
   } = collectionItem
-
-  const showDateLastEdit = dateLastEdit && dateLastEdit !== datePublished
-  const showDatePublishedTime =
-    !!datePublished.slice(11) && datePublished.slice(11) !== '00:00'
-  const showDateLastEditTime =
-    !!dateLastEdit.slice(11) && dateLastEdit.slice(11) !== '00:00'
 
   // image, name and time in the 1st column
   const layoutList = [{}]
@@ -58,103 +52,29 @@ export default ({
         padding: `0 ${rhythm(1 / 2)}`,
       }}
     >
-      {/* <h3 key="title">{collectionItem.name}</h3>
-      {collectionItem.momentPublished && (
-        <Moment
-          key="date"
-          locale={collectionItem.fields.locale}
-          format="Do MMM YYYY"
-          css={{
-            ...scale(-0.2),
-            lineHeight: rhythm(1 / 2),
-            // marginBottom: rhythm(1 / 2),
-            // padding: rhythm(1 / 2),
-          }}
-        >
-          {collectionItem.datePublished}
-        </Moment>
-      )} */}
       <h4
         css={{
           ...scale(0.4),
+          lineHeight: 1.2,
           // color: `inherit`,
         }}
       >
         {collectionItem.name}
       </h4>
-      {datePublished && (
-        <Moment
-          locale={collectionItemLocale}
-          format="Do MMM YYYY"
-          css={{
-            ...scale(-0.2),
-            lineHeight: rhythm(1 / 2),
-            marginBottom: rhythm(1 / 2),
-            // padding: rhythm(1 / 2),
-          }}
-        >
-          {datePublished}
-        </Moment>
-      )}
-      {showDatePublishedTime && (
-        <>
-          <span>{` - `}</span>
-          <Moment
-            locale={collectionItemLocale}
-            format="HH:mm"
-            css={{
-              ...scale(-0.2),
-              lineHeight: rhythm(1 / 2),
-              marginBottom: rhythm(1 / 2),
-              // padding: rhythm(1 / 2),
-              ...altColor,
-            }}
-          >
-            {datePublished}
-          </Moment>
-        </>
-      )}
-      {datePublished && (showDateLastEdit || showDateLastEditTime) && (
-        <span {...{ css: { ...altColor } }}>{` > `}</span>
-      )}
-      {showDateLastEdit && (
-        <Moment
-          locale={collectionItemLocale}
-          format="Do MMM YYYY"
-          css={{
-            ...scale(-0.2),
-            lineHeight: rhythm(1 / 2),
-            marginBottom: rhythm(1 / 2),
-            // padding: rhythm(1 / 2),
-          }}
-        >
-          {dateLastEdit}
-        </Moment>
-      )}
-      {showDateLastEditTime && (
-        <>
-          {showDateLastEdit && <span>{` - `}</span>}
-          <Moment
-            locale={collectionItemLocale}
-            format="HH:mm"
-            css={{
-              ...scale(-0.2),
-              lineHeight: rhythm(1 / 2),
-              marginBottom: rhythm(1 / 2),
-              // padding: rhythm(1 / 2),
-              ...altColor,
-            }}
-          >
-            {dateLastEdit}
-          </Moment>
-        </>
-      )}
+      <EventDates
+        {...{
+          start: datePublished,
+          end: dateLastEdit,
+          locale: collectionItemLocale,
+          altColor,
+        }}
+      />
       <hr
         css={{
           flexShrink: 0,
           width: `100%`,
-          marginBottom: rhythm(1 / 2),
-          height: 1,
+          // marginBottom: rhythm(1 / 2),
+          height: 6,
           backgroundColor: colors[funkyCombo].body,
         }}
       />
@@ -164,65 +84,11 @@ export default ({
         sizes={image.fluid}
         key="image"
         css={{
-          height: `200px`,
+          height: `100px`,
         }}
       />
     </div>
   )
-
-  const innerr = [
-    <div
-      key="leftCol"
-      css={{
-        ...imageStyle,
-      }}
-    >
-      <Img title={image.title} className="image" sizes={image.fluid} />
-    </div>,
-    <div
-      key="rightCol"
-      css={{
-        ...itemStyle,
-        display: `flex`,
-        flexFlow: `column`,
-        // maxHeight: imageStyle[` .image`].height,
-        padding: `0 ${rhythm(1 / 2)}`,
-        overflow: `hidden`,
-      }}
-    >
-      <h4
-        css={{
-          ...scale(0.4),
-          // color: `inherit`,
-        }}
-      >
-        {collectionItem.name}
-      </h4>
-      {collectionItem.datePublished && (
-        <Moment
-          locale={collectionItem.fields.locale}
-          format="Do MMM YYYY"
-          css={{
-            ...scale(-0.2),
-            lineHeight: rhythm(1 / 2),
-            marginBottom: rhythm(1 / 2),
-            // padding: rhythm(1 / 2),
-          }}
-        >
-          {collectionItem.datePublished}
-        </Moment>
-      )}
-      <hr
-        css={{
-          flexShrink: 0,
-          width: `100%`,
-          marginBottom: rhythm(1 / 2),
-          height: 1,
-          backgroundColor: colors[funkyCombo].body,
-        }}
-      />
-    </div>,
-  ]
 
   return (
     <LinkOrNotCollectionItem
@@ -234,48 +100,4 @@ export default ({
       {inner}
     </LinkOrNotCollectionItem>
   )
-  // linkToPage ? (
-  //   <Link
-  //     to={collectionItem.path}
-  //     className="collectionItem stylishLink"
-  //     css={{
-  //       display: `flex`,
-  //       flexFlow: `row wrap`,
-  //       justifyContent: `center`,
-  //       textAlign: `left`,
-  //       " h2, h3, h4, h5, h6, p": {
-  //         color: `inherit`,
-  //         textAlign: `left`,
-  //         margin: 0,
-  //       },
-  //       padding: `${rhythm(1)} 0`,
-  //       // ...passCSS
-  //       // ...colors[classicCombo].style,
-  //       // ...styleData
-  //     }}
-  //   >
-  //     {inner}
-  //   </Link>
-  // ) : (
-  //   <div
-  //     className="collectionItem stylishLink"
-  //     css={{
-  //       display: `flex`,
-  //       flexFlow: `row wrap`,
-  //       justifyContent: `center`,
-  //       textAlign: `left`,
-  //       " h2, h3, h4, h5, h6, p": {
-  //         color: `inherit`,
-  //         textAlign: `left`,
-  //         margin: 0,
-  //       },
-  //       padding: `${rhythm(1)} 0`,
-  //       // ...passCSS
-  //       // ...colors[classicCombo].style,
-  //       // ...styleData
-  //     }}
-  //   >
-  //     {inner}
-  //   </div>
-  // )
 }
