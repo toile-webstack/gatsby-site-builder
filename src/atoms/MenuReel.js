@@ -18,6 +18,7 @@ const activeStyle = {
 }
 
 const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
+  console.log(menu)
   const currentMenu = menu && menu[currentLocale]
   const { pathname } = location
   const locales = menu && Object.keys(menu).map(locale => locale.split('-')[0])
@@ -67,7 +68,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           },
         }}
       >
-        <li>
+        <li css={{ flexShrink: 0 }}>
           <Stack
             {...{
               as: Link,
