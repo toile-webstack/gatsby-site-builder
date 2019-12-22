@@ -152,15 +152,17 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           // In case ch unit or js are not supported, we use max-width because menyReel is mobile friendly
           // and the prefered choice. The burger menu being progressive enhancement.
           [`@media only screen and (max-width: ${fullDimensionApprox}ch)`]: {
-            ' .menu--main__large': {
-              display: 'none',
-            },
-            ' .menu--main__mobile': {
-              display: 'block',
-            },
-            ' .menu--mobile-button': {
-              display: 'inline-block',
-            },
+            ...(typeof window !== 'undefined' && {
+              ' .menu--main__large': {
+                display: 'none',
+              },
+              ' .menu--main__mobile': {
+                display: 'block',
+              },
+              ' .menu--mobile-button': {
+                display: 'inline-block',
+              },
+            }),
           },
         }}
       >

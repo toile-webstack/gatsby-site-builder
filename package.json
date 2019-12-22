@@ -9,6 +9,7 @@
     "dev": "gatsby clean && gatsby develop",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "gatsby clean",
+    "serve": "gatsby serve",
     "schema-update": "rm -f schema.gql && GATSBY_UPDATE_SCHEMA_SNAPSHOT=true && gatsby build"
   },
   "repository": {
