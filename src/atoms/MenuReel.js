@@ -86,6 +86,8 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
     0
   )
 
+  const MenuIcon = open ? MdClose : MdMenu
+
   return (
     <>
       <Box
@@ -135,13 +137,9 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           ' .menu--main__mobile': {
             textAlign: 'right',
           },
-          // ' .menu--mobile-button': {},
-          // TODO: In case ch unit are not supported
-          // [`@media only screen and (max-width: ${fullDimensionApprox}ch)`]: {
-          //   ' .menu--mobile-button, .menu--main__mobile': {
-          //     display: 'block',
-          //   },
-          // },
+          ' .menu--mobile-button, .menu--main__mobile': {
+            display: 'none',
+          },
           // LARGE SCREEN MENU
           ' .menu--main__large': {
             ...layoutStyles.reel({
@@ -150,14 +148,18 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
               space: [rhythm(1), '3ch'],
             }),
             ...lateralShadowStyles,
-            display: 'none',
           },
-          [`@media only screen and (min-width: ${fullDimensionApprox}ch)`]: {
-            ' .menu--main': {
-              display: 'flex',
-            },
-            ' .menu--mobile-button, .menu--main__mobile': {
+          // In case ch unit or js are not supported, we use max-width because menyReel is mobile friendly
+          // and the prefered choice. The burger menu being progressive enhancement.
+          [`@media only screen and (max-width: ${fullDimensionApprox}ch)`]: {
+            ' .menu--main__large': {
               display: 'none',
+            },
+            ' .menu--main__mobile': {
+              display: 'block',
+            },
+            ' .menu--mobile-button': {
+              display: 'inline-block',
             },
           },
         }}
@@ -238,7 +240,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
                 />
               </div>
             )}
-            <MdMenu
+            <MenuIcon
               size={rhythm(1.2)}
               type="button"
               role="button"
