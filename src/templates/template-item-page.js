@@ -37,7 +37,7 @@ const ItemPageTemplate = ({
     style: styleData,
     scripts,
     node_locale: pageLocale,
-    categories: categoriesRaw = [],
+    categories: categoriesRaw,
     datePublished,
     dateLastEdit,
   } = collectionItem
@@ -49,8 +49,8 @@ const ItemPageTemplate = ({
 
   const colors = useColors({ options, colorsLib })
   const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
-
-  const categories = categoriesRaw.map(raw => {
+  console.log(collectionItem)
+  const categories = (categoriesRaw || []).map(raw => {
     if (!/:/.test(raw)) {
       return {
         label: raw,
