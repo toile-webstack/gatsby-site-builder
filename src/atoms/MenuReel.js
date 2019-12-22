@@ -75,11 +75,11 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
     componentP: 6 + (langsLength > 0 ? 3 : 0),
     logo: 4,
     name: name.length,
-    leftElP: 0.7,
+    leftElP: 0.6,
     menu: menuCharsLength,
     menuP: (currentMenu.length - 1) * 3,
     lang: langsLength,
-    langP: (localesLength - 1) * 0.7,
+    langP: (localesLength - 1) * 0.6,
   }
   const fullDimensionApprox = Object.values(dimensionsApprox).reduce(
     (accu, curr) => accu + curr,
@@ -122,10 +122,10 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
             },
           },
           // LATERAL STACKS
-          ' .menu-langs, .menu--logo-name': {
+          ' .menu--langs, .menu--logo-name': {
             ...layoutStyles.stack({
               horizontal: true,
-              space: [rhythm(1 / 4), '0.7ch'],
+              space: [rhythm(1 / 4), '0.6ch'],
             }),
           },
           // MOBILE MENU
