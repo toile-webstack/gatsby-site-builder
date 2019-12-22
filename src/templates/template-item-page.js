@@ -49,7 +49,6 @@ const ItemPageTemplate = ({
 
   const colors = useColors({ options, colorsLib })
   const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
-  console.log(collectionItem)
   const categories = (categoriesRaw || []).map(raw => {
     if (!/:/.test(raw)) {
       return {

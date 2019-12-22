@@ -1494,7 +1494,7 @@
 "@bit/marccoet.toile.nuds-layout-primitives@file:./libs":
   version "0.0.3"
   dependencies:
-    "@bit/marccoet.toile.use-resize-observer" "file:../../../.cache/yarn/v6/npm-@bit-marccoet-toile-nuds-layout-primitives-0.0.3-b5249d96-d976-44a6-a868-d1850364e245-1576946839665/node_modules/@bit/components/use-resize-observer"
+    "@bit/marccoet.toile.use-resize-observer" "file:../../../.cache/yarn/v6/npm-@bit-marccoet-toile-nuds-layout-primitives-0.0.3-ce611fdf-01b1-4c4c-a366-d9b04207fb40-1577006151885/node_modules/@bit/components/use-resize-observer"
 
 "@bit/marccoet.toile.use-resize-observer@file:./components/use-resize-observer", "@bit/marccoet.toile.use-resize-observer@file:components/use-resize-observer":
   version "0.0.3"
@@ -4890,11 +4890,6 @@ devcert-san@^0.3.3:
     mkdirp "^0.5.1"
     tmp "^0.0.31"
     tslib "^1.6.0"
-
-dialog-polyfill@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/dialog-polyfill/-/dialog-polyfill-0.5.0.tgz#bf67bc67abaf538e44fff80f2f71ff132befadd7"
-  integrity sha512-fOj68T8KB6UIsDFmK7zYbmORJMLYkRmtsLM1W6wbCVUWu4Hdcud5bqbvuueTxO84JXtK9HcpCHV9vNwlWUdCIw==
 
 diffie-hellman@^5.0.0:
   version "5.0.3"

@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { graphql } from 'gatsby'
-import _ from 'lodash'
+import qs from 'qs'
+
+import { navigate } from '@reach/router'
 
 import Carousel from '../atoms/Carousel'
 
@@ -26,12 +28,6 @@ const ColumnWrapper = ({ maxWidth, children, className }) => (
       flexFlow: `column`,
       width: `100%`,
       maxWidth,
-      // "> div": {
-      //   ...this.colors[classicCombo].style,
-      //   ":hover": {
-      //     ...this.colors[funkyCombo].style,
-      //   },
-      // },
     }}
   >
     {children}
@@ -54,7 +50,8 @@ const decomposeCategory = cat => {
   const [family, familyIndex] =
     catSplit.length > 1 ? catSplit[0].split('|') : ['main']
   const label = catSplit[catSplit.length - 1]
-  return { family, familyIndex, label }
+  const raw = `${family}${familyIndex ? `|${familyIndex}` : ''}:${label}`
+  return { family, familyIndex, label, raw }
 }
 
 const References = ({
@@ -84,129 +81,143 @@ const References = ({
     name,
     hideCategories,
     mode,
-    categories: { families: catFamiliesOptions } = {},
+    categories: { families: catFamiliesOptions, showQueryString } = {},
   } = options
 
   // CATEGORIES
-  // TODO: do this at build time or using memo
   const categories = useMemo(() => {
     let showCategories = false
+    // const familiesObj = {}
+    let families = Array.isArray(catFamiliesOptions) ? catFamiliesOptions : []
+    const allObj = {}
     let all = []
+    const byFamilyObj = {}
     // catFamiliesOptions can be set to something like ["place", "main"]
     // to indicate we want to show the place family first
-    const byFamily = new Map()
-    // Initialize families with a null value corresponding to "All"
-    if (Array.isArray(catFamiliesOptions)) {
-      catFamiliesOptions.forEach(catFamily => {
-        byFamily.set(
-          catFamily,
-          new Map([
-            [
-              '',
-              {
-                family: catFamily,
-                // raw: `${catFamily}:${wAll}`,
-                label: wAll,
-              },
-            ],
-          ])
-        )
-      })
-    } else {
-      byFamily.set(
-        'main',
-        new Map([
-          [
-            '',
-            {
-              family: 'main',
-              // raw: `main:${wAll}`,
-              label: wAll,
-            },
-          ],
-        ])
-      )
-    }
-    if (!byFamily.has('main') || byFamily.get('main').length < 1) {
-      // if we use categories families, we need to initialize the main array with an empty string
-      byFamily.set(
-        'main',
-        new Map([
-          [
-            '',
-            {
-              family: 'main',
-              // raw: `main:${wAll}`,
-              label: wAll,
-            },
-          ],
-        ])
-      )
-    }
-    // End initialize
-    // const initialState = new Map(byFamily)
-    // fill in the arrays "all" and each one in "byFamily"
+
     if (hideCategories !== true) {
+      // fill in the arrays "all" and each one in "byFamily"
+      // construct the 'all' array ordered
       references.forEach(reference => {
         const refCats = reference.categories || []
 
         refCats.forEach(cat => {
-          const { family, familyIndex, label } = decomposeCategory(cat)
-          // This is the shape of a cat
-          const catSmart = { raw: cat, family, familyIndex, label }
+          if (!cat) return null
 
-          const familyMap = byFamily.get(family)
-          if (cat && !familyMap.has(cat)) {
-            all = [...all, catSmart]
-            familyMap.set(cat, catSmart)
-            // byFamily.set(family, [...(byFamily.get || []), catSmart])
-          }
-
-          // if (cat !== '' && _.indexOf(categories.main, cat) === -1) {
-          //   categories.main = [...categories.main, cat]
-          // }
+          const {
+            family,
+            // familyIndex, label,
+            raw,
+          } = decomposeCategory(cat)
+          // NOTE: this would add the empty tag we need for each family
+          // allObj[`${family}:`] = true
+          // NOTE: this would be usefull if we need to populate families without a family order option
+          // familiesObj[family] = true
+          families =
+            families.indexOf(family) > -1 ? families : [...families, family]
+          allObj[raw] = true
         })
       })
+      all = Object.keys(allObj).sort()
+      showCategories = all.length > 0
+      // families = Object.keys(familiesObj)
 
-      const catFamilies = Array.from(byFamily.keys())
-      catFamilies.forEach(family => {
-        const familyMap = byFamily.get(family)
-        if (familyMap.size > 1) {
-          showCategories = true
-        }
-        familyMap.set(family, [...familyMap.entries()].sort())
-        // familyMap.sort()
-        // byFamily.set(family, _.sortBy(familyArray))
+      all.forEach(rawCat => {
+        const catSmart = decomposeCategory(rawCat)
+        const { family } = catSmart
+
+        byFamilyObj[family] = byFamilyObj[family]
+          ? [...byFamilyObj[family], catSmart]
+          : [
+              {
+                family,
+                // raw: `${catFamily}:${wAll}`,
+                label: wAll,
+              },
+              catSmart,
+            ]
       })
-
-      // categories.main = _.sortBy(categories.main)
     }
 
     return {
       all, // [ ...allCats ]
-      byFamily, // Map(
-      //     place: [ ...someCats ],
-      //     main: [ ...someOtherCats ],
-      //   )
+      families, // families ordered by options
+      byFamilyObj, // families of cats with an empty value at the start (for the "all" button)
       show: showCategories, // bool
-      // initialState, // Map(
-      //     place: [],
-      //     main: [],
-      //   )
     }
   }, [catFamiliesOptions, hideCategories])
 
   // Declare state when categories are empty
-  const [stateCategories, setCatState] = useState(new Map(categories.byFamily))
+  const [stateCategories, setCatState] = useState({ ...categories.byFamilyObj })
+
+  // Compare current querry string and state and sync
+  useEffect(() => {
+    const { search } = location
+    const queryParams = qs.parse(search, {
+      ignoreQueryPrefix: true,
+      comma: true,
+      encode: false,
+    })
+    // always an array. Can be empty
+    const qsCategories = Array.isArray(queryParams.categories)
+      ? queryParams.categories
+      : (queryParams.categories && [queryParams.categories]) || []
+
+    if (qsCategories.length > 0) {
+      const qsCatsByFamily = qsCategories.reduce((acc, rawCat) => {
+        const { family } = decomposeCategory(rawCat)
+        return {
+          ...acc,
+          [family]: [...(acc[family] || []), rawCat],
+        }
+      }, {})
+      setCatState(prevState => {
+        const newState = { ...prevState }
+        Object.entries(qsCatsByFamily).forEach(([family, rawCats]) => {
+          if (!newState[family]) return null
+
+          newState[family] = newState[family].map(smartCat => {
+            const isSelected = rawCats.indexOf(smartCat.raw) > -1
+            return {
+              ...smartCat,
+              ...(isSelected ? { isSelected: true } : null),
+            }
+          })
+        })
+        return newState
+      })
+    }
+  }, [])
+  useEffect(() => {
+    if (showQueryString) {
+      // Handle query strings for categories
+      const qsStringifyOptions = {
+        addQueryPrefix: true,
+        encode: false,
+        arrayFormat: 'comma',
+      }
+
+      const cats = Object.values(stateCategories).reduce((acc, currFamily) => {
+        const selectedCats = currFamily
+          .filter(({ isSelected }) => isSelected)
+          .map(({ raw }) => raw)
+        return [...acc, ...selectedCats]
+      }, [])
+
+      const queryString =
+        cats.length < 1
+          ? '.'
+          : qs.stringify({ categories: cats }, qsStringifyOptions)
+      navigate(`${queryString}`, { replace: true })
+    }
+  }, [stateCategories])
+
   const resetFamilyCategories = family => {
     setCatState(prevState => {
-      const newState = new Map(prevState)
-      const familyMap = newState.get(family)
-      familyMap.forEach(catSmart => {
-        if (Array.isArray(catSmart)) return null
-        // familyMap.set(mapKey, { ...catSmart, isSelected: false })
-        catSmart.isSelected = false
-      })
+      const newState = { ...prevState }
+      newState[family] = newState[family].map(
+        ({ isSelected, ...catSmart }) => catSmart
+      )
       return newState
     })
   }
@@ -215,9 +226,12 @@ const References = ({
       resetFamilyCategories(family)
     } else {
       setCatState(prevState => {
-        const newState = new Map(prevState)
-        const catToSelect = newState.get(family).get(raw)
-        catToSelect.isSelected = !catToSelect.isSelected
+        const newState = { ...prevState }
+        newState[family] = newState[family].map(catSmart =>
+          catSmart.raw === raw
+            ? { ...catSmart, isSelected: !catSmart.isSelected }
+            : catSmart
+        )
         return newState
       })
     }
@@ -225,14 +239,18 @@ const References = ({
 
   const showRef = refCats => {
     let filter = false
-    const byFamily = {}
+
+    const selectedByFamily = {}
     // Loop over each family in stateCategories
-    stateCategories.forEach((familyMap, family) => {
-      familyMap.forEach(catSmart => {
+    Object.entries(stateCategories).forEach(([family, familyCats]) => {
+      familyCats.forEach(catSmart => {
         // if no tag is selected in a family, we don't care about it
         if (catSmart.isSelected) {
           filter = true
-          byFamily[family] = [...(byFamily[family] || []), catSmart.raw]
+          selectedByFamily[family] = [
+            ...(selectedByFamily[family] || []),
+            catSmart.raw,
+          ]
         }
       })
     })
@@ -242,9 +260,13 @@ const References = ({
     // construct a condition to show based on selected
     // // in one family, can have any cat selected
     // // must have a corresponding tag if something is selected in a family
-    const showByFamily = Object.entries(byFamily).map(
+    const showByFamily = Object.entries(selectedByFamily).map(
       ([family, catRawArray]) => {
-        return catRawArray.some(cat => refCats.indexOf(cat) > -1)
+        return catRawArray.some(cat => {
+          // we have to strip "main:" from raw names in our cats
+          const catToCheck = /^main:/.test(cat) ? cat.split(':')[1] : cat
+          return refCats.indexOf(catToCheck) > -1
+        })
       }
     )
     return showByFamily.every(bool => bool)
@@ -325,15 +347,14 @@ const References = ({
       }}
     >
       {categories.show &&
-        Array.from(stateCategories.entries()).map(([family, familyMap], i) => {
-          // console.log(Array.from(familyMap.values()))
-          const noCatSelected = Array.from(familyMap.values()).reduce(
-            (acc, currVal) => {
-              if (acc === false) return false
-              return !currVal.isSelected
-            },
-            true
-          )
+        categories.families.map((family, i) => {
+          const familyCats = stateCategories[family]
+          if (!familyCats) return null
+
+          const noCatSelected = familyCats.reduce((acc, currVal) => {
+            if (acc === false) return false
+            return !currVal.isSelected
+          }, true)
           return (
             <div
               key={family}
@@ -345,16 +366,9 @@ const References = ({
                 marginTop: i > 0 ? rhythm(1 / 2) : 0,
               }}
             >
-              {Array.from(familyMap.values()).map(catSmart => {
-                // TODO: understand why the whole family is put as an array inside this family mapping
-                if (Array.isArray(catSmart)) return null
-
+              {familyCats.map(catSmart => {
                 const { isSelected, label, raw } = catSmart
-                // || {
-                //  raw: null,
-                //  family,
-                //  label: wAll,
-                // }
+
                 const combo =
                   isSelected || (noCatSelected && !raw)
                     ? funkyContrastCombo
@@ -638,6 +652,13 @@ const References = ({
 // }
 
 export default References
+// export default props => (
+//   <Location>
+//     {l => {
+//       return <References {...props} {...l} />
+//     }}
+//   </Location>
+// )
 
 export const blockReferencesFragment = graphql`
   fragment BlockReferences on ContentfulBlockReferences {

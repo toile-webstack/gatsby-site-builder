@@ -164,7 +164,7 @@ const options = {
         // background: colors.palettes[0].neutral
       },
       "a.button, button, input[type='submit'], html [type='button'], html [role='button']": {
-        background: 'none',
+        // background: 'none',
         textDecoration: `none`,
         cursor: `pointer`,
         display: `inline-block`,
