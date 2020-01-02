@@ -52,10 +52,12 @@ export const layoutStyles = {
     space = ['1rem', 'var(--s0, 1rem)'], // The space (margin) between successive sibling elements
     recursive = false, // Whether the spaces apply recursively (i.e. regardless of nesting level)
     splitAfter = null, // The element index after which to split the stack. Leave empty for no splitting
+    splitType,
     horizontal = false, // To make it flow horizontally and not wrapping.
   } = {}) => {
     const marginStart = horizontal ? 'marginLeft' : 'marginTop'
     const marginEnd = horizontal ? 'marginRight' : 'marginBottom'
+    const splitIt = /number|string/.test(typeof splitAfter)
     return {
       display: 'flex',
       flexDirection: horizontal ? 'row' : 'column',
@@ -67,11 +69,18 @@ export const layoutStyles = {
       [recursive ? ' * + *' : '> * + *']: {
         [marginStart]: space,
       },
-      ...(typeof splitAfter === 'number' && {
-        [`> :nth-child(${splitAfter})`]: {
-          [marginEnd]: 'auto',
-        },
-      }),
+      ...(splitIt &&
+        (splitType
+          ? {
+              [`> ${splitType}:nth-of-type(${splitAfter})`]: {
+                [marginEnd]: 'auto',
+              },
+            }
+          : {
+              [`> :nth-child(${splitAfter})`]: {
+                [marginEnd]: 'auto',
+              },
+            })),
     }
   },
 
@@ -411,13 +420,21 @@ const jsxHelper = ({ children, layoutProps, layoutComp, as, css, ...props }) =>
     children
   )
 
-export const Stack = ({ space, recursive, splitAfter, horizontal, ...rest }) =>
+export const Stack = ({
+  space,
+  recursive,
+  splitAfter,
+  splitType,
+  horizontal,
+  ...rest
+}) =>
   jsxHelper({
     layoutComp: 'stack',
     layoutProps: {
       space,
       recursive,
       splitAfter,
+      splitType,
       horizontal,
     },
     ...rest,

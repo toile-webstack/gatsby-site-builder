@@ -6,7 +6,7 @@ import {
   Box,
   // Stack,
   layoutStyles,
-} from '@bit/marccoet.toile.nuds-layout-primitives'
+} from '../../libs/nuds-layout-primitives'
 import { lateralShadowStyles } from '../../nuds-styles'
 
 import { rhythm } from '../utils/typography'
@@ -119,6 +119,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
               ...layoutStyles.stack({
                 horizontal: true,
                 splitAfter: 1,
+                splitType: 'li',
               }),
               alignItems: 'center',
             },
