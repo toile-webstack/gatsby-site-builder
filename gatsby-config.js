@@ -103,7 +103,7 @@ module.exports = {
         update: process.env.GATSBY_UPDATE_SCHEMA_SNAPSHOT,
       },
     },
-    // `gatsby-plugin-netlify-cache`,
+    `gatsby-plugin-netlify-cache`,
     `gatsby-plugin-remove-fingerprints`,
     `gatsby-plugin-netlify`,
   ],
