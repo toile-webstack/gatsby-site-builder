@@ -11,7 +11,6 @@ const Scripts = ({
   defer = false,
 }) => {
   if (!scripts || !Array.isArray(scripts) || !scripts.length) {
-    console.log('no scripts')
     return null
   }
   const isSSR = typeof window === 'undefined'
