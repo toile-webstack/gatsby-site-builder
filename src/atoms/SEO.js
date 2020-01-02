@@ -1,6 +1,9 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 
+// NOTE: whatch out! we cannot render React components inside a Helmet tag Better to render multiple helmet tags
+// https://github.com/nfl/react-helmet/issues/326
+
 const Meta = ({
   children,
   property,
@@ -54,9 +57,8 @@ const SEO = ({
       {/* {canonicalUrl && <link rel="canonical" href={canonicalUrl} />} */}
       {/* {canonicalUrl && <meta property="og:url" content={canonicalUrl} />} */}
       {/* ogType && <meta property="og:type" content={ogType} />} */}
-
-      {children}
     </Helmet>
+    {children}
     <Meta {...{ tag: 'title' }}>{title}</Meta>
     <Meta {...{ property: 'og:title', content: `${title} | ${name}` }} />
     <Meta {...{ property: 'og:site_name', content: name }} />
