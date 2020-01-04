@@ -1,6 +1,6 @@
 export const lateralShadowStyles = {
   // Styles for lateral shadow scroll
-  overflow: 'auto',
+  overflowX: 'auto',
   backgroundImage: `
 /* Shadows */
 linear-gradient(to right, white, white),
