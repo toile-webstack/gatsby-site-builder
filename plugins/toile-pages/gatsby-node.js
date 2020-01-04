@@ -7,6 +7,10 @@ const slash = require(`slash`)
 const slugify = require('slugify')
 const { createPath } = require(`../../utils/utils.js`)
 
+require('dotenv').config()
+const contentful = require('contentful')
+const util = require('util')
+
 function camelize(str) {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
@@ -82,51 +86,171 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   }
 }
 
+const getCircularReplacer = () => {
+  const seen = new WeakSet()
+  return (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) {
+        return
+      }
+      seen.add(value)
+    }
+    return value
+  }
+}
+
+/**
+ * Gets all the existing entities based on pagination parameters.
+ * The first call will have no aggregated response. Subsequent calls will
+ * concatenate the new responses to the original one.
+ */
+const pagedGet = (
+  client,
+  method,
+  query = {},
+  skip = 0,
+  pageLimit = 1000,
+  aggregatedResponse = null
+) => {
+  return client[method]({
+    ...query,
+    skip,
+    limit: pageLimit,
+    order: `sys.createdAt`,
+  }).then(response => {
+    if (!aggregatedResponse) {
+      aggregatedResponse = response
+    } else {
+      aggregatedResponse.items = aggregatedResponse.items.concat(response.items)
+    }
+    if (skip + pageLimit <= response.total) {
+      return pagedGet(
+        client,
+        method,
+        query,
+        skip + pageLimit,
+        pageLimit,
+        aggregatedResponse
+      )
+    }
+    return aggregatedResponse
+  })
+}
+
+const fetchContentfulPages = async () => {
+  const {
+    contentfulSpaceID: spaceId,
+    contentfulAccessToken: accessToken,
+  } = process.env
+
+  const contentfulClientOptions = {
+    space: spaceId,
+    accessToken,
+    // host: pluginConfig.get(`host`),
+    // environment: pluginConfig.get(`environment`),
+    // proxy: pluginConfig.get(`proxy`),
+  }
+
+  const client = contentful.createClient(contentfulClientOptions)
+
+  const space = await client.getSpace()
+  const locales = await client.getLocales().then(response => response.items)
+  const defaultLocale = locales.reduce((acc, curr) => {
+    return (curr.default && curr.code) || acc
+  }, '')
+  const contentTypes = await pagedGet(client, `getContentTypes`)
+  const contentTypeItems = contentTypes.items
+  //   const contentTypeItems = contentTypes.items.map(c => normalize.fixIds(c))
+  const entries = await pagedGet(client, `getEntries`)
+  const entriesItems = entries.items
+  const entriesItemsSys = entries.items.map(e => e.sys)
+  const entriesItemsFields = entries.items.map(e => e.fields)
+  const pages = entries.items.filter(e => e.sys.contentType.sys.id === 'page')
+  // .map(e => {
+  //   return e
+  // })
+  // const pageBlocks = pages[0].blocks
+  // const pageBlocksSys = pages[0].blocks.map(b => b.sys)
+  // const pageBlocksFields = pages[0].blocks.map(b => b.fields)
+  // const assets = await client.getAssets()
+
+  // console.log({ space, locales, defaultLocale, contentTypes, contentTypeItems })
+  // console.log({ pageBlocksSys, pageBlocksFields })
+
+  return pages
+}
+
 // CREATE NORMAL PAGES
 exports.createPages = ({ graphql, actions }) => {
   const { createPage, createRedirect } = actions
   return new Promise((resolve, reject) => {
     const pageTemplate = pathLib.resolve(`src/templates/template-page.js`)
     resolve(
-      graphql(
-        `
-          {
-            locales: allContentfulSettings {
-              edges {
-                node {
-                  node_locale
-                  fields {
-                    defaultLocale
-                    locale
-                  }
-                }
-              }
-            }
-            contentfulPages: allContentfulPage(
-              filter: { path: { ne: "IGNORE" } }
-            ) {
-              edges {
-                node {
-                  id
-                  path
-                  node_locale
-                  metadata {
-                    internal {
-                      content
-                    }
-                  }
-                  fields {
-                    menuName
-                    shortPath
-                    localizedPath
-                    locale
-                  }
-                }
-              }
-            }
-          }
-        `
-      ).then(result => {
+      // graphql(
+      //   `
+      //     {
+      //       locales: allContentfulSettings {
+      //         edges {
+      //           node {
+      //             node_locale
+      //             fields {
+      //               defaultLocale
+      //               locale
+      //             }
+      //           }
+      //         }
+      //       }
+      //       contentfulPages: allContentfulPage(
+      //         filter: { path: { ne: "IGNORE" } }
+      //       ) {
+      //         edges {
+      //           node {
+      //             id
+      //             path
+      //             node_locale
+      //             metadata {
+      //               internal {
+      //                 content
+      //               }
+      //             }
+      //             fields {
+      //               menuName
+      //               shortPath
+      //               localizedPath
+      //               locale
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   `
+      // )
+      fetchContentfulPages().then(pages => {
+        pages.forEach(page => {
+          const { fields } = page
+          const path = createPath(fields.path)
+          // const shortPath = node.path === `index` ? `/` : `/${path}/`
+          // const localizedPath =
+          //   node.path === `index` ? `/${locale}/` : `/${locale}/${path}/`
+
+          const pageData = JSON.stringify(page, getCircularReplacer())
+          const context = { page: pageData }
+          const pageComponent = slash(pageTemplate)
+
+          createPage({
+            path, // required
+            component: pageComponent,
+            // menuName,
+            // locale,
+            // defaultLocale,
+            context,
+          })
+        })
+
+        return null
+
+        // -------------END------------------
+
         if (result.errors) {
           reject(result.errors)
         }

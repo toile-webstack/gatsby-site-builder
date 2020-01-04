@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql } from 'gatsby'
+// import { graphql } from 'gatsby'
 import { For } from 'react-loops'
 
 import { metadata as siteMetadata } from '../utils/siteSettings.json'
@@ -12,33 +12,39 @@ import { colors as colorsLib, useColors, internalJson } from '../utils'
 
 // import Layout from '../layouts/Layout'
 
+const getBlockType = b => b?.sys?.contentType?.sys?.id
+
 const TemplatePage = ({
-  data: { contentfulPage: page } = {},
+  // data: { contentfulPage: page } = {},
+  pageContext: { page: pageData } = {},
   location,
   // children,
   path,
 }) => {
-  if (!page.path) return null
-
-  // console.log(page)
-
+  // if (!page.path) return null
+  const page = JSON.parse(pageData)
+  const { sys, fields } = page
+  const { locale: pageLocale } = sys
   const {
-    metadata: metadataData,
-    options: optionsData,
-    style: styleData,
+    metadata = {},
+    options = {},
+    style = {},
     scripts,
-    node_locale: pageLocale,
-  } = page
+    blocks,
+    // node_locale: pageLocale,
+  } = fields
   // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
-  const metadata = internalJson(metadataData)
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  // const metadata = internalJson(metadataData)
+  // const options = internalJson(optionsData)
+  // const style = mapStyle(internalJson(styleData))
 
   const colors = useColors({ options, colorsLib })
   const { classicCombo } = colors
 
   // const isSSR = typeof window === 'undefined'
   const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
+
+  console.log(blocks)
 
   return (
     // <Layout {...{ location, isLandingPage }}>
@@ -71,18 +77,19 @@ const TemplatePage = ({
         }}
       >
         <For
-          of={page.blocks}
+          of={blocks}
           as={block => {
-            switch (block.__typename) {
-              case `ContentfulSection`:
+            const blockType = getBlockType(block)
+            switch (blockType) {
+              case `section`:
                 return <Section {...{ block, colors, location }} />
-              case `ContentfulBlockFreeText`:
+              case `blockFreeText`:
                 return <FreeText {...{ block, colors, location }} />
-              case `ContentfulBlockForm`:
+              case `blockForm`:
                 return <Form {...{ block, colors, location }} />
-              case `ContentfulBlockGallery`:
+              case `blockGallery`:
                 return <Gallery {...{ block, colors, location }} />
-              case `ContentfulBlockReferences`:
+              case `blockReferences`:
                 return <References {...{ block, colors, location }} />
               default:
                 return null
@@ -96,50 +103,50 @@ const TemplatePage = ({
 
 export default TemplatePage
 
-export const pageQuery = graphql`
-  query PageTemplate($id: String!) {
-    contentfulPage(id: { eq: $id }) {
-      id
-      node_locale
-      path
-      metadata {
-        internal {
-          content
-        }
-        # name
-        # title
-        # description
-      }
-      blocks {
-        ...BlockFreeText
-        ...BlockForm
-        ...BlockGallery
-        ...BlockReferences
-        ...Section
-      }
-      options {
-        internal {
-          content
-        }
-        # colorPalettes
-        # colorCombo
-      }
-      style {
-        internal {
-          content
-        }
-      }
-      scripts {
-        id
-        name
-        type
-        src
-        charset
-        content {
-          id
-          content
-        }
-      }
-    }
-  }
-`
+// export const pageQuery = graphql`
+//   query PageTemplate($id: String!) {
+//     contentfulPage(id: { eq: $id }) {
+//       id
+//       node_locale
+//       path
+//       metadata {
+//         internal {
+//           content
+//         }
+//         # name
+//         # title
+//         # description
+//       }
+//       blocks {
+//         ...BlockFreeText
+//         ...BlockForm
+//         ...BlockGallery
+//         ...BlockReferences
+//         ...Section
+//       }
+//       options {
+//         internal {
+//           content
+//         }
+//         # colorPalettes
+//         # colorCombo
+//       }
+//       style {
+//         internal {
+//           content
+//         }
+//       }
+//       scripts {
+//         id
+//         name
+//         type
+//         src
+//         charset
+//         content {
+//           id
+//           content
+//         }
+//       }
+//     }
+//   }
+// `

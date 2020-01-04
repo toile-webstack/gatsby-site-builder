@@ -30,31 +30,28 @@ const Gallery = ({
   className = '',
   passCSS,
 }) => {
-  if (Object.keys(block).length < 1) return null
-  if (block.gallery.length < 1) return null
+  const { sys, fields } = block
+  const { gallery, options = {}, style = {} } = fields
+
+  if (Object.keys(fields).length < 1) return null
+  if (gallery.length < 1) return null
+
+  const colors = useColors({ options, colorsLib })
+  const { isColored, classicCombo } = colors
 
   const [showModal, setShowModal] = useState(false)
   const closeModal = () => {
     setShowModal(false)
   }
 
-  const { options: optionsData, style: styleData } = block
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
-
-  const colors = useColors({ options, colorsLib })
-  const { isColored, classicCombo } = colors
-
   const parentMaxWidth = passCSS?.maxWidth || 1000
 
   // const layout = gridLayout(this.optionsData, parentMaxWidth, block.gallery)
-  const { layout, list } = addLayoutOptions(
-    options,
-    parentMaxWidth,
-    block.gallery
-  )
+  const { layout, list } = addLayoutOptions(options, parentMaxWidth, gallery)
 
   const { id, name, links = [] } = options
+
+  console.log(gallery)
 
   return (
     <LBlockGallery

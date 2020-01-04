@@ -1,5 +1,6 @@
 import React from 'react'
 import { graphql } from 'gatsby'
+import showdown from 'showdown'
 
 import { mapStyle } from '../utils/processCss'
 import { internalJson, useColors } from '../utils'
@@ -7,6 +8,11 @@ import { internalJson, useColors } from '../utils'
 import { LBlockFreeText } from '../t-layouts'
 
 import Html from '../atoms/Html'
+
+const convertMarkdown = md => {
+  const converter = new showdown.Converter()
+  return converter.makeHtml(md)
+}
 
 const FreeText = ({
   block,
@@ -17,15 +23,19 @@ const FreeText = ({
   cookieButton,
   passCSS,
 }) => {
-  if (!block.main) return null
+  const { sys, fields } = block
+  const { main, options = {}, style = {} } = fields
+  if (!main) return null
 
-  const { options: optionsData, style: styleData } = block
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  // const { options: optionsData, style: styleData } = block
+  // const options = internalJson(optionsData)
+  // const style = mapStyle(internalJson(styleData))
 
   const colors = useColors({ options, colorsLib })
   const { isColored, classicCombo } = colors
   const { id, name } = options
+
+  const html = convertMarkdown(main)
 
   return (
     <LBlockFreeText
@@ -45,10 +55,7 @@ const FreeText = ({
         },
       }}
     >
-      <Html
-        html={block.main.childMarkdownRemark.html}
-        shortCodeMatchees={shortCodeMatchees}
-      />
+      <Html {...{ html, shortCodeMatchees }} />
       {cookieButton && cookieButton({ style: colors[classicCombo].style })}
     </LBlockFreeText>
   )

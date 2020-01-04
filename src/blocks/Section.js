@@ -24,11 +24,10 @@ const Section = ({
   shortCodeMatchees,
   cookieButton,
 }) => {
-  if (typeof section === `undefined` || !section) return null
+  const { sys, fields } = section
+  const { blocks, options = {}, style = {} } = fields
 
-  const { options: optionsData, style: styleData, blocks } = section
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  if (typeof section === `undefined` || !section) return null
 
   const colors = useColors({ options, colorsLib })
   const { isColored, classicCombo } = colors
