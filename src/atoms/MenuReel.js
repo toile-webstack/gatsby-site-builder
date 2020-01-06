@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { For } from 'react-loops'
 import { MdClose, MdMenu } from 'react-icons/md'
 import {
@@ -18,8 +18,22 @@ const activeStyle = {
   fontWeight: `bold`,
 }
 
-const MenuMain = ({ menu, close, openMenu, className }) => (
-  <div {...{ className }}>
+const MenuMain = ({
+  // forwardRef,
+  menu,
+  closeMenu,
+  openMenu,
+  // blurMenu,
+  className,
+}) => (
+  <div
+    {...{
+      // ref: forwardRef,
+      className,
+      ...(openMenu && { onFocus: openMenu }),
+      ...(closeMenu && { onBlur: closeMenu }),
+    }}
+  >
     <For
       of={menu}
       as={({ name: pageName, path: to }) => (
@@ -28,8 +42,8 @@ const MenuMain = ({ menu, close, openMenu, className }) => (
             {...{
               to,
               activeStyle,
-              ...(close && { onClick: close }),
-              onFocus: openMenu,
+              // ...(blurMenu && { onClick: blurMenu }),
+              ...(closeMenu && { onClick: closeMenu }),
             }}
           >
             {pageName}
@@ -80,16 +94,29 @@ const useMenuContentLengthEval = ({
 }
 
 const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
+  // TODO: we should show the mobile menu when it is focused and not rely on state
+  // const mainMenuRef = useRef(null)
+  // const focusMenu = () => {
+  //   mainMenuRef.current.focus()
+  // }
+  // const blurMenu = () => {
+  //   mainMenuRef.current.blur()
+  // }
   const [open, setOpen] = useState(false)
   const openMenu = () => {
     setOpen(true)
   }
-  const close = () => {
+  const closeMenu = () => {
     setOpen(false)
   }
   const toggleOpen = () => {
     setOpen(prev => !prev)
   }
+
+  const [win, setWin] = useState()
+  useEffect(() => {
+    setWin(() => typeof window !== 'undefined')
+  }, [])
   const currentMenu = menu && menu[currentLocale]
   const { pathname } = location
   const locales = menu && Object.keys(menu).map(locale => locale.split('-')[0])
@@ -175,15 +202,17 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           // In case ch unit or js are not supported, we use max-width because menyReel is mobile friendly
           // and the prefered choice. The burger menu being progressive enhancement.
           [`@media only screen and (max-width: ${mqDimension}ch)`]: {
-            ' .menu--main__large': {
-              display: 'none',
-            },
-            ' .menu--main__mobile': {
-              display: 'block',
-            },
-            ' .menu--mobile-button': {
-              display: 'inline-block',
-            },
+            ...(win && {
+              ' .menu--main__large': {
+                display: 'none',
+              },
+              ' .menu--main__mobile': {
+                display: 'block',
+              },
+              ' .menu--mobile-button': {
+                display: 'inline-block',
+              },
+            }),
           },
         }}
       >
@@ -202,7 +231,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
                 {...{
                   to: '/',
                   className: 'menu--logo-name',
-                  onClick: close,
+                  onClick: closeMenu,
                   onFocus: openMenu,
                 }}
               >
@@ -231,7 +260,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
             <MenuMain
               {...{
                 menu: currentMenu,
-                close,
+                closeMenu,
                 className: 'menu--main menu--main__large',
               }}
             />
@@ -278,9 +307,11 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           </div>
           <MenuMain
             {...{
+              // forwardRef: mainMenuRef,
               menu: currentMenu,
-              close,
+              closeMenu,
               openMenu,
+              // blurMenu,
               className: 'menu--main menu--main__mobile',
             }}
           />
