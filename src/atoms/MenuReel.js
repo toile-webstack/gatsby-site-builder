@@ -171,6 +171,9 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
                 splitType: 'li',
               }),
               alignItems: 'center',
+              ' *': {
+                flexShrink: 0,
+              },
             },
           },
           // LATERAL STACKS
@@ -226,7 +229,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           }}
         >
           <div className="menu--wrapper-top">
-            <li css={{ flexShrink: 0 }}>
+            <li>
               <Link
                 {...{
                   to: '/',
@@ -294,6 +297,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
             )}
             <MenuIcon
               size={rhythm(1.2)}
+              css={{ height: rhythm(1.2) }}
               type="button"
               role="button"
               onClick={() => {
