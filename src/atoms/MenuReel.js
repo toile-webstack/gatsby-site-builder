@@ -171,7 +171,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
                 splitType: 'li',
               }),
               alignItems: 'center',
-              ' *': {
+              ' li, a, span': {
                 flexShrink: 0,
               },
             },
