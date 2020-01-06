@@ -3,6 +3,8 @@ import { jsx } from '@emotion/core'
 import { useEffect, useState, useRef } from 'react'
 import useResizeObserver from './useResizeObserver'
 
+const star = `*:not(style):not(script)`
+
 export const useGridObserver = ({ min, defaultWidth, defaultHeight } = {}) => {
   const { ref, width, height, hasSupport } = useResizeObserver({
     min,
@@ -62,11 +64,11 @@ export const layoutStyles = {
       display: 'flex',
       flexDirection: horizontal ? 'row' : 'column',
       justifyContent: 'flex-start',
-      [recursive ? ' *' : '> *']: {
+      [recursive ? ` ${star}` : `> ${star}`]: {
         [marginStart]: 0,
         [marginEnd]: 0,
       },
-      [recursive ? ' * + *' : '> * + *']: {
+      [recursive ? ` ${star} + ${star}` : `> ${star} + ${star}`]: {
         [marginStart]: space,
       },
       ...(splitIt &&
@@ -135,14 +137,14 @@ export const layoutStyles = {
     space = ['1rem', 'var(--s0, 1rem)'], // The space (margin) between each of the clustered elements
   } = {}) => ({
     overflow: 'hidden',
-    '> *': {
+    [`> ${star}`]: {
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent,
       alignItems,
       alignContent,
       margin: mapIfArray(space, s => `calc(${s} / 2 * -1)`),
-      '> *': {
+      [`> ${star}`]: {
         margin: mapIfArray(space, s => `calc(${s} / 2)`),
       },
     },
@@ -160,18 +162,20 @@ export const layoutStyles = {
 
     return {
       overflow: 'hidden',
-      '> *': {
+      [`> ${star}`]: {
         display: 'flex',
         flexWrap: 'wrap',
         margin: mapIfArray(space, s => `calc(${s} / 2 * -1)`),
         ...(noStretch && { alignItems: 'flex-start' }),
       },
-      '> * > *': {
+      [`> ${star} > ${star}`]: {
         margin: mapIfArray(space, s => `calc(${s} / 2)`),
         flexGrow: 1,
         ...(sideWidth && { flexBasis: sideWidth }),
       },
-      [side === 'right' ? '> * > :first-child' : '> * > :last-child']: {
+      [side === 'right'
+        ? `> ${star} > :first-child`
+        : `> ${star} > :last-child`]: {
         flexBasis: 0,
         flexGrow: 999,
         // minWidth: `calc(${contentMin} - ${space})`,
@@ -188,13 +192,13 @@ export const layoutStyles = {
     const g = groupTwoParams(treshold, space)
     return {
       display: 'block',
-      '> *': {
+      [`> ${star}`]: {
         display: 'flex',
         flexWrap: 'wrap',
         overflow: 'hidden',
         margin: mapIfArray(space, s => `calc(${s} / 2 * -1)`),
       },
-      '> * > *': {
+      [`> ${star} > ${star}`]: {
         flexBasis: mapIfArray(
           g,
           o => `calc((${o.main} - (100% - ${o.second})) * 999)`
@@ -202,8 +206,8 @@ export const layoutStyles = {
         flexGrow: 1,
         margin: mapIfArray(space, s => `calc(${s} / 2)`),
       },
-      [`& > * > :nth-last-child(n + ${limit +
-        1}), & > * > :nth-last-child(n + ${limit + 1}) ~ *`]: {
+      [`& > ${star} > :nth-last-child(n + ${limit +
+        1}), & > ${star} > :nth-last-child(n + ${limit + 1}) ~ ${star}`]: {
         flexBasis: '100%',
       },
     }
@@ -219,7 +223,7 @@ export const layoutStyles = {
     flexDirection: 'column',
     minHeight,
     ...(!noPad && { padding: space }),
-    '> *': {
+    [`> ${star}`]: {
       marginTop: space,
       marginBottom: space,
     },
@@ -252,11 +256,11 @@ export const layoutStyles = {
     return flexboxInstead
       ? {
           overflow: 'hidden',
-          '> *': {
+          [`> ${star}`]: {
             display: 'flex',
             flexWrap: 'wrap',
             margin: mapIfArray(space, s => `calc(${s} / 2 * -1)`),
-            '> *': {
+            [`> ${star}`]: {
               flex: `1 1`,
               flexBasis: flexBasis || min,
               margin: mapIfArray(space, s => `calc(${s} / 2)`),
@@ -294,7 +298,7 @@ export const layoutStyles = {
         const [num, den] = r.split('/')
         return `calc(${den} / ${num} * 100%)`
       }),
-      '& > *': {
+      [`& > ${star}`]: {
         overflow: 'hidden',
         position: 'absolute',
         top: 0,
@@ -317,9 +321,9 @@ export const layoutStyles = {
     ratio = '16/9', // The element's aspect ratio
   }) => ({
     position: 'relative',
-    '& > :first-child': {
-      width: '100%',
-    },
+    // '& > :first-child': {
+    //   width: '100%',
+    // },
     '& > img': {
       height: 'auto',
     },
@@ -332,6 +336,7 @@ export const layoutStyles = {
       }),
     },
     '& > :first-child': {
+      width: '100%',
       position: 'absolute',
       top: '0',
       left: '0',
@@ -361,7 +366,7 @@ export const layoutStyles = {
         scrollbarWidth: 'none',
       }),
 
-      '& > *': {
+      [`& > ${star}`]: {
         // flex: mapIfArray(itemWidth, iw => `0 0 ${iw}`),
         flex: '0 0',
         flexBasis: itemWidth,
@@ -371,7 +376,7 @@ export const layoutStyles = {
         flexBasis: 'auto',
         width: 'auto',
       },
-      '& > * + *': {
+      [`& > ${star} + ${star}`]: {
         marginLeft: space,
       },
 
