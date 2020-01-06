@@ -66,6 +66,7 @@ const DefaultLayout = ({
   // const landingRE = new RegExp(/\/landing\//)
   const currentLocale = getCurrentLocale(pathname) || defaultLocale
   useMomentLocaleImport({ locale: currentLocale })
+
   const isLandingPage =
     islp || options.isLandingPage || /\/landing\//.test(pathname)
 
@@ -128,15 +129,6 @@ const DefaultLayout = ({
           location={location}
         />
       )}
-      {/* {isLandingPage ? null : (
-        <Menu
-          icon={favicon}
-          name={metadata.name}
-          menu={menu}
-          currentLocale={currentLocale}
-          location={location}
-        />
-      )} */}
       {envIsDev && <ColorPalettesDemo />}
       <div className="layout-wrapper">
         {/* wrapper was useful for sidebar */}

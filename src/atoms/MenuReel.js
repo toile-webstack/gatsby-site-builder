@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { For } from 'react-loops'
 import { MdClose, MdMenu } from 'react-icons/md'
 import {
@@ -40,6 +40,45 @@ const MenuMain = ({ menu, close, openMenu, className }) => (
   </div>
 )
 
+const useMenuContentLengthEval = ({
+  name,
+  currentMenu,
+  locales,
+  currentLocale,
+}) => {
+  // 85ch seems a sensible, totally arbitrary default value
+  const [mqDimension, setMqDimension] = useState(85)
+
+  // Try to guess the right breakpoint for name to disapear
+  // const wordLengthApprox = 60
+  // const aroundApprox = 280 // indexLink, locales and padding
+  // const breakpointApprox = wordLengthApprox * currentMenu.length + aroundApprox
+
+  useMemo(() => {
+    const menuCharsLength = currentMenu.map(({ name: n }) => n).join('').length
+    const localesLength = locales.length
+    const langsLength = localesLength > 1 ? localesLength * 2 : 0
+    const dimensionsApprox = {
+      // left and right = 6ch /* + 3 between left and right */ + 3 between main menu and lang if lang
+      componentP: 6 + (langsLength > 0 ? 3 : 0),
+      logo: 4,
+      name: name.length,
+      leftElP: 0.6,
+      menu: menuCharsLength,
+      menuP: (currentMenu.length - 1) * 3,
+      lang: langsLength,
+      langP: (localesLength - 1) * 0.6,
+    }
+    const fullDimensionApprox = Object.values(dimensionsApprox).reduce(
+      (accu, curr) => accu + curr,
+      0
+    )
+    setMqDimension(fullDimensionApprox)
+  }, [name, currentLocale])
+
+  return mqDimension
+}
+
 const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
   const [open, setOpen] = useState(false)
   const openMenu = () => {
@@ -62,29 +101,12 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
   const colors = { ...colorsLib, ...newColors }
   const { classicCombo } = colors
 
-  // Try to guess the right breakpoint for name to disapear
-  // const wordLengthApprox = 60
-  // const aroundApprox = 280 // indexLink, locales and padding
-  // const breakpointApprox = wordLengthApprox * currentMenu.length + aroundApprox
-
-  const menuCharsLength = currentMenu.map(({ name: n }) => n).join('').length
-  const localesLength = locales.length
-  const langsLength = localesLength > 1 ? localesLength * 2 : 0
-  const dimensionsApprox = {
-    // left and right = 6ch /* + 3 between left and right */ + 3 between main menu and lang if lang
-    componentP: 6 + (langsLength > 0 ? 3 : 0),
-    logo: 4,
-    name: name.length,
-    leftElP: 0.6,
-    menu: menuCharsLength,
-    menuP: (currentMenu.length - 1) * 3,
-    lang: langsLength,
-    langP: (localesLength - 1) * 0.6,
-  }
-  const fullDimensionApprox = Object.values(dimensionsApprox).reduce(
-    (accu, curr) => accu + curr,
-    0
-  )
+  const mqDimension = useMenuContentLengthEval({
+    name,
+    currentMenu,
+    locales,
+    currentLocale,
+  })
 
   const MenuIcon = open ? MdClose : MdMenu
 
@@ -152,18 +174,16 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           },
           // In case ch unit or js are not supported, we use max-width because menyReel is mobile friendly
           // and the prefered choice. The burger menu being progressive enhancement.
-          [`@media only screen and (max-width: ${fullDimensionApprox}ch)`]: {
-            ...(typeof window !== 'undefined' && {
-              ' .menu--main__large': {
-                display: 'none',
-              },
-              ' .menu--main__mobile': {
-                display: 'block',
-              },
-              ' .menu--mobile-button': {
-                display: 'inline-block',
-              },
-            }),
+          [`@media only screen and (max-width: ${mqDimension}ch)`]: {
+            ' .menu--main__large': {
+              display: 'none',
+            },
+            ' .menu--main__mobile': {
+              display: 'block',
+            },
+            ' .menu--mobile-button': {
+              display: 'inline-block',
+            },
           },
         }}
       >
