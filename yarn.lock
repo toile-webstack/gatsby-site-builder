@@ -1491,6 +1491,14 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@bit/marccoet.toile.nuds-layout-primitives@file:./libs":
+  version "0.0.3"
+  dependencies:
+    "@bit/marccoet.toile.use-resize-observer" "file:../../../.cache/yarn/v6/npm-@bit-marccoet-toile-nuds-layout-primitives-0.0.3-f4b23ca9-3c47-4a92-a5ea-13c76e1d37f6-1577966744935/node_modules/@bit/components/use-resize-observer"
+
+"@bit/marccoet.toile.use-resize-observer@file:./components/use-resize-observer", "@bit/marccoet.toile.use-resize-observer@file:components/use-resize-observer":
+  version "0.0.3"
+
 "@contentful/axios@^0.18.0":
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/@contentful/axios/-/axios-0.18.0.tgz#576e0e6047411a66971e82d40688a8c795e62f27"
@@ -6355,6 +6363,15 @@ fs-exists-cached@1.0.0, fs-exists-cached@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs-exists-cached/-/fs-exists-cached-1.0.0.tgz#cf25554ca050dc49ae6656b41de42258989dcbce"
   integrity sha1-zyVVTKBQ3EmuZla0HeQiWJidy84=
 
+fs-extra@^7.0.0:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
+  integrity sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
 fs-extra@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
@@ -6541,6 +6558,21 @@ gatsby-plugin-google-analytics@^2:
   dependencies:
     "@babel/runtime" "^7.6.3"
 
+gatsby-plugin-layout@^1.1.18:
+  version "1.1.18"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-layout/-/gatsby-plugin-layout-1.1.18.tgz#cd318ae1ca7a978ebaec9624af501eb83c2a67d6"
+  integrity sha512-e/FV9wQ2Ch+167KNtDe2rHyipMufABS7uCeBW7vo4GPhouGqF3a3Ww25Z4tWDt/lYbUpxfmtRYpvvWuigLUoWw==
+  dependencies:
+    "@babel/runtime" "^7.7.6"
+
+gatsby-plugin-netlify-cache@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-netlify-cache/-/gatsby-plugin-netlify-cache-1.2.0.tgz#e68db9c5bd4ae103b4589f9be2a3cb9958750788"
+  integrity sha512-unt4mAVpC0JzwZSo8KQV4P/trDHkr3PeTWDF5Hijw9jGfNQIWXbcj9nYljAVg7HCich6E6b27Q+zuf53InwpDQ==
+  dependencies:
+    babel-runtime "^6.26.0"
+    fs-extra "^7.0.0"
+
 gatsby-plugin-netlify@^2:
   version "2.1.23"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-netlify/-/gatsby-plugin-netlify-2.1.23.tgz#5d6a7759f51ce3840b13d83dda98fffb92463928"
@@ -6579,6 +6611,11 @@ gatsby-plugin-react-helmet@^3.1.13:
   integrity sha512-O3Fvxm76t58RPVUz0Fo2tbXeJnXV6vmlLnKBPMz+smr0Mtx8vnGP1Pi6DuWdRepJsnVespNNth/L8n7iucQCYQ==
   dependencies:
     "@babel/runtime" "^7.6.3"
+
+gatsby-plugin-remove-fingerprints@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-remove-fingerprints/-/gatsby-plugin-remove-fingerprints-0.0.2.tgz#ef21a184e2f5deffe644aebd16b8d67f46a7d51b"
+  integrity sha512-af1zbr0+cr3fcjEAVAbUia/On6GJbrxoLVNZf7TxLqKzPMfMlDNXf6hDXAJy0dzxE6qrqD2oyGZpk1rOdgUQ0Q==
 
 gatsby-plugin-schema-snapshot@^1.0.0:
   version "1.0.0"
@@ -11632,17 +11669,12 @@ react-hot-loader@^4.12.18:
     shallowequal "^1.1.0"
     source-map "^0.7.3"
 
-react-icon-base@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-icon-base/-/react-icon-base-2.1.0.tgz#a196e33fdf1e7aaa1fda3aefbb68bdad9e82a79d"
-  integrity sha1-oZbjP98eeqof2jrvu2i9rZ6Cp50=
-
-react-icons@^2.2.5:
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-2.2.7.tgz#d7860826b258557510dac10680abea5ca23cf650"
-  integrity sha512-0n4lcGqzJFcIQLoQytLdJCE0DKSA9dkwEZRYoGrIDJZFvIT6Hbajx5mv9geqhqFiNjUgtxg8kPyDfjlhymbGFg==
+react-icons@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.8.0.tgz#229de5904809696c9f46932bd9b6126b2522866e"
+  integrity sha512-rA/8GRKjPulft8BSBSMsHkE1AGPqJ7LjNsyk0BE7XjG70Iz62zOled2SJk7LDo8x9z86a3xOstDlKlMZ4pAy7A==
   dependencies:
-    react-icon-base "2.1.0"
+    camelcase "^5.0.0"
 
 react-is@^16.7.0, react-is@^16.8.1:
   version "16.11.0"

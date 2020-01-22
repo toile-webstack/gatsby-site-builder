@@ -15,14 +15,14 @@ module.exports = {
         accessToken: process.env.contentfulAccessToken,
       },
     },
-    // `gatsby-plugin-layout`,
+    `gatsby-plugin-layout`,
     {
       resolve: `gatsby-plugin-nprogress`,
       options: {
         // Setting a color is optional.
         // color: `tomato`,
         // Disable the loading spinner.
-        // showSpinner: false,
+        showSpinner: false,
       },
     },
     `gatsby-transformer-sharp`,
@@ -64,7 +64,6 @@ module.exports = {
         ],
       },
     },
-    // `gatsby-plugin-glamor`,
     {
       resolve: `gatsby-plugin-emotion`,
       options: {
@@ -104,6 +103,8 @@ module.exports = {
         update: process.env.GATSBY_UPDATE_SCHEMA_SNAPSHOT,
       },
     },
+    // `gatsby-plugin-netlify-cache`,
+    `gatsby-plugin-remove-fingerprints`,
     `gatsby-plugin-netlify`,
   ],
 }

@@ -1,0 +1,18 @@
+{
+  "name": "@bit/marccoet.toile.nuds-layout-primitives",
+  "version": "0.0.3",
+  "homepage": "https://bit.dev/marccoet/toile/nuds-layout-primitives",
+  "main": "nuds-layout-primitives.js",
+  "dependencies": {
+    "@bit/marccoet.toile.use-resize-observer": "file:../components/use-resize-observer"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "@emotion/core": "^10.0.21"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "bit": {
+    "env": {}
+  }
+}

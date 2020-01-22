@@ -144,4 +144,5 @@ export const LinkWrapper = ({
   )
 }
 
+export const Link = GatsbyLink
 export default GatsbyLink

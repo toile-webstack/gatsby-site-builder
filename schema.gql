@@ -1,4 +1,4 @@
-### Type definitions saved at 2019-11-07T16:34:15.760Z ###
+### Type definitions saved at 2019-12-19T20:00:50.575Z ###
 
 type ImageSharp implements Node @childOf(types: ["File"]) @dontInfer {
   fixed(width: Int, height: Int, base64Width: Int, jpegProgressive: Boolean = true, pngCompressionSpeed: Int = 4, grayscale: Boolean = false, duotone: DuotoneGradient, traceSVG: Potrace, quality: Int, toFormat: ImageFormat = NO_CHANGE, toFormatBase64: ImageFormat = NO_CHANGE, cropFocus: ImageCropFocus = ATTENTION, fit: ImageFit = COVER, background: String = "rgba(0,0,0,1)", rotate: Int = 0, trim: Float = 0): ImageSharpFixed
@@ -245,21 +245,73 @@ type ContentfulSettings implements Node @dontInfer {
 type ContentfulPage implements Node @dontInfer {
   path: String
   blocks: [ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulSectionUnion] @link(by: "id", from: "blocks___NODE")
-  scripts: [ContentfulScript] @link(by: "id", from: "scripts___NODE")
-  block___references: [ContentfulBlockReferences] @link(by: "id", from: "block - references___NODE") @proxy(from: "block - references___NODE")
+  settings: [ContentfulSettings] @link(by: "id", from: "settings___NODE")
   metadata: contentfulPageMetadataJsonNode @link(by: "id", from: "metadata___NODE")
-  options: contentfulPageOptionsJsonNode @link(by: "id", from: "options___NODE")
-  style: contentfulPageStyleJsonNode @link(by: "id", from: "style___NODE")
   spaceId: String
   contentful_id: String
   createdAt: Date @dateformat
   updatedAt: Date @dateformat
   node_locale: String
   fields: ContentfulPageFields
-  settings: [ContentfulSettings] @link(by: "id", from: "settings___NODE")
+  block___references: [ContentfulBlockReferences] @link(by: "id", from: "block - references___NODE") @proxy(from: "block - references___NODE")
+  options: contentfulPageOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulPageStyleJsonNode @link(by: "id", from: "style___NODE")
+  scripts: [ContentfulScript] @link(by: "id", from: "scripts___NODE")
 }
 
 union ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulSectionUnion = ContentfulBlockForm | ContentfulBlockFreeText | ContentfulBlockGallery | ContentfulBlockReferences | ContentfulSection
+
+type contentfulPageMetadataJsonNode implements Node @dontInfer
+
+type ContentfulPageFields {
+  menuName: String
+  shortPath: String
+  localizedPath: String
+  locale: String
+}
+
+type ContentfulBlockReferences implements Node @dontInfer {
+  name: String
+  references: [ContentfulCollectionItemContentfulPageUnion] @link(by: "id", from: "references___NODE")
+  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
+  options: contentfulBlockReferencesOptionsJsonNode @link(by: "id", from: "options___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+  style: contentfulBlockReferencesStyleJsonNode @link(by: "id", from: "style___NODE")
+}
+
+union ContentfulCollectionItemContentfulPageUnion = ContentfulCollectionItem | ContentfulPage
+
+type ContentfulSection implements Node @dontInfer {
+  name: String
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+  style: contentfulSectionStyleJsonNode @link(by: "id", from: "style___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  blocks: [ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulCollectionItemUnion] @link(by: "id", from: "blocks___NODE")
+  options: contentfulSectionOptionsJsonNode @link(by: "id", from: "options___NODE")
+}
+
+type contentfulSectionStyleJsonNode implements Node @dontInfer
+
+union ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulCollectionItemUnion = ContentfulBlockForm | ContentfulBlockFreeText | ContentfulBlockGallery | ContentfulBlockReferences | ContentfulCollectionItem
+
+type contentfulSectionOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockReferencesOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockReferencesStyleJsonNode implements Node @dontInfer
+
+type contentfulPageOptionsJsonNode implements Node @dontInfer
+
+type contentfulPageStyleJsonNode implements Node @dontInfer
 
 type ContentfulScript implements Node @dontInfer {
   name: String
@@ -281,23 +333,24 @@ type ContentfulCollectionItem implements Node @dontInfer {
   name: String
   type: String
   datePublished: Date @dateformat
+  dateLastEdit: Date @dateformat
+  author: String
   categories: [String]
   featuredImage: ContentfulAsset @link(by: "id", from: "featuredImage___NODE")
   gallery: [ContentfulAsset] @link(by: "id", from: "gallery___NODE")
+  scripts: [ContentfulScript] @link(by: "id", from: "scripts___NODE")
   block___references: [ContentfulBlockReferences] @link(by: "id", from: "block - references___NODE") @proxy(from: "block - references___NODE")
+  data: contentfulCollectionItemDataJsonNode @link(by: "id", from: "data___NODE")
   content: contentfulCollectionItemContentTextNode @link(by: "id", from: "content___NODE")
+  metadata: contentfulCollectionItemMetadataJsonNode @link(by: "id", from: "metadata___NODE")
   options: contentfulCollectionItemOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulCollectionItemStyleJsonNode @link(by: "id", from: "style___NODE")
   spaceId: String
   contentful_id: String
   createdAt: Date @dateformat
   updatedAt: Date @dateformat
   node_locale: String
   fields: ContentfulCollectionItemFields
-  author: String
-  dateLastEdit: Date @dateformat
-  metadata: contentfulCollectionItemMetadataJsonNode @link(by: "id", from: "metadata___NODE")
-  style: contentfulCollectionItemStyleJsonNode @link(by: "id", from: "style___NODE")
-  scripts: [ContentfulScript] @link(by: "id", from: "scripts___NODE")
   section: [ContentfulSection] @link(by: "id", from: "section___NODE")
 }
 
@@ -326,50 +379,17 @@ type ContentfulAssetFileDetailsImage {
   height: Int
 }
 
-type ContentfulBlockReferences implements Node @dontInfer {
-  name: String
-  references: [ContentfulCollectionItemContentfulPageUnion] @link(by: "id", from: "references___NODE")
-  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
-  options: contentfulBlockReferencesOptionsJsonNode @link(by: "id", from: "options___NODE")
-  style: contentfulBlockReferencesStyleJsonNode @link(by: "id", from: "style___NODE")
-  spaceId: String
-  contentful_id: String
-  createdAt: Date @dateformat
-  updatedAt: Date @dateformat
-  node_locale: String
-  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
-}
-
-union ContentfulCollectionItemContentfulPageUnion = ContentfulCollectionItem | ContentfulPage
-
-type ContentfulSection implements Node @dontInfer {
-  name: String
-  blocks: [ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulCollectionItemUnion] @link(by: "id", from: "blocks___NODE")
-  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
-  options: contentfulSectionOptionsJsonNode @link(by: "id", from: "options___NODE")
-  style: contentfulSectionStyleJsonNode @link(by: "id", from: "style___NODE")
-  spaceId: String
-  contentful_id: String
-  createdAt: Date @dateformat
-  updatedAt: Date @dateformat
-  node_locale: String
-}
-
-union ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulCollectionItemUnion = ContentfulBlockForm | ContentfulBlockFreeText | ContentfulBlockGallery | ContentfulBlockReferences | ContentfulCollectionItem
-
-type contentfulSectionOptionsJsonNode implements Node @dontInfer
-
-type contentfulSectionStyleJsonNode implements Node @dontInfer
-
-type contentfulBlockReferencesOptionsJsonNode implements Node @dontInfer
-
-type contentfulBlockReferencesStyleJsonNode implements Node @dontInfer
+type contentfulCollectionItemDataJsonNode implements Node @dontInfer
 
 type contentfulCollectionItemContentTextNode implements Node @dontInfer {
   content: String
 }
 
+type contentfulCollectionItemMetadataJsonNode implements Node @dontInfer
+
 type contentfulCollectionItemOptionsJsonNode implements Node @dontInfer
+
+type contentfulCollectionItemStyleJsonNode implements Node @dontInfer
 
 type ContentfulCollectionItemFields {
   menuName: String
@@ -378,25 +398,8 @@ type ContentfulCollectionItemFields {
   locale: String
 }
 
-type contentfulCollectionItemMetadataJsonNode implements Node @dontInfer
-
-type contentfulCollectionItemStyleJsonNode implements Node @dontInfer
-
 type contentfulScriptContentTextNode implements Node @dontInfer {
   content: String
-}
-
-type contentfulPageMetadataJsonNode implements Node @dontInfer
-
-type contentfulPageOptionsJsonNode implements Node @dontInfer
-
-type contentfulPageStyleJsonNode implements Node @dontInfer
-
-type ContentfulPageFields {
-  menuName: String
-  shortPath: String
-  localizedPath: String
-  locale: String
 }
 
 type contentfulSettingsMetadataJsonNode implements Node @dontInfer
@@ -424,6 +427,7 @@ type contentfulSettingsContactJsonNode implements Node @dontInfer {
   name: String
   email: String
   phone: String
+  github: String
   facebook: String
   linkedin: String
   instagram: String
@@ -442,6 +446,7 @@ type ContentfulBlockFreeText implements Node @dontInfer {
   name: String
   section: [ContentfulSection] @link(by: "id", from: "section___NODE")
   main: contentfulBlockFreeTextMainTextNode @link(by: "id", from: "main___NODE")
+  options: contentfulBlockFreeTextOptionsJsonNode @link(by: "id", from: "options___NODE")
   style: contentfulBlockFreeTextStyleJsonNode @link(by: "id", from: "style___NODE")
   spaceId: String
   contentful_id: String
@@ -449,16 +454,15 @@ type ContentfulBlockFreeText implements Node @dontInfer {
   updatedAt: Date @dateformat
   node_locale: String
   page: [ContentfulPage] @link(by: "id", from: "page___NODE")
-  options: contentfulBlockFreeTextOptionsJsonNode @link(by: "id", from: "options___NODE")
 }
 
 type contentfulBlockFreeTextMainTextNode implements Node @dontInfer {
   main: String
 }
 
-type contentfulBlockFreeTextStyleJsonNode implements Node @dontInfer
-
 type contentfulBlockFreeTextOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockFreeTextStyleJsonNode implements Node @dontInfer
 
 type ContentfulBlog implements Node @dontInfer {
   name: String
@@ -490,18 +494,18 @@ type contentfulBlogStyleJsonNode implements Node @dontInfer
 
 type ContentfulBlockForm implements Node @dontInfer {
   name: String
-  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
   form: contentfulBlockFormFormJsonNode @link(by: "id", from: "form___NODE")
   successMessage: contentfulBlockFormSuccessMessageTextNode @link(by: "id", from: "successMessage___NODE")
   errorMessage: contentfulBlockFormErrorMessageTextNode @link(by: "id", from: "errorMessage___NODE")
+  options: contentfulBlockFormOptionsJsonNode @link(by: "id", from: "options___NODE")
   style: contentfulBlockFormStyleJsonNode @link(by: "id", from: "style___NODE")
   spaceId: String
   contentful_id: String
   createdAt: Date @dateformat
   updatedAt: Date @dateformat
   node_locale: String
-  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
-  options: contentfulBlockFormOptionsJsonNode @link(by: "id", from: "options___NODE")
+  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
 }
 
 type contentfulBlockFormFormJsonNode implements Node @dontInfer {
@@ -517,6 +521,14 @@ type contentfulBlockFormFormJsonNodeFormFields {
   checked: String
   required: String
   placeholder: String
+  options: [contentfulBlockFormFormJsonNodeFormFieldsOptions]
+  text: String
+}
+
+type contentfulBlockFormFormJsonNodeFormFieldsOptions {
+  label: String
+  value: String
+  checked: String
 }
 
 type contentfulBlockFormSuccessMessageTextNode implements Node @dontInfer {
@@ -527,9 +539,9 @@ type contentfulBlockFormErrorMessageTextNode implements Node @dontInfer {
   errorMessage: String
 }
 
-type contentfulBlockFormStyleJsonNode implements Node @dontInfer
-
 type contentfulBlockFormOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockFormStyleJsonNode implements Node @dontInfer
 
 type ContentfulBlockGallery implements Node @dontInfer {
   name: String

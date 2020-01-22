@@ -1,0 +1,15 @@
+{
+  "name": "@bit/marccoet.toile.use-resize-observer",
+  "version": "0.0.3",
+  "homepage": "https://bit.dev/marccoet/toile/use-resize-observer",
+  "main": "useResizeObserver.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {
+    "react": ">=16.9.0"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "bit": {
+    "env": {}
+  }
+}

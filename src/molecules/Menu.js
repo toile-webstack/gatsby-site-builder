@@ -50,6 +50,7 @@ class Menu extends React.Component {
       window.addEventListener('resize', this.listen)
     }
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.listen)
   }
@@ -111,6 +112,8 @@ class Menu extends React.Component {
           className="menu"
           css={{
             ...this.colors[classicCombo].style,
+            position: 'relative',
+            zIndex: 100,
             width: `100%`,
             // background: this.colors[classicCombo].background,
             // display: `grid`,

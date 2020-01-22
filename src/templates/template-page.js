@@ -10,15 +10,15 @@ import { SEO, Scripts } from '../atoms'
 import { mapStyle } from '../utils/processCss'
 import { colors as colorsLib, useColors, internalJson } from '../utils'
 
-import Layout from '../layouts/Layout'
+// import Layout from '../layouts/Layout'
 
 const TemplatePage = ({
-  data: { contentfulPage: page = {} } = {},
+  data: { contentfulPage: page } = {},
   location,
   // children,
   path,
 }) => {
-  if (!page) return null
+  if (!page.path) return null
 
   // console.log(page)
 
@@ -37,11 +37,12 @@ const TemplatePage = ({
   const colors = useColors({ options, colorsLib })
   const { classicCombo } = colors
 
-  const isSSR = typeof window === 'undefined'
+  // const isSSR = typeof window === 'undefined'
   const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
 
   return (
-    <Layout {...{ location, isSSR, isLandingPage }}>
+    // <Layout {...{ location, isLandingPage }}>
+    <>
       <SEO
         {...{
           lang: pageLocale,
@@ -89,7 +90,7 @@ const TemplatePage = ({
           }}
         />
       </div>
-    </Layout>
+    </>
   )
 }
 

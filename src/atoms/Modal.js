@@ -1,14 +1,14 @@
-import React from "react";
-import MdClose from "react-icons/lib/md/close";
+import React from 'react'
+import { MdClose } from 'react-icons/md'
 
-import { rhythm, scale } from "../utils/typography";
+import { rhythm, scale } from '../utils/typography'
 
 export default props => {
   return (
     <dialog
       onClick={e => {
-        e.stopPropagation();
-        props.close();
+        e.stopPropagation()
+        props.close()
       }}
       onWheel={e => e.preventDefault()}
       css={{
@@ -26,8 +26,8 @@ export default props => {
         alignItems: `center`,
         zIndex: 100,
         cursor: `pointer`,
-        touchAction: "pinch-zoom",
-        "> div": {
+        touchAction: 'pinch-zoom',
+        '> div': {
           position: `relative`,
           backgroundColor: `inherit`,
           width: `80vw`,
@@ -36,29 +36,29 @@ export default props => {
           flexDirection: `column`,
           justifyContent: `center`,
           cursor: `auto`,
-          backgroundColor: `rgb(255, 255, 255)`
+          backgroundColor: `rgb(255, 255, 255)`,
         },
-        " .image, img": {
+        ' .image, img': {
           // width: `auto`,
-          width: "100%",
+          width: '100%',
           maxWidth: `75vw`,
           height: `auto`,
           maxHeight: `75vh`,
           objectFit: `contain!important`,
-          borderRadius: `0`
+          borderRadius: `0`,
         },
-        ...props.style
+        ...props.style,
       }}
     >
       <div
         onClick={e => {
-          e.stopPropagation();
+          e.stopPropagation()
         }}
       >
         {props.children}
         <MdClose
           onClick={() => {
-            props.close();
+            props.close()
           }}
           css={{
             position: `absolute`,
@@ -67,15 +67,15 @@ export default props => {
             fontSize: rhythm(2),
             textAlign: `right`,
             cursor: `pointer`,
-            ":hover": {
+            ':hover': {
               // color: props.colors[props.colors.classicCombo].linkHover
-            }
+            },
           }}
         />
       </div>
     </dialog>
-  );
-};
+  )
+}
 
 // export default ({ children, passCSS }) => {
 //   return (
