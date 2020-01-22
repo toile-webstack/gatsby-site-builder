@@ -596,6 +596,15 @@ export const Frame = ({ ratio, ...rest }) =>
     ...rest,
   })
 
+export const Ratio = ({ ratio, ...rest }) =>
+  jsxHelper({
+    layoutComp: 'ratio',
+    layoutProps: {
+      ratio,
+    },
+    ...rest,
+  })
+
 export const Reel = ({
   itemWidth,
   height,

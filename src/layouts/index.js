@@ -1,3 +1,3 @@
-import Layout from './Layout'
+import Layout from '../structure/Layout'
 
 export default Layout

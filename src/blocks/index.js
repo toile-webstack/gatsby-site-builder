@@ -1,3 +1,4 @@
+export Block from './Block'
 export Section from './Section'
 export FreeText from './FreeText'
 export Form from './Form'

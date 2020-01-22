@@ -70,12 +70,12 @@ module.exports = {
         // Accepts all options defined by `babel-plugin-emotion` plugin.
       },
     },
-    {
-      resolve: `gatsby-plugin-typography`,
-      options: {
-        pathToConfigModule: `src/utils/typography`,
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-typography`,
+    //   options: {
+    //     pathToConfigModule: `src/utils/typography`,
+    //   },
+    // },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-catch-links`,
@@ -92,17 +92,24 @@ module.exports = {
           },
         ]
       : []),
+    {
+      resolve: `custom-contentful`,
+      options: {
+        spaceId: process.env.contentfulSpaceID,
+        accessToken: process.env.contentfulAccessToken,
+      },
+    },
     // `toile-ignores`,
     `toile-siteSettings`,
     `toile-pages`,
     `toile-customContentType`,
-    {
-      resolve: `gatsby-plugin-schema-snapshot`,
-      options: {
-        path: `schema.gql`,
-        update: process.env.GATSBY_UPDATE_SCHEMA_SNAPSHOT,
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-schema-snapshot`,
+    //   options: {
+    //     path: `schema.gql`,
+    //     update: process.env.GATSBY_UPDATE_SCHEMA_SNAPSHOT,
+    //   },
+    // },
     // `gatsby-plugin-netlify-cache`,
     `gatsby-plugin-remove-fingerprints`,
     `gatsby-plugin-netlify`,

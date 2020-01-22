@@ -23,16 +23,148 @@ import { LinkWrapper } from '../atoms/Link'
 
 import { LBlockGallery } from '../t-layouts'
 
-const Gallery = ({
-  block,
-  colors: colorsLib,
-  // location,
-  className = '',
-  passCSS,
-}) => {
-  if (Object.keys(block).length < 1) return null
-  if (block.gallery.length < 1) return null
+import { Box, Ratio, Grid } from '../../libs/nuds-layout-primitives'
+import View from '../../libs/nuds-view-component'
 
+// const Gallery = ({
+//   block,
+//   colors: colorsLib,
+//   // location,
+//   className = '',
+//   passCSS,
+// }) => {
+//   if (Object.keys(block).length < 1) return null
+//   if (block.gallery.length < 1) return null
+
+//   const [showModal, setShowModal] = useState(false)
+//   const closeModal = () => {
+//     setShowModal(false)
+//   }
+
+//   const { options: optionsData, style: styleData } = block
+//   const options = internalJson(optionsData)
+//   const style = mapStyle(internalJson(styleData))
+
+//   const colors = useColors({ options, colorsLib })
+//   const { isColored, classicCombo } = colors
+
+//   const parentMaxWidth = passCSS?.maxWidth || 1000
+
+//   // const layout = gridLayout(this.optionsData, parentMaxWidth, block.gallery)
+//   const { layout, list } = addLayoutOptions(
+//     options,
+//     parentMaxWidth,
+//     block.gallery
+//   )
+
+//   const { id, name, links = [] } = options
+
+//   return (
+//     <LBlockGallery
+//       {...{
+//         id,
+//         name,
+//         className: `block blockGallery ${className || ''}`,
+//         css: {
+//           // padding: rhythm(1),
+//           // display: `flex`,
+//           // flexFlow: `row wrap`,
+//           // justifyContent: [`space-around`, `space-evenly`],
+//           // width: `100%`,
+//           // maxWidth: `1000px`,
+//           // margin: `0 auto`,
+
+//           alignItems: layout.align || `baseline`,
+
+//           ...passCSS,
+//           ...(isColored ? colors[classicCombo].style : {}),
+//           // ...this.colors[classicCombo].style,
+//           ...style,
+//           // " a.button:hover": {
+//           //   ...this.colors[funkyContrastCombo].style,
+//           //   borderColor: this.colors[classicCombo].border
+//           // }
+//         },
+//       }}
+//     >
+//       {list.map((column, colCount) => {
+//         // const imageStyle = listImageStyle(layout, i)
+//         const { itemStyle, imageStyle } = column[0]
+
+//         return (
+//           <div
+//             key={colCount}
+//             className="column"
+//             css={{
+//               display: `flex`,
+//               flexFlow: `column`,
+//               width: `100%`,
+//               maxWidth: itemStyle.maxWidth,
+//             }}
+//           >
+//             {column.map((image, imCount) => {
+//               const to = links[colCount]
+//               return (
+//                 <LinkWrapper
+//                   tag="div"
+//                   key={imCount}
+//                   onClick={() => {
+//                     if (options.popup) {
+//                       setShowModal(image.id)
+//                     }
+//                   }}
+//                   css={{
+//                     ...imageStyle,
+//                     display: 'block',
+//                     // cursor: `pointer`,
+//                     ' .gatsby-image-wrapper': {
+//                       cursor: to ? `pointer` : 'auto',
+//                     },
+//                   }}
+//                   to={to}
+//                   // colors={this.colors}
+//                 >
+//                   {options.gallery?.showTitle && image.title && (
+//                     <div>{image.title}</div>
+//                   )}
+//                   {showModal === image.id ? (
+//                     <Modal close={closeModal}>
+//                       <Img
+//                         className="image"
+//                         // title={image.title}
+//                         fluid={image.fluid}
+//                       />
+//                     </Modal>
+//                   ) : null}
+//                   <Img
+//                     className="image"
+//                     // title={image.title}
+//                     fluid={image.fluid}
+//                     style={{
+//                       cursor: to || options.popup ? `pointer` : `auto`,
+//                     }}
+//                   />
+//                   {options.gallery &&
+//                     options.gallery.showDescription &&
+//                     image.description && <div>{image.description}</div>}
+//                 </LinkWrapper>
+//               )
+//             })}
+//           </div>
+//         )
+//       })}
+//     </LBlockGallery>
+//   )
+// }
+
+const useGallery = ({
+  block,
+  // colors: colorsLib,
+  // location,
+  // className = '',
+  // passCSS,
+  ...rest
+}) => {
   const [showModal, setShowModal] = useState(false)
   const closeModal = () => {
     setShowModal(false)
@@ -42,22 +174,48 @@ const Gallery = ({
   const options = internalJson(optionsData)
   const style = mapStyle(internalJson(styleData))
 
-  const colors = useColors({ options, colorsLib })
-  const { isColored, classicCombo } = colors
+  // const colors = useColors({ options, colorsLib })
+  // const { isColored, classicCombo } = colors
 
-  const parentMaxWidth = passCSS?.maxWidth || 1000
+  // const parentMaxWidth = passCSS?.maxWidth || 1000
 
-  // const layout = gridLayout(this.optionsData, parentMaxWidth, block.gallery)
-  const { layout, list } = addLayoutOptions(
-    options,
-    parentMaxWidth,
-    block.gallery
-  )
+  // // const layout = gridLayout(this.optionsData, parentMaxWidth, block.gallery)
+  // const { layout, list } = addLayoutOptions(
+  //   options,
+  //   parentMaxWidth,
+  //   block.gallery
+  // )
 
   const { id, name, links = [] } = options
 
+  return {
+    ...rest,
+    ...block,
+    showModal,
+    setShowModal,
+    closeModal,
+    options,
+    style,
+    id,
+    name,
+    links,
+  }
+}
+
+const Markup = ({
+  gallery,
+  className,
+  showModal,
+  setShowModal,
+  closeModal,
+  options,
+  style,
+  id,
+  name,
+  links,
+}) => {
   return (
-    <LBlockGallery
+    <Grid
       {...{
         id,
         name,
@@ -71,11 +229,10 @@ const Gallery = ({
           // maxWidth: `1000px`,
           // margin: `0 auto`,
 
-          alignItems: layout.align || `baseline`,
+          // alignItems: layout.align || `baseline`,
 
-          ...passCSS,
-          ...(isColored ? colors[classicCombo].style : {}),
-          // ...this.colors[classicCombo].style,
+          // ...passCSS,
+          // ...(isColored ? colors[classicCombo].style : {}),
           ...style,
           // " a.button:hover": {
           //   ...this.colors[funkyContrastCombo].style,
@@ -84,75 +241,72 @@ const Gallery = ({
         },
       }}
     >
-      {list.map((column, colCount) => {
+      {gallery.map((image, imCount) => {
         // const imageStyle = listImageStyle(layout, i)
-        const { itemStyle, imageStyle } = column[0]
+        // const { itemStyle, imageStyle } = column[0]
 
+        const { title, description, fluid } = image
+
+        const to = links[imCount]
         return (
-          <div
-            key={colCount}
-            className="column"
-            css={{
-              display: `flex`,
-              flexFlow: `column`,
-              width: `100%`,
-              maxWidth: itemStyle.maxWidth,
+          <LinkWrapper
+            tag={Ratio}
+            key={image.id}
+            onClick={() => {
+              if (options.popup) {
+                setShowModal(image.id)
+              }
             }}
+            css={{
+              // ...imageStyle,
+              display: 'block',
+              // cursor: `pointer`,
+              ' .gatsby-image-wrapper': {
+                cursor: to ? `pointer` : 'auto',
+              },
+            }}
+            to={to}
+            // colors={this.colors}
           >
-            {column.map((image, imCount) => {
-              const to = links[colCount]
-              return (
-                <LinkWrapper
-                  tag="div"
-                  key={imCount}
-                  onClick={() => {
-                    if (options.popup) {
-                      setShowModal(image.id)
-                    }
-                  }}
-                  css={{
-                    ...imageStyle,
-                    display: 'block',
-                    // cursor: `pointer`,
-                    ' .gatsby-image-wrapper': {
-                      cursor: to ? `pointer` : 'auto',
-                    },
-                  }}
-                  to={to}
-                  // colors={this.colors}
-                >
-                  {options.gallery?.showTitle && image.title && (
-                    <div>{image.title}</div>
-                  )}
-                  {showModal === image.id ? (
-                    <Modal close={closeModal}>
-                      <Img
-                        className="image"
-                        // title={image.title}
-                        fluid={image.fluid}
-                      />
-                    </Modal>
-                  ) : null}
-                  <Img
-                    className="image"
-                    // title={image.title}
-                    fluid={image.fluid}
-                    style={{
-                      cursor: to || options.popup ? `pointer` : `auto`,
-                    }}
-                  />
-                  {options.gallery &&
-                    options.gallery.showDescription &&
-                    image.description && <div>{image.description}</div>}
-                </LinkWrapper>
-              )
-            })}
-          </div>
+            {options.gallery?.showTitle && image.title && (
+              <div>{image.title}</div>
+            )}
+            {showModal === image.id ? (
+              <Modal close={closeModal}>
+                <Img
+                  className="image"
+                  // title={image.title}
+                  fluid={image.fluid}
+                />
+              </Modal>
+            ) : null}
+            <Img
+              className="image"
+              // title={image.title}
+              fluid={image.fluid}
+              style={{
+                cursor: to || options.popup ? `pointer` : `auto`,
+              }}
+            />
+            {options.gallery &&
+              options.gallery.showDescription &&
+              image.description && <div>{image.description}</div>}
+          </LinkWrapper>
         )
       })}
-    </LBlockGallery>
+    </Grid>
   )
 }
+
+const Gallery = ({ ...data }) => (
+  <View
+    {...{
+      data,
+      useData: useGallery,
+      Markup,
+    }}
+  />
+)
 
 export default Gallery
 

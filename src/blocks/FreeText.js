@@ -4,21 +4,11 @@ import { graphql } from 'gatsby'
 import { mapStyle } from '../utils/processCss'
 import { internalJson, useColors } from '../utils'
 
-import { LBlockFreeText } from '../t-layouts'
-
 import Html from '../atoms/Html'
 
-const FreeText = ({
-  block,
-  colors: colorsLib,
-  // location,
-  shortCodeMatchees,
-  className = '',
-  cookieButton,
-  passCSS,
-}) => {
-  if (!block.main) return null
+import View from '../../libs/nuds-view-component'
 
+const useFreeText = ({ block, colors: colorsLib, ...rest }) => {
   const { options: optionsData, style: styleData } = block
   const options = internalJson(optionsData)
   const style = mapStyle(internalJson(styleData))
@@ -27,32 +17,66 @@ const FreeText = ({
   const { isColored, classicCombo } = colors
   const { id, name } = options
 
-  return (
-    <LBlockFreeText
-      {...{
-        id,
-        name,
-        className: `block blockFreeText ${className || ''}`,
-        css: {
-          ...passCSS,
-          ...(isColored ? colors[classicCombo].style : {}),
-          // ...this.colors[classicCombo].style,
-          ...style,
-          // " a.button:hover": {
-          //   ...this.colors[funkyContrastCombo].style,
-          //   borderColor: this.colors[classicCombo].border
-          // }
-        },
-      }}
-    >
-      <Html
-        html={block.main.childMarkdownRemark.html}
-        shortCodeMatchees={shortCodeMatchees}
-      />
-      {cookieButton && cookieButton({ style: colors[classicCombo].style })}
-    </LBlockFreeText>
-  )
+  return {
+    ...rest,
+    ...block,
+    style,
+    isColored,
+    colors,
+    classicCombo,
+    id,
+    name,
+  }
 }
+
+const Markup = ({
+  id,
+  name,
+  className,
+  isColored,
+  colors,
+  classicCombo,
+  style,
+  main,
+  shortCodeMatchees,
+  cookieButton,
+}) => (
+  <div
+    {...{
+      id,
+      name,
+      className: `block blockFreeText ${className || ''}`,
+      css: {
+        // ...(isColored ? colors[classicCombo].style : {}),
+        // ...style,
+        //
+        // " a.button:hover": {
+        //   ...this.colors[funkyContrastCombo].style,
+        //   borderColor: this.colors[classicCombo].border
+        // }
+      },
+    }}
+  >
+    <Html
+      html={main && main.childMarkdownRemark.html}
+      shortCodeMatchees={shortCodeMatchees}
+    />
+    {cookieButton &&
+      cookieButton({
+        // style: colors[classicCombo].style
+      })}
+  </div>
+)
+
+const FreeText = ({ ...data }) => (
+  <View
+    {...{
+      data,
+      useData: useFreeText,
+      Markup,
+    }}
+  />
+)
 
 export default FreeText
 
