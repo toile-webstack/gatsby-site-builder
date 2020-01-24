@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import parse from 'html-react-parser'
 
 import {
@@ -20,7 +20,7 @@ export default ({ html: htmlInput, passCSS, shortCodeMatchees, ...rest }) => {
   if (!htmlInput) return null
   const [h, setH] = useState()
 
-  useMemo(() => {
+  useEffect(() => {
     const html = withSimpleLineBreaks(htmlInput)
     setH(
       parse(html, {
@@ -47,7 +47,7 @@ export default ({ html: htmlInput, passCSS, shortCodeMatchees, ...rest }) => {
         },
       })
     )
-  }, [htmlInput])
+  }, [])
 
   // let html = protectEmail(htmlInput)
   // html = withSimpleLineBreaks(html)
