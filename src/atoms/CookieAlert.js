@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 // import PropTypes from 'prop-types'
 // import { Flex, Box, Fixed, Text, Button } from '../elements'
 // import { Translations } from '.'
-import { rhythm, scale } from '../utils/typography';
-import colors from '../utils/colors';
+import { rhythm, scale } from '../utils/typography'
+import colors from '../utils/colors'
 
-import Section from '../blocks/Section';
+import Section from '../blocks/Section'
 
 const OkButton = ({ handleClick, style }) => (
   <button
@@ -20,32 +20,32 @@ const OkButton = ({ handleClick, style }) => (
   >
     OK
   </button>
-);
+)
 
 class CookieAlert extends React.Component {
   constructor(props) {
-    super(props);
-    const newColors = colors.computeColors([1], 'classic');
-    this.colors = { ...colors, ...newColors };
+    super(props)
+    const newColors = colors.computeColors([1], 'classic')
+    this.colors = { ...colors, ...newColors }
 
     this.state = {
       cookieAccepted: true,
-    };
+    }
   }
 
   componentDidMount() {
-    this.checkCookie();
+    this.checkCookie()
   }
 
   checkCookie = () => {
-    const cookieAccepted = localStorage.getItem('accepts-cookies') === 'true';
-    this.setState({ cookieAccepted });
-  };
+    const cookieAccepted = localStorage.getItem('accepts-cookies') === 'true'
+    this.setState({ cookieAccepted })
+  }
 
   handleClick = () => {
-    localStorage.setItem('accepts-cookies', 'true');
-    this.setState({ cookieAccepted: true });
-  };
+    localStorage.setItem('accepts-cookies', 'true')
+    this.setState({ cookieAccepted: true })
+  }
 
   render() {
     const {
@@ -53,11 +53,11 @@ class CookieAlert extends React.Component {
       contrastCombo,
       funkyCombo,
       funkyContrastCombo,
-    } = this.colors;
-    const { section } = this.props;
+    } = this.colors
+    const { section } = this.props
 
     if (!section) {
-      return null;
+      return null
     }
 
     return (
@@ -97,8 +97,8 @@ class CookieAlert extends React.Component {
           )}
         />
       </div>
-    );
+    )
   }
 }
 
-export default CookieAlert;
+export default CookieAlert
