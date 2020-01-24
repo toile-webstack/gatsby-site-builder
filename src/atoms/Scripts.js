@@ -25,10 +25,11 @@ const Scripts = ({
           id,
           name,
           type = 'text/javascript',
-          content: { content },
+          content: contentObj,
           // charset, // src,
           ...srcAndCharset
         }) => {
+          const content = contentObj?.content
           const scriptProps = {
             // id: name,
             id: `${idPrefix}-${name}-${randomNumber()}`,
@@ -46,7 +47,7 @@ const Scripts = ({
                 ...scriptProps,
               }}
             >
-              {`${content}`}
+              {`${content || ''}`}
             </script>
           )
         }

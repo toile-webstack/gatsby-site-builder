@@ -27,7 +27,7 @@ import internalJson from '../utils/internalJson'
 import useMomentLocaleImport from '../utils/useMomentLocaleImport'
 // import Menu from '../molecules/Menu'
 import MenuReel from '../atoms/MenuReel'
-import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
+// import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
 // import ContactInfos from '../molecules/ContactInfos'
 // import FooterFeed from '../molecules/FooterFeed'
 import Footer from '../molecules/Footer'
@@ -70,11 +70,11 @@ const DefaultLayout = ({
   const isLandingPage =
     islp || options.isLandingPage || /\/landing\//.test(pathname)
 
-  const isSSR = typeof window === 'undefined'
+  // const isSSR = typeof window === 'undefined'
 
-  const envIsDev =
-    process.env.NODE_ENV === 'development' ||
-    (!isSSR && window.location.href.match(/localhost|dev--.*netlify.com/gi))
+  // const envIsDev =
+  //   process.env.NODE_ENV === 'development' ||
+  //   (!isSSR && window.location.href.match(/localhost|dev--.*netlify.com/gi))
 
   // const colors = useColors({ options, colorsLib })
   // const { isColored, classicCombo } = colors
@@ -129,7 +129,7 @@ const DefaultLayout = ({
           location={location}
         />
       )}
-      {envIsDev && <ColorPalettesDemo />}
+      {/* {envIsDev && <ColorPalettesDemo />} */}
       <div className="layout-wrapper">
         {/* wrapper was useful for sidebar */}
         <main className="layout-main">{children}</main>
