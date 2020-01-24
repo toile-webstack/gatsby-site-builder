@@ -310,30 +310,30 @@ const Gallery = ({ ...data }) => (
 
 export default Gallery
 
-export const blockGalleryFragment = graphql`
-  fragment BlockGallery on ContentfulBlockGallery {
-    id
-    name
-    __typename
-    gallery {
-      id
-      title
-      description
-      fluid(maxWidth: 1000, quality: 80) {
-        ...GatsbyContentfulFluid
-      }
-    }
-    options {
-      internal {
-        content
-      }
-      # colorPalettes
-      # colorCombo
-    }
-    style {
-      internal {
-        content
-      }
-    }
-  }
-`
+// export const blockGalleryFragment = graphql`
+//   fragment BlockGallery on ContentfulBlockGallery {
+//     id
+//     name
+//     __typename
+//     gallery {
+//       id
+//       title
+//       description
+//       fluid(maxWidth: 1000, quality: 80) {
+//         ...GatsbyContentfulFluid
+//       }
+//     }
+//     options {
+//       internal {
+//         content
+//       }
+//       # colorPalettes
+//       # colorCombo
+//     }
+//     style {
+//       internal {
+//         content
+//       }
+//     }
+//   }
+// `

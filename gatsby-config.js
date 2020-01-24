@@ -8,13 +8,13 @@ module.exports = {
     siteUrl: process.env.URL,
   },
   plugins: [
-    {
-      resolve: `gatsby-source-contentful`,
-      options: {
-        spaceId: process.env.contentfulSpaceID,
-        accessToken: process.env.contentfulAccessToken,
-      },
-    },
+    // {
+    //   resolve: `gatsby-source-contentful`,
+    //   options: {
+    //     spaceId: process.env.contentfulSpaceID,
+    //     accessToken: process.env.contentfulAccessToken,
+    //   },
+    // },
     `gatsby-plugin-layout`,
     {
       resolve: `gatsby-plugin-nprogress`,
@@ -100,9 +100,9 @@ module.exports = {
       },
     },
     // `toile-ignores`,
-    `toile-siteSettings`,
-    `toile-pages`,
-    `toile-customContentType`,
+    // `toile-siteSettings`,
+    // `toile-pages`,
+    // `toile-customContentType`,
     // {
     //   resolve: `gatsby-plugin-schema-snapshot`,
     //   options: {

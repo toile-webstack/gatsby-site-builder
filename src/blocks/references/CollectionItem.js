@@ -82,64 +82,64 @@ const CollectionItem = ({
 
 export default CollectionItem
 
-export const collectionItemsFragment = graphql`
-  fragment CollectionItem on ContentfulCollectionItem {
-    id
-    internal {
-      type
-    }
-    type
-    name
-    author
-    featuredImage {
-      id
-      title
-      description
-      fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
-        base64
-        aspectRatio
-        src
-        srcSet
-        sizes
-      }
-    }
-    content {
-      id
-      childMarkdownRemark {
-        id
-        excerpt(pruneLength: 200)
-        html
-      }
-    }
-    datePublished
-    dateLastEdit
-    data {
-      internal {
-        content
-      }
-    }
-    categories
-    metadata {
-      internal {
-        content
-      }
-    }
-    options {
-      internal {
-        content
-      }
-    }
-    style {
-      internal {
-        content
-      }
-    }
-    node_locale
-    fields {
-      menuName
-      shortPath
-      localizedPath
-      locale
-    }
-  }
-`
+// export const collectionItemsFragment = graphql`
+//   fragment CollectionItem on ContentfulCollectionItem {
+//     id
+//     internal {
+//       type
+//     }
+//     type
+//     name
+//     author
+//     featuredImage {
+//       id
+//       title
+//       description
+//       fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+//         base64
+//         aspectRatio
+//         src
+//         srcSet
+//         sizes
+//       }
+//     }
+//     content {
+//       id
+//       childMarkdownRemark {
+//         id
+//         excerpt(pruneLength: 200)
+//         html
+//       }
+//     }
+//     datePublished
+//     dateLastEdit
+//     data {
+//       internal {
+//         content
+//       }
+//     }
+//     categories
+//     metadata {
+//       internal {
+//         content
+//       }
+//     }
+//     options {
+//       internal {
+//         content
+//       }
+//     }
+//     style {
+//       internal {
+//         content
+//       }
+//     }
+//     node_locale
+//     fields {
+//       menuName
+//       shortPath
+//       localizedPath
+//       locale
+//     }
+//   }
+// `

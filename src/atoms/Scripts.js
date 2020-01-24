@@ -29,6 +29,8 @@ const Scripts = ({
           // charset, // src,
           ...srcAndCharset
         }) => {
+          if (name === 'IGNORE') return null
+
           const scriptProps = {
             // id: name,
             id: `${idPrefix}-${name}-${randomNumber()}`,

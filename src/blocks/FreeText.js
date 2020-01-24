@@ -80,31 +80,31 @@ const FreeText = ({ ...data }) => (
 
 export default FreeText
 
-export const blockFreeTextFragment = graphql`
-  fragment BlockFreeText on ContentfulBlockFreeText {
-    id
-    name
-    __typename
-    main {
-      id
-      childMarkdownRemark {
-        id
-        html
-        excerpt
-        timeToRead
-      }
-    }
-    options {
-      internal {
-        content
-      }
-      # colorPalettes
-      # colorCombo
-    }
-    style {
-      internal {
-        content
-      }
-    }
-  }
-`
+// export const blockFreeTextFragment = graphql`
+//   fragment BlockFreeText on ContentfulBlockFreeText {
+//     id
+//     name
+//     __typename
+//     main {
+//       id
+//       childMarkdownRemark {
+//         id
+//         html
+//         excerpt
+//         timeToRead
+//       }
+//     }
+//     options {
+//       internal {
+//         content
+//       }
+//       # colorPalettes
+//       # colorCombo
+//     }
+//     style {
+//       internal {
+//         content
+//       }
+//     }
+//   }
+// `

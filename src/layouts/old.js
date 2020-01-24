@@ -463,92 +463,92 @@ const DefaultLayout = ({
 // }
 
 // TODO: query for global styles and options in settings
-const QUERY = graphql`
-  query IndexLayout {
-    settings: contentfulSettings {
-      id
-      name
-      style {
-        # _json_
-        internal {
-          content
-        }
-      }
-      options {
-        # _json_
-        internal {
-          content
-        }
-      }
-      node_locale
-      scripts {
-        id
-        name
-        type
-        src
-        charset
-        content {
-          id
-          content
-        }
-      }
-    }
-    footer: contentfulSection(name: { eq: "--footer" }) {
-      id
-      name
-      internal {
-        type
-      }
-      blocks {
-        ...BlockFreeText
-        ...BlockForm
-        ...BlockGallery
-        ...BlockReferences
-      }
-      options {
-        # _json_
-        internal {
-          content
-        }
-      }
-      style {
-        # _json_
-        internal {
-          content
-        }
-      }
-    }
-    cookieAlert: contentfulSection(name: { eq: "--cookie" }) {
-      id
-      name
-      internal {
-        type
-      }
-      blocks {
-        ...BlockFreeText
-        ...BlockForm
-        ...BlockGallery
-        ...BlockReferences
-      }
-      options {
-        # _json_
-        internal {
-          content
-        }
-      }
-      style {
-        # _json_
-        internal {
-          content
-        }
-      }
-    }
-  }
-`
+// const QUERY = graphql`
+//   query IndexLayout {
+//     settings: contentfulSettings {
+//       id
+//       name
+//       style {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       options {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       node_locale
+//       scripts {
+//         id
+//         name
+//         type
+//         src
+//         charset
+//         content {
+//           id
+//           content
+//         }
+//       }
+//     }
+//     footer: contentfulSection(name: { eq: "--footer" }) {
+//       id
+//       name
+//       internal {
+//         type
+//       }
+//       blocks {
+//         ...BlockFreeText
+//         ...BlockForm
+//         ...BlockGallery
+//         ...BlockReferences
+//       }
+//       options {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       style {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//     }
+//     cookieAlert: contentfulSection(name: { eq: "--cookie" }) {
+//       id
+//       name
+//       internal {
+//         type
+//       }
+//       blocks {
+//         ...BlockFreeText
+//         ...BlockForm
+//         ...BlockGallery
+//         ...BlockReferences
+//       }
+//       options {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       style {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//     }
+//   }
+// `
 
-export default props => (
-  <StaticQuery
-    query={QUERY}
-    render={data => <DefaultLayout {...{ ...props, data }} />}
-  />
-)
+// export default props => (
+//   <StaticQuery
+//     query={QUERY}
+//     render={data => <DefaultLayout {...{ ...props, data }} />}
+//   />
+// )

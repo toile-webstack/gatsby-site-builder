@@ -10,24 +10,24 @@ import _ from 'lodash'
 // )
 // const typographyTheme = require("./typography-themes/typography-theme-alton/src/index.js")
 // console.log(themes)
-import { mapStyle } from '../utils/processCss'
-import {
-  defaultLocale,
-  locales,
-  metadata,
-  favicon,
-  socialImageUrl,
-  menu,
-  // pages,
-  // colors,
-  // fonts,
-  // contact,
-} from '../utils/siteSettings.json'
-import internalJson from '../utils/internalJson'
+// import { mapStyle } from '../utils/processCss'
+// import {
+//   defaultLocale,
+//   locales,
+//   metadata,
+//   favicon,
+//   socialImageUrl,
+//   menu,
+//   // pages,
+//   // colors,
+//   // fonts,
+//   // contact,
+// } from '../utils/siteSettings.json'
+// import internalJson from '../utils/internalJson'
 import useMomentLocaleImport from '../utils/useMomentLocaleImport'
 // import Menu from '../molecules/Menu'
 import MenuReel from '../atoms/MenuReel'
-import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
+// import ColorPalettesDemo from '../molecules/ColorPalettesDemo'
 // import ContactInfos from '../molecules/ContactInfos'
 // import FooterFeed from '../molecules/FooterFeed'
 import Footer from '../molecules/Footer'
@@ -43,38 +43,64 @@ import { LLayout } from '../t-layouts'
 //   path: "contact",
 // })
 
-const getCurrentLocale = pathname => {
-  const firstPath = pathname.match(/^\/..\//) || []
-  const localeFromPath = firstPath[0] && firstPath[0].replace(/\//g, '')
-  const currentLocale =
-    locales.some(l => l === localeFromPath) && localeFromPath
-  return currentLocale
-}
+// const getCurrentLocale = pathname => {
+//   const firstPath = pathname.match(/^\/..\//) || []
+//   const localeFromPath = firstPath[0] && firstPath[0].replace(/\//g, '')
+//   const currentLocale =
+//     locales.some(l => l === localeFromPath) && localeFromPath
+//   return currentLocale
+// }
 
 const DefaultLayout = ({
-  data: { settings, cookieAlert, footer } = {},
+  // data: { settings, cookieAlert, footer } = {},
   location,
   children,
   // isSSR,
-  isLandingPage: islp,
+  // isLandingPage: islp,
+  pageContext: {
+    settings: settingsData,
+    // page: pageData,
+    cookie: cookieData,
+    footer: footerData,
+    locale: { code: locale },
+  } = {},
 }) => {
+  // const page = JSON.parse(pageData)
+  const settings = JSON.parse(settingsData)
+  const cookieAlert = JSON.parse(cookieData)
+  const footer = JSON.parse(footerData)
+  // const { sys, fields } = page
+  // const { locale: pageLocale } = sys
+
   const { pathname } = location || {}
-  const { options: optionsData, style: styleData, scripts } = settings
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  const {
+    menu,
+    favicon,
+    facebookImage: socialImage,
+    colors,
+    fonts,
+    contact,
+    metadata,
+    options,
+    style,
+    scripts,
+    ...rest
+  } = settings
+
+  console.log(settings)
 
   // const landingRE = new RegExp(/\/landing\//)
-  const currentLocale = getCurrentLocale(pathname) || defaultLocale
-  useMomentLocaleImport({ locale: currentLocale })
+  // const currentLocale = getCurrentLocale(pathname) || defaultLocale
+  // useMomentLocaleImport({ locale: currentLocale })
+  useMomentLocaleImport({ locale })
 
-  const isLandingPage =
-    islp || options.isLandingPage || /\/landing\//.test(pathname)
+  const isLandingPage = options.isLandingPage || /\/landing\//.test(pathname)
 
-  const isSSR = typeof window === 'undefined'
+  // const isSSR = typeof window === 'undefined'
 
-  const envIsDev =
-    process.env.NODE_ENV === 'development' ||
-    (!isSSR && window.location.href.match(/localhost|dev--.*netlify.com/gi))
+  // const envIsDev =
+  //   process.env.NODE_ENV === 'development' ||
+  //   (!isSSR && window.location.href.match(/localhost|dev--.*netlify.com/gi))
 
   // const colors = useColors({ options, colorsLib })
   // const { isColored, classicCombo } = colors
@@ -95,7 +121,7 @@ const DefaultLayout = ({
           title: metadata.title,
           name: metadata.name,
           //
-          lang: currentLocale,
+          lang: locale,
           description: metadata.description,
           canonicalUrl: metadata.url,
           favicon,
@@ -372,92 +398,94 @@ const DefaultLayout = ({
 // }
 
 // TODO: query for global styles and options in settings
-const QUERY = graphql`
-  query Layout {
-    settings: contentfulSettings {
-      id
-      name
-      style {
-        # _json_
-        internal {
-          content
-        }
-      }
-      options {
-        # _json_
-        internal {
-          content
-        }
-      }
-      node_locale
-      scripts {
-        id
-        name
-        type
-        src
-        charset
-        content {
-          id
-          content
-        }
-      }
-    }
-    footer: contentfulSection(name: { eq: "--footer" }) {
-      id
-      name
-      internal {
-        type
-      }
-      blocks {
-        ...BlockFreeText
-        ...BlockForm
-        ...BlockGallery
-        ...BlockReferences
-      }
-      options {
-        # _json_
-        internal {
-          content
-        }
-      }
-      style {
-        # _json_
-        internal {
-          content
-        }
-      }
-    }
-    cookieAlert: contentfulSection(name: { eq: "--cookie" }) {
-      id
-      name
-      internal {
-        type
-      }
-      blocks {
-        ...BlockFreeText
-        ...BlockForm
-        ...BlockGallery
-        ...BlockReferences
-      }
-      options {
-        # _json_
-        internal {
-          content
-        }
-      }
-      style {
-        # _json_
-        internal {
-          content
-        }
-      }
-    }
-  }
-`
+// const QUERY = graphql`
+//   query Layout {
+//     settings: contentfulSettings {
+//       id
+//       name
+//       style {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       options {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       node_locale
+//       scripts {
+//         id
+//         name
+//         type
+//         src
+//         charset
+//         content {
+//           id
+//           content
+//         }
+//       }
+//     }
+//     footer: contentfulSection(name: { eq: "--footer" }) {
+//       id
+//       name
+//       internal {
+//         type
+//       }
+//       blocks {
+//         ...BlockFreeText
+//         ...BlockForm
+//         ...BlockGallery
+//         ...BlockReferences
+//       }
+//       options {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       style {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//     }
+//     cookieAlert: contentfulSection(name: { eq: "--cookie" }) {
+//       id
+//       name
+//       internal {
+//         type
+//       }
+//       blocks {
+//         ...BlockFreeText
+//         ...BlockForm
+//         ...BlockGallery
+//         ...BlockReferences
+//       }
+//       options {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//       style {
+//         # _json_
+//         internal {
+//           content
+//         }
+//       }
+//     }
+//   }
+// `
 
-export default props => (
-  <StaticQuery
-    query={QUERY}
-    render={data => <DefaultLayout {...{ ...props, data }} />}
-  />
-)
+// export default props => (
+//   <StaticQuery
+//     query={QUERY}
+//     render={data => <DefaultLayout {...{ ...props, data }} />}
+//   />
+// )
+
+export default DefaultLayout

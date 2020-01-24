@@ -903,39 +903,39 @@ const Form = ({ ...data }) => (
 
 export default Form
 
-export const blockFormFragment = graphql`
-  fragment BlockForm on ContentfulBlockForm {
-    id
-    name
-    __typename
-    form {
-      internal {
-        content
-      }
-    }
-    successMessage {
-      id
-      childMarkdownRemark {
-        id
-        html
-      }
-    }
-    errorMessage {
-      id
-      childMarkdownRemark {
-        id
-        html
-      }
-    }
-    options {
-      internal {
-        content
-      }
-    }
-    style {
-      internal {
-        content
-      }
-    }
-  }
-`
+// export const blockFormFragment = graphql`
+//   fragment BlockForm on ContentfulBlockForm {
+//     id
+//     name
+//     __typename
+//     form {
+//       internal {
+//         content
+//       }
+//     }
+//     successMessage {
+//       id
+//       childMarkdownRemark {
+//         id
+//         html
+//       }
+//     }
+//     errorMessage {
+//       id
+//       childMarkdownRemark {
+//         id
+//         html
+//       }
+//     }
+//     options {
+//       internal {
+//         content
+//       }
+//     }
+//     style {
+//       internal {
+//         content
+//       }
+//     }
+//   }
+// `

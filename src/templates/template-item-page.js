@@ -220,84 +220,84 @@ const ItemPageTemplate = ({
 
 export default ItemPageTemplate
 
-export const itemPageQuery = graphql`
-  query ItemPageTemplate($id: String!) {
-    collectionItem: contentfulCollectionItem(id: { eq: $id }) {
-      id
-      type
-      name
-      featuredImage {
-        id
-        title
-        description
-        fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
-          base64
-          aspectRatio
-          src
-          srcSet
-          sizes
-        }
-      }
-      datePublished
-      dateLastEdit
-      data {
-        internal {
-          content
-        }
-      }
-      categories
-      content {
-        id
-        childMarkdownRemark {
-          id
-          html
-        }
-      }
-      gallery {
-        id
-        title
-        description
-        fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
-          base64
-          aspectRatio
-          src
-          srcSet
-          sizes
-        }
-      }
-      metadata {
-        internal {
-          content
-        }
-      }
-      options {
-        internal {
-          content
-        }
-      }
-      style {
-        internal {
-          content
-        }
-      }
-      node_locale
-      fields {
-        menuName
-        shortPath
-        localizedPath
-        locale
-      }
-      scripts {
-        id
-        name
-        type
-        src
-        charset
-        content {
-          id
-          content
-        }
-      }
-    }
-  }
-`
+// export const itemPageQuery = graphql`
+//   query ItemPageTemplate($id: String!) {
+//     collectionItem: contentfulCollectionItem(id: { eq: $id }) {
+//       id
+//       type
+//       name
+//       featuredImage {
+//         id
+//         title
+//         description
+//         fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+//           base64
+//           aspectRatio
+//           src
+//           srcSet
+//           sizes
+//         }
+//       }
+//       datePublished
+//       dateLastEdit
+//       data {
+//         internal {
+//           content
+//         }
+//       }
+//       categories
+//       content {
+//         id
+//         childMarkdownRemark {
+//           id
+//           html
+//         }
+//       }
+//       gallery {
+//         id
+//         title
+//         description
+//         fluid(maxWidth: 1000, maxHeight: 1000, quality: 80) {
+//           base64
+//           aspectRatio
+//           src
+//           srcSet
+//           sizes
+//         }
+//       }
+//       metadata {
+//         internal {
+//           content
+//         }
+//       }
+//       options {
+//         internal {
+//           content
+//         }
+//       }
+//       style {
+//         internal {
+//           content
+//         }
+//       }
+//       node_locale
+//       fields {
+//         menuName
+//         shortPath
+//         localizedPath
+//         locale
+//       }
+//       scripts {
+//         id
+//         name
+//         type
+//         src
+//         charset
+//         content {
+//           id
+//           content
+//         }
+//       }
+//     }
+//   }
+// `

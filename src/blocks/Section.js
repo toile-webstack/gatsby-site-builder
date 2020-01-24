@@ -115,26 +115,26 @@ const Section = ({
 
 export default Section
 
-export const sectionFragment = graphql`
-  fragment Section on ContentfulSection {
-    id
-    name
-    __typename
-    blocks {
-      ...BlockFreeText
-      ...BlockForm
-      ...BlockGallery
-      ...BlockReferences
-    }
-    options {
-      internal {
-        content
-      }
-    }
-    style {
-      internal {
-        content
-      }
-    }
-  }
-`
+// export const sectionFragment = graphql`
+//   fragment Section on ContentfulSection {
+//     id
+//     name
+//     __typename
+//     blocks {
+//       ...BlockFreeText
+//       ...BlockForm
+//       ...BlockGallery
+//       ...BlockReferences
+//     }
+//     options {
+//       internal {
+//         content
+//       }
+//     }
+//     style {
+//       internal {
+//         content
+//       }
+//     }
+//   }
+// `

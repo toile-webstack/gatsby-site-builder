@@ -702,27 +702,27 @@ const ReferencesO = ({ ...data }) => (
 
 export default References
 
-export const blockReferencesFragment = graphql`
-  fragment BlockReferences on ContentfulBlockReferences {
-    id
-    name
-    node_locale
-    __typename
-    references {
-      ...CollectionItem
-      ...PageReference
-    }
-    options {
-      internal {
-        content
-      }
-      # colorPalettes
-      # colorCombo
-    }
-    style {
-      internal {
-        content
-      }
-    }
-  }
-`
+// export const blockReferencesFragment = graphql`
+//   fragment BlockReferences on ContentfulBlockReferences {
+//     id
+//     name
+//     node_locale
+//     __typename
+//     references {
+//       ...CollectionItem
+//       ...PageReference
+//     }
+//     options {
+//       internal {
+//         content
+//       }
+//       # colorPalettes
+//       # colorCombo
+//     }
+//     style {
+//       internal {
+//         content
+//       }
+//     }
+//   }
+// `
