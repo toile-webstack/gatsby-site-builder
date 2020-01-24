@@ -86,7 +86,8 @@ const DefaultLayout = ({
     scripts,
     ...rest
   } = settings
-
+  const socialImageUrl =
+    socialImage?.file?.url && `https:${socialImage?.file?.url}`
   console.log(settings)
 
   // const landingRE = new RegExp(/\/landing\//)
@@ -151,7 +152,7 @@ const DefaultLayout = ({
           icon={favicon}
           name={metadata.name}
           menu={menu}
-          currentLocale={currentLocale}
+          currentLocale={locale}
           location={location}
         />
       )}

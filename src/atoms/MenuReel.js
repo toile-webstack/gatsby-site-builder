@@ -118,6 +118,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
     setWin(() => typeof window !== 'undefined')
   }, [])
   const currentMenu = menu && menu[currentLocale]
+  console.log(menu)
   const { pathname } = location
   const locales = menu && Object.keys(menu).map(locale => locale.split('-')[0])
   const showLocalesMenu = locales && locales.length > 1

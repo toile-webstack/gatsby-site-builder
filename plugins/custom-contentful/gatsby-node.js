@@ -6,7 +6,75 @@ const util = require('util')
 
 const { createPath } = require(`../../utils/utils.js`)
 
-const transformItem = (item, locale, defaultLocale, stopCycle) => {
+const addFields = (contentType, fields, localesObj) => {
+  const { all: locales, current: locale, default: defaultLocale } = localesObj
+  switch (contentType) {
+    case 'page': {
+      const slug = createPath(fields.path)
+      const pathShort = slug === `index` ? `/` : `/${slug}/`
+      const pathLocalized =
+        slug === `index` ? `/${locale}/` : `/${locale}/${slug}/`
+      const path = locales.length > 1 ? pathLocalized : pathShort
+      return { ...fields, slug, pathShort, pathLocalized, path }
+    }
+    case 'asset': {
+      const {
+        title,
+        fileName,
+        contentType: ct,
+        file: {
+          url,
+          details: {
+            size,
+            image: { width: naturalWidth, height: naturalHeight },
+          },
+        },
+      } = fields
+
+      const aspectRatio = naturalWidth / naturalHeight
+      const src = `https:${url}`
+      const webp = `https:${url}?fm=webp`
+
+      // { title: 'Brewery_JandrainJandrenouille',
+      //    file:
+      //      { url:
+      //     '//images.ctfassets.net/eeu0634yzxo7/5CofTmX6Wz6mbYfbcPynOK/7357a75d4b3da8045db11e99718e18b1/jbj.jpg',
+      //    details: { size: 111547, image: [Object] },
+      //    fileName: 'jbj.jpg',
+      //    contentType: 'image/jpeg' } }
+
+      //   <picture>
+      //     <source srcset='paul_irish.jxr' type='image/vnd.ms-photo'>
+      //     <source srcset='paul_irish.jp2' type='image/jp2'>
+      //     <source srcset='paul_irish.webp' type='image/webp'>
+      //     <img src='paul_irish.jpg' alt='paul'>
+      // </picture>
+
+      const i = (
+        <picture>
+          <source srcset="paul_irish.webp" type="image/webp" />
+          <img src="paul_irish.jpg" alt="paul" />
+        </picture>
+      )
+
+      return {
+        name: title,
+        fileName,
+        contentType: ct,
+        naturalWidth,
+        naturalHeight,
+        url: src,
+        src,
+        aspectRatio,
+      }
+    }
+    default:
+      return fields
+  }
+}
+
+const transformItem = (item, localesObj, stopCycle) => {
+  const { all: locales, current: locale, default: defaultLocale } = localesObj
   const { sys, fields: fi, ...rest } = item
   const f = { ...fi, ...rest }
 
@@ -20,37 +88,40 @@ const transformItem = (item, locale, defaultLocale, stopCycle) => {
   const identifier = f.name || f.path ? (f.name || f.path)[defaultLocale] : ''
   if (f && /IGNORE/.test(identifier)) return null
 
-  const fields = f
+  let fields = f
   if (f) {
     Object.entries(f).forEach(([fieldKey, fieldVal]) => {
       const val = fieldVal[locale] || fieldVal[defaultLocale]
+
       if (Array.isArray(val)) {
         // we want to stop if we are inside a blockReferences
         // then we simplify the object because we don't need all its content
         // only its preview and how to link to it
         if (stopCycle) {
           fields[fieldKey] = null
-          // only blockReferences can trigger cyclical references
-          // then we stop the ccle at the next iteration
         } else if (contentType === 'blockReferences') {
-          fields[fieldKey] = mapItems(val, locale, defaultLocale, true)
+          // only blockReferences can trigger cyclical references
+          // then we stop the cycle at the next iteration encountering an array
+          fields[fieldKey] = mapItems(val, localesObj, true)
         } else {
-          fields[fieldKey] = mapItems(val, locale, defaultLocale)
+          fields[fieldKey] = mapItems(val, localesObj)
         }
       } else if (
-        // if we reference only one entry, we have to loop it too
-        // we need to check for both keys because we could have a JSON object with a field key (form)
-        // TODO: Weak -> we could have in our data a JSON object with both keys and it would fail
         typeof val === 'object' &&
         Object.prototype.hasOwnProperty.call(val, 'fields') &&
         Object.prototype.hasOwnProperty.call(val, 'sys')
       ) {
-        fields[fieldKey] = mapItems(val, locale, defaultLocale)
+        // if we reference only one entry, we have to loop it too
+        // we need to check for both keys because we could have a JSON object with a field key (form)
+        // TODO: Weak -> we could have in our data a JSON object with both keys and it would fail
+        fields[fieldKey] = mapItems(val, localesObj)
       } else {
         // if it is not an array, it is an object with localized keys
         fields[fieldKey] = val
       }
     })
+
+    fields = addFields(contentType, fields, localesObj)
   }
 
   return {
@@ -61,16 +132,16 @@ const transformItem = (item, locale, defaultLocale, stopCycle) => {
   }
 }
 
-const mapItems = (items, locale, defaultLocale, stopCycle) => {
+const mapItems = (items, localesObj, stopCycle) => {
   if (Array.isArray(items)) {
     return items
       .map(item => {
-        return transformItem(item, locale, defaultLocale, stopCycle)
+        return transformItem(item, localesObj, stopCycle)
       })
       .filter(i => i)
   }
 
-  return transformItem(items, locale, defaultLocale, stopCycle)
+  return transformItem(items, localesObj, stopCycle)
 }
 
 /**
@@ -162,7 +233,12 @@ exports.createPages = async ({ actions }, { spaceId, accessToken, host }) => {
     }) => {
       locales.forEach(locale => {
         const { code } = locale
-        const localeMapItems = items => mapItems(items, code, defaultLocale)
+        const localeMapItems = items =>
+          mapItems(items, {
+            all: locales,
+            current: code,
+            default: defaultLocale,
+          })
 
         const settings = localeMapItems(s)[0]
         const cookie = localeMapItems(c)[0]
@@ -174,11 +250,11 @@ exports.createPages = async ({ actions }, { spaceId, accessToken, host }) => {
         const pages = localeMapItems(p)
 
         pages.forEach(page => {
-          const slug = createPath(page.path)
-          const shortPath = slug === `index` ? `/` : `/${slug}/`
-          const localizedPath =
-            slug === `index` ? `/${code}/` : `/${code}/${slug}/`
-          const path = locales.length > 1 ? localizedPath : shortPath
+          // const slug = createPath(page.path)
+          // const shortPath = slug === `index` ? `/` : `/${slug}/`
+          // const localizedPath =
+          //   slug === `index` ? `/${code}/` : `/${code}/${slug}/`
+          // const path = locales.length > 1 ? page.pathLocalized : page.pathShort
 
           // const pageData = JSON.stringify(page, getCircularReplacer())
           const pageData = JSON.stringify(page)
@@ -192,24 +268,24 @@ exports.createPages = async ({ actions }, { spaceId, accessToken, host }) => {
           const pageComponent = slash(pageTemplate)
 
           createPage({
-            path, // required
+            path: page.path, // required
             component: pageComponent,
             // menuName,
             // locale,
             // defaultLocale,
             context,
           })
+
+          if (locales.length > 1 && locale === defaultLocale) {
+            createRedirect({
+              fromPath: page.pathShort,
+              toPath: page.path,
+              isPermanent: true,
+              redirectInBrowser: true,
+            })
+          }
         })
       })
-
-      if (locales.length > 1) {
-        createRedirect({
-          fromPath: '/',
-          toPath: `/${defaultLocale}/`,
-          isPermanent: true,
-          redirectInBrowser: true,
-        })
-      }
 
       return null
     }
