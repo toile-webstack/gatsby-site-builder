@@ -11,6 +11,7 @@ import { lateralShadowStyles } from '../../nuds-styles'
 
 import { rhythm } from '../utils/typography'
 import colorsLib from '../utils/colors'
+import useRerenderOnHydrate from '../utils/useRerenderOnHydrate'
 import { Link } from './Link'
 // import MenuLocale from '../atoms/MenuLocaleSideBySide'
 
@@ -113,10 +114,11 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
     setOpen(prev => !prev)
   }
 
-  const [win, setWin] = useState()
-  useEffect(() => {
-    setWin(() => typeof window !== 'undefined')
-  }, [])
+  const win = useRerenderOnHydrate()
+  // const [win, setWin] = useState()
+  // useEffect(() => {
+  //   setWin(() => typeof window !== 'undefined')
+  // }, [])
   const currentMenu = menu && menu[currentLocale]
   const { pathname } = location
   const locales = menu && Object.keys(menu).map(locale => locale.split('-')[0])

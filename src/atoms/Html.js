@@ -1,22 +1,58 @@
-import React from "react";
-
-import { rhythm, scale } from "../utils/typography";
+import React, { useMemo } from 'react'
+import parse from 'html-react-parser'
 
 import {
-  replaceShortCodes,
+  // replaceShortCodes,
   withSimpleLineBreaks,
-  protectEmail,
-  targetBlank
-} from "../utils/processHtml";
+  // protectEmail,
+  // targetBlank,
+} from '../utils/processHtml'
 
-export default ({ html, passCSS, shortCodeMatchees, ...rest }) => {
-  if (!html) return null;
+// import useRerenderOnHydrate from '../utils/useRerenderOnHydrate'
 
-  html = protectEmail(html);
-  html = withSimpleLineBreaks(html);
-  // html = targetBlank(html)
-  html = replaceShortCodes(html, shortCodeMatchees);
-  // const arrayOfComponents
+const ProtectedEmail = ({ children, ...attrs }) => {
+  // const win = useRerenderOnHydrate()
+  const win = typeof window !== 'undefined'
+  return win ? <a {...attrs}>{children}</a> : <a> </a>
+}
+
+export default ({ html: htmlInput, passCSS, shortCodeMatchees, ...rest }) => {
+  if (!htmlInput) return null
+
+  let h = null
+  useMemo(() => {
+    const html = withSimpleLineBreaks(htmlInput)
+    h = parse(html, {
+      replace: domNode => {
+        switch (true) {
+          case domNode?.name === 'a' &&
+            /^mailto:.+?/.test(domNode?.attribs?.href):
+            return (
+              <ProtectedEmail {...domNode?.attribs}>
+                {domNode.children[0].data}
+              </ProtectedEmail>
+            )
+
+          case domNode?.name === 'p' &&
+            /^<toile:/.test(domNode?.children[0]?.data): {
+            const childString = domNode?.children[0]?.data
+            const [__, matcher] = childString.split(/<toile:|>/)
+
+            const Comp = shortCodeMatchees && shortCodeMatchees[matcher]
+            return Comp
+          }
+          default:
+            break
+        }
+      },
+    })
+  }, [htmlInput])
+
+  // let html = protectEmail(htmlInput)
+  // html = withSimpleLineBreaks(html)
+  // // html = targetBlank(html)
+  // html = replaceShortCodes(html, shortCodeMatchees)
+
   return (
     <div
       {...rest}
@@ -24,11 +60,13 @@ export default ({ html, passCSS, shortCodeMatchees, ...rest }) => {
         width: `100%`,
         whiteSpace: `pre-line`,
         // whiteSpace: `pre-wrap`,
-        ...passCSS
+        ...passCSS,
       }}
-      dangerouslySetInnerHTML={{
-        __html: html
-      }}
-    />
-  );
-};
+      // dangerouslySetInnerHTML={{
+      //   __html: html,
+      // }}
+    >
+      {h}
+    </div>
+  )
+}

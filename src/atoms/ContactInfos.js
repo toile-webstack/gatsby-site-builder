@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export default ({ name, email, phone }) =>
   typeof window !== `undefined` ? (
@@ -7,15 +7,15 @@ export default ({ name, email, phone }) =>
         display: `flex`,
         flexFlow: `row wrap`,
         justifyContent: `center`,
-        "> *:not(:last-child):after": {
+        '> *:not(:last-child):after': {
           content: `"-"`,
           margin: `0 3px`,
-          fontWeight: `normal`
-        }
+          fontWeight: `normal`,
+        },
       }}
     >
       {name && <span>{name}</span>}
       {email}
       {phone}
     </p>
-  ) : null;
+  ) : null
