@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import parse from 'html-react-parser'
 
 import {
@@ -18,59 +18,36 @@ const ProtectedEmail = ({ children, ...attrs }) => {
 
 export default ({ html: htmlInput, passCSS, shortCodeMatchees, ...rest }) => {
   if (!htmlInput) return null
-  const h = parse(withSimpleLineBreaks(htmlInput), {
-    replace: domNode => {
-      switch (true) {
-        case domNode?.name === 'a' &&
-          /^mailto:.+?/.test(domNode?.attribs?.href):
-          return (
-            <ProtectedEmail {...domNode?.attribs}>
-              {domNode.children[0].data}
-            </ProtectedEmail>
-          )
-        case domNode?.name === 'p' &&
-          /^<toile:/.test(domNode?.children[0]?.data): {
-          const childString = domNode?.children[0]?.data
-          const [__, matcher] = childString.split(/<toile:|>/)
+  const [h, setH] = useState()
 
-          const Comp = shortCodeMatchees && shortCodeMatchees[matcher]
-          return Comp
-        }
-        default:
-          break
-      }
-    },
-  })
-  // const parseHtml = () =>
-  //   parse(html, {
-  //     replace: domNode => {
-  //       switch (true) {
-  //         case domNode?.name === 'a' &&
-  //           /^mailto:.+?/.test(domNode?.attribs?.href):
-  //           return (
-  //             <ProtectedEmail {...domNode?.attribs}>
-  //               {domNode.children[0].data}
-  //             </ProtectedEmail>
-  //           )
-  //         case domNode?.name === 'p' &&
-  //           /^<toile:/.test(domNode?.children[0]?.data): {
-  //           const childString = domNode?.children[0]?.data
-  //           const [__, matcher] = childString.split(/<toile:|>/)
+  useMemo(() => {
+    const html = withSimpleLineBreaks(htmlInput)
+    setH(
+      parse(html, {
+        replace: domNode => {
+          switch (true) {
+            case domNode?.name === 'a' &&
+              /^mailto:.+?/.test(domNode?.attribs?.href):
+              return (
+                <ProtectedEmail {...domNode?.attribs}>
+                  {domNode.children[0].data}
+                </ProtectedEmail>
+              )
+            case domNode?.name === 'p' &&
+              /^<toile:/.test(domNode?.children[0]?.data): {
+              const childString = domNode?.children[0]?.data
+              const [__, matcher] = childString.split(/<toile:|>/)
 
-  //           const Comp = shortCodeMatchees && shortCodeMatchees[matcher]
-  //           return Comp
-  //         }
-  //         default:
-  //           break
-  //       }
-  //     },
-  //   })
-
-  // const [h, setH] = useState(parseHtml())
-
-  // useEffect(() => {
-  //   setH(parseHtml())
-  // }, [])
+              const Comp = shortCodeMatchees && shortCodeMatchees[matcher]
+              return Comp
+            }
+            default:
+              break
+          }
+        },
+      })
+    )
+  }, [htmlInput])
 
   // let html = protectEmail(htmlInput)
   // html = withSimpleLineBreaks(html)
@@ -90,7 +67,7 @@ export default ({ html: htmlInput, passCSS, shortCodeMatchees, ...rest }) => {
       //   __html: html,
       // }}
     >
-      {h}
+      {h || <p> </p>}
     </div>
   )
 }
