@@ -93,7 +93,7 @@ const useMenuContentLengthEval = ({
   return mqDimension
 }
 
-const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
+const MenuReel = ({ icon, name, menu, currentLocale, locales, location }) => {
   // TODO: we should show the mobile menu when it is focused and not rely on state
   // const mainMenuRef = useRef(null)
   // const focusMenu = () => {
@@ -117,11 +117,11 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
   useEffect(() => {
     setWin(() => typeof window !== 'undefined')
   }, [])
-  const currentMenu = menu && menu[currentLocale]
-  console.log(menu)
+  const currentMenu = (menu && menu[currentLocale]) || menu
+
   const { pathname } = location
-  const locales = menu && Object.keys(menu).map(locale => locale.split('-')[0])
-  const showLocalesMenu = locales && locales.length > 1
+  const localesCodes = locales.map(({ code }) => code.split('-')[0])
+  const showLocalesMenu = localesCodes && localesCodes.length > 1
 
   // Colors
   const colorCombo = colorsLib.menuCombo
@@ -132,7 +132,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
   const mqDimension = useMenuContentLengthEval({
     name,
     currentMenu,
-    locales,
+    locales: localesCodes,
     currentLocale,
   })
 
@@ -245,7 +245,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
                   css={{
                     maxHeight: rhythm(1),
                     // maxWidth: rhythm(1),
-                    width: 'fit-content',
+                    // width: 'fit-content',
                   }}
                 />
                 <span
@@ -271,7 +271,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
             {showLocalesMenu && (
               <div className="menu--langs">
                 <For
-                  of={locales}
+                  of={localesCodes}
                   as={locale => {
                     // const highlighted = locale === props.currentLocale
                     const lang = locale.toUpperCase()

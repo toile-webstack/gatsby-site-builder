@@ -1,6 +1,6 @@
 import React from 'react'
-import { graphql, StaticQuery } from 'gatsby'
-import _ from 'lodash'
+// import { graphql, StaticQuery } from 'gatsby'
+// import _ from 'lodash'
 // import * as themes from "./typography-themes"
 // importAll themes from
 // const themes = require.context(
@@ -62,9 +62,11 @@ const DefaultLayout = ({
     // page: pageData,
     cookie: cookieData,
     footer: footerData,
-    locale: { code: locale },
+    locale: { code: locale } = {},
+    locales,
   } = {},
 }) => {
+  if (!settingsData) return null
   // const page = JSON.parse(pageData)
   const settings = JSON.parse(settingsData)
   const cookieAlert = JSON.parse(cookieData)
@@ -84,11 +86,10 @@ const DefaultLayout = ({
     options,
     style,
     scripts,
-    ...rest
+    // ...rest
   } = settings
   const socialImageUrl =
     socialImage?.file?.url && `https:${socialImage?.file?.url}`
-  console.log(settings)
 
   // const landingRE = new RegExp(/\/landing\//)
   // const currentLocale = getCurrentLocale(pathname) || defaultLocale
@@ -125,7 +126,7 @@ const DefaultLayout = ({
           lang: locale,
           description: metadata.description,
           canonicalUrl: metadata.url,
-          favicon,
+          favicon: favicon.src,
           socialImage: socialImageUrl,
           // IDEA: use fullPath in sitePage fields for canonical url
           ogType: metadata.ogType || 'website',
@@ -149,10 +150,11 @@ const DefaultLayout = ({
 
       {isLandingPage ? null : (
         <MenuReel
-          icon={favicon}
-          name={metadata.name}
+          icon={favicon.src}
+          name={metadata.name || settings.name}
           menu={menu}
           currentLocale={locale}
+          locales={locales}
           location={location}
         />
       )}

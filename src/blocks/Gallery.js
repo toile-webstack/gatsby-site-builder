@@ -1,30 +1,31 @@
 import React, { useState } from 'react'
-import Img from 'gatsby-image'
-import { graphql } from 'gatsby'
+// import Img from 'gatsby-image'
+// import { graphql } from 'gatsby'
 
-import { mapStyle } from '../utils/processCss'
-import { rhythm } from '../utils/typography'
-import {
-  addLayoutOptions,
-  // gridLayout,
-  // listItemStyle,
-} from '../utils/computeGrid'
+// import { mapStyle } from '../utils/processCss'
+// import { rhythm } from '../utils/typography'
+// import {
+//   addLayoutOptions,
+//   // gridLayout,
+//   // listItemStyle,
+// } from '../utils/computeGrid'
 // import colors from "../utils/colors"
 // import {
 //   replaceShortCodes,
 //   withSimpleLineBreaks,
 //   protectEmail
 // } from "../utils/processHtml"
-import { internalJson, useColors } from '../utils'
+// import { internalJson, useColors } from '../utils'
 
 import Modal from '../atoms/Modal'
 // import LinkSimple from '../atoms/LinkSimple'
 import { LinkWrapper } from '../atoms/Link'
 
-import { LBlockGallery } from '../t-layouts'
+// import { LBlockGallery } from '../t-layouts'
 
 import { Box, Ratio, Grid } from '../../libs/nuds-layout-primitives'
 import View from '../../libs/nuds-view-component'
+import Image from '../atoms/Image'
 
 // const Gallery = ({
 //   block,
@@ -170,9 +171,9 @@ const useGallery = ({
     setShowModal(false)
   }
 
-  const { options: optionsData, style: styleData } = block
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  const { options = {}, style } = block
+  // const options = internalJson(optionsData)
+  // const style = mapStyle(internalJson(styleData))
 
   // const colors = useColors({ options, colorsLib })
   // const { isColored, classicCombo } = colors
@@ -245,7 +246,9 @@ const Markup = ({
         // const imageStyle = listImageStyle(layout, i)
         // const { itemStyle, imageStyle } = column[0]
 
-        const { title, description, fluid } = image
+        // console.log(image)
+
+        const { title, description } = image
 
         const to = links[imCount]
         return (
@@ -273,17 +276,17 @@ const Markup = ({
             )}
             {showModal === image.id ? (
               <Modal close={closeModal}>
-                <Img
+                <Image
                   className="image"
                   // title={image.title}
-                  fluid={image.fluid}
+                  {...image}
                 />
               </Modal>
             ) : null}
-            <Img
+            <Image
               className="image"
               // title={image.title}
-              fluid={image.fluid}
+              {...image}
               style={{
                 cursor: to || options.popup ? `pointer` : `auto`,
               }}

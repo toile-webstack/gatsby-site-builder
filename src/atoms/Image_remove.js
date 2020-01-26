@@ -1,7 +1,13 @@
 import React from 'react'
-import { For } from 'react-loops'
 
-const GatsbyImageExample = () => {
+const Image = () => {
+  const simple = (
+    <picture>
+      <source type="image/svg" src="logo.svg" />
+      <source type="image/png" src="logo.png" />
+      <img src="logo.gif" alt="RadWolf, Inc." />
+    </picture>
+  )
   return (
     <div
       className="gatsby-image-wrapper"
@@ -55,15 +61,15 @@ const GatsbyImageExample = () => {
             sizes="(max-width: 800px) 100vw, 800px"
           />
           <img
+            loading="lazy"
+            sizes="(max-width: 800px) 100vw, 800px"
             srcSet="/6d653/edited.jpg 200w,
                 /ea045/edited.jpg 400w,
                 /a1aeb/edited.jpg 800w,
                 /8d976/edited.jpg 1200w,
                 /29a98/edited.jpg 1600w,
                 /8fd7c/edited.jpg 2400w"
-            sizes="(max-width: 800px) 100vw, 800px"
             src="/a1aeb/edited.jpg"
-            loading="lazy"
             alt=""
             title="“Black and silver vintage camera” by Alexander Andrews (via unsplash.com)"
             htmlStyle="position:absolute;top:0;left:0;opacity:1;width:100%;height:100%;object-fit:cover;object-position:center"
@@ -71,59 +77,6 @@ const GatsbyImageExample = () => {
         </picture>
       </noscript>
     </div>
-  )
-}
-
-const Image = image => {
-  const {
-    picture: { sources, img } = {},
-    naturalWidth,
-    maxWidth,
-    alt,
-    title,
-    loading,
-  } = image
-
-  const sizes = [
-    `(min-width: ${naturalWidth}px) ${naturalWidth}px`,
-    maxWidth && `(max-width: ${maxWidth}) 100vw`,
-    maxWidth,
-  ]
-    .filter(s => s)
-    .join(', ')
-  // sizes="(max-width: 800px) 100vw, 800px"
-
-  return (
-    <picture>
-      <For
-        {...{
-          of: sources,
-          as: ({ type, src, srcSet }) => (
-            <source
-              {...{
-                type,
-                // src,
-                srcSet,
-                sizes,
-              }}
-            />
-          ),
-        }}
-      />
-      {img && (
-        <img
-          {...{
-            type: img.type,
-            src: img.src,
-            srcSet: img.srcSet,
-            sizes,
-            alt: alt || '',
-            title,
-            loading: loading || 'lazy',
-          }}
-        />
-      )}
-    </picture>
   )
 }
 

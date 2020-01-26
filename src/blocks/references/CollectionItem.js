@@ -64,17 +64,17 @@ const CollectionItem = ({
   }
 
   switch (layout.name) {
-    case `classicRow`:
-      return <ClassicRowListEntry {...propsToPass} />
-    case `testimonial`:
-      return <TestimonialListEntry {...propsToPass} />
-    case `event`:
-      return <EventListEntry {...propsToPass} />
-    case 'imgUnder':
-      return <ImgUnderListEntry {...propsToPass} />
-    case ``:
-    case `default`:
-      return <DefaultListEntry {...propsToPass} />
+    // case `classicRow`:
+    //   return <ClassicRowListEntry {...propsToPass} />
+    // case `testimonial`:
+    //   return <TestimonialListEntry {...propsToPass} />
+    // case `event`:
+    //   return <EventListEntry {...propsToPass} />
+    // case 'imgUnder':
+    //   return <ImgUnderListEntry {...propsToPass} />
+    // case ``:
+    // case `default`:
+    //   return <DefaultListEntry {...propsToPass} />
     default:
       return null
   }

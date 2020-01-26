@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { graphql } from 'gatsby'
+// import { graphql } from 'gatsby'
 import qs from 'qs'
 
 import { navigate } from '@reach/router'
@@ -462,22 +462,21 @@ const useReferences = ({
   location,
   className = '',
   passCSS,
+  locale: localeUnsafe,
   ...rest
 }) => {
   const {
-    options: optionsData,
-    style: styleData,
+    options,
+    style,
     references,
-    node_locale,
+    // node_locale,
   } = block
 
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
-  const locale = node_locale.split('-')[0]
+  const locale = localeUnsafe.split('-')[0]
   const wAll = wordAll[locale]
   const mNoMatch = messageNoMatch[locale]
-  const colors = useColors({ options, colorsLib })
-  const { isColored, classicCombo, funkyCombo, funkyContrastCombo } = colors
+  // const colors = useColors({ options, colorsLib })
+  // const { isColored, classicCombo, funkyCombo, funkyContrastCombo } = colors
   const {
     id,
     name,
@@ -674,20 +673,168 @@ const useReferences = ({
     return showByFamily.every(bool => bool)
   }
 
-  const parentMaxWidth = passCSS?.maxWidth || 1000
+  // const parentMaxWidth = passCSS?.maxWidth || 1000
 
   // let layout = gridLayout(this.optionsData, parentMaxWidth, block.references)
-  const { layout, list } = addLayoutOptions(
-    options,
-    parentMaxWidth,
-    block.references.filter(ref => showRef(ref.categories))
-  )
+  // const { layout, list } = addLayoutOptions(
+  //   options,
+  //   parentMaxWidth,
+  //   block.references.filter(ref => showRef(ref.categories))
+  // )
   const carouselDisplay = mode === `carousel`
 
   return {
     ...rest,
     ...block,
+    mNoMatch,
+    options,
+    carouselDisplay,
+    id,
+    name,
+    className,
+    style,
+    categories,
+    selectCategory,
+    stateCategories,
   }
+}
+
+const Markup = ({
+  mNoMatch,
+  options,
+  carouselDisplay,
+  id,
+  name,
+  className,
+  style,
+  categories,
+  selectCategory,
+  stateCategories,
+  references = [],
+}) => {
+  const inner =
+    references.length < 1 ? (
+      <div>{mNoMatch}</div>
+    ) : (
+      references.map(reference => {
+        // beta branch
+        switch (reference.contentType) {
+          case `page`:
+            return (
+              <PageReference
+                {...{
+                  key: reference.id,
+                  page: reference,
+                  // colors,
+                  // location,
+                  // layout,
+                  blockOptionsData: options,
+                  // passCSS: imageStyle,
+                }}
+              />
+            )
+          default:
+            return (
+              <CollectionItem
+                {...{
+                  key: reference.id,
+                  collectionItem: reference,
+                  // colors,
+                  // location,
+                  // layout,
+                  blockOptionsData: options,
+                  // passCSS: imageStyle,
+                }}
+              />
+            )
+        }
+      })
+    )
+  return (
+    <div
+      {...{
+        id,
+        name,
+        className: `block-wrapper ${className}`,
+        css: {
+          width: `100%`,
+          maxWidth: `1000px`,
+          margin: `auto`,
+          flexGrow: 1,
+          display: `flex`,
+          flexFlow: `column`,
+          // ...(isColored ? colors[classicCombo].style : {}),
+          ...style,
+        },
+      }}
+    >
+      {categories.show &&
+        categories.families.map((family, i) => {
+          const familyCats = stateCategories[family]
+          if (!familyCats) return null
+
+          const noCatSelected = familyCats.reduce((acc, currVal) => {
+            if (acc === false) return false
+            return !currVal.isSelected
+          }, true)
+          return (
+            <div
+              key={family}
+              className="blockReferences-categories"
+              css={{
+                display: `flex`,
+                flexFlow: `row wrap`,
+                justifyContent: `center`,
+                marginTop: i > 0 ? rhythm(1 / 2) : 0,
+              }}
+            >
+              {familyCats.map(catSmart => {
+                const { isSelected, label, raw } = catSmart
+
+                //const combo =
+                //isSelected || (noCatSelected && !raw)
+                //? funkyContrastCombo
+                //: funkyCombo
+
+                return (
+                  <div
+                    key={raw || label}
+                    role="button"
+                    onClick={() => {
+                      selectCategory(catSmart)
+                    }}
+                    onKeyPress={() => {
+                      selectCategory(catSmart)
+                    }}
+                    tabIndex="0"
+                    css={{
+                      margin: `${rhythm(1 / 4)} ${rhythm(1 / 4)}`,
+                      padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
+                      cursor: `pointer`,
+                      border: `solid 1px`,
+                      // ...colors[combo].style,
+                    }}
+                  >
+                    {label}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
+      <div
+        className="block blockReferences"
+        css={{
+          // ...(layout.align && { alignItems: layout.align }),
+          // ...passCSS,
+          // ...colors[classicCombo].style,
+          ...style,
+        }}
+      >
+        {carouselDisplay ? <Carousel>{inner}</Carousel> : inner}
+      </div>
+    </div>
+  )
 }
 
 const ReferencesO = ({ ...data }) => (
@@ -700,7 +847,7 @@ const ReferencesO = ({ ...data }) => (
   />
 )
 
-export default References
+export default ReferencesO
 
 // export const blockReferencesFragment = graphql`
 //   fragment BlockReferences on ContentfulBlockReferences {

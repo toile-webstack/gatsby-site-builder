@@ -9,14 +9,14 @@ import { addLayoutOptions } from '../../utils/computeGrid'
 import Html from '../../atoms/Html'
 
 export const LArticleLink = ({
-  colors,
-  passCSS,
+  // colors,
+  // passCSS,
   to,
   lang,
   className,
   children,
 }) => {
-  const { classicCombo, funkyCombo } = colors
+  // const { classicCombo, funkyCombo } = colors
 
   const css = {
     display: `flex`,
@@ -36,12 +36,12 @@ export const LArticleLink = ({
     },
     padding: `${rhythm(1)} 0`,
 
-    ...colors[classicCombo].style,
-    ':hover': {
-      ...colors[!to ? classicCombo : funkyCombo].style,
-      color: `${colors[!to ? classicCombo : funkyCombo].body}!important`,
-    },
-    ...passCSS,
+    // ...colors[classicCombo].style,
+    // ':hover': {
+    //   ...colors[!to ? classicCombo : funkyCombo].style,
+    //   color: `${colors[!to ? classicCombo : funkyCombo].body}!important`,
+    // },
+    // ...passCSS,
   }
 
   return (
@@ -66,7 +66,7 @@ export const LArticleClassicRow = ({
 }) => {
   const { funkyCombo } = colors
   const image = collectionItem.featuredImage
-  const { excerpt, html } = collectionItem.content.childMarkdownRemark
+  // const { excerpt, html } = collectionItem.content.childMarkdownRemark
 
   // Image on the 1st column
   // title date and excerpt in the 2nd column
@@ -181,14 +181,14 @@ const LArticle = ({
 }) => {
   return (
     <LArticleLink {...{ colors, passCSS, to, lang, className }}>
-      <LArticleClassicRow
+      {/* <LArticleClassicRow
         {...{
           colors,
           article: collectionItem,
           layout,
           parentMaxWidth: passCSS && passCSS.maxWidth,
         }}
-      />
+      /> */}
     </LArticleLink>
   )
 }

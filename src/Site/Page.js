@@ -13,34 +13,25 @@ import View from '../../libs/nuds-view-component'
 
 // import Layout from '../layouts/Layout'
 
-const usePage = ({ data, path, ...rest }) => {
-  const {
-    metadata: metadataData,
-    options: optionsData,
-    style: styleData,
-    scripts,
-    node_locale: pageLocale,
-  } = data
+const usePage = ({ data, locale, locales, path, ...rest }) => {
+  const { metadata, options, style, scripts } = data
   // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
-  const metadata = internalJson(metadataData)
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
 
-  const colors = useColors({ options, colorsLib })
-  const { classicCombo } = colors
+  // const colors = useColors({ options, colorsLib })
+  // const { classicCombo } = colors
 
   // const isSSR = typeof window === 'undefined'
-  const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
+  const isLandingPage = options?.isLandingPage || /\/landing\//.test(path)
 
   return {
     ...data,
     scripts,
-    pageLocale,
+    locale,
     metadata,
     options,
     style,
-    colors,
-    classicCombo,
+    // colors,
+    // classicCombo,
     isLandingPage,
     pathData: data.path,
     path,
@@ -49,13 +40,13 @@ const usePage = ({ data, path, ...rest }) => {
 }
 
 const Markup = ({
-  pageLocale,
+  locale,
   metadata,
   path,
   scripts,
   pathData,
-  colors,
-  classicCombo,
+  // colors,
+  // classicCombo,
   blocks,
   style,
   location,
@@ -63,7 +54,7 @@ const Markup = ({
   <>
     <SEO
       {...{
-        lang: pageLocale,
+        lang: locale,
         name: siteMetadata.name,
         title: metadata.title,
         description: metadata.description,
@@ -83,12 +74,10 @@ const Markup = ({
     </SEO>
     <div
       data-component="page"
-      css={
-        {
-          // ...colors[classicCombo].style,
-          // ...style,
-        }
-      }
+      css={{
+        // ...colors[classicCombo].style,
+        ...style,
+      }}
     >
       <For
         of={blocks}
@@ -104,17 +93,17 @@ const Markup = ({
           //   default:
           //     return null
           // }
-          switch (block.__typename) {
-            case `ContentfulSection`:
-              return <Section {...{ block, colors, location }} />
-            case `ContentfulBlockFreeText`:
-              return <FreeText {...{ block, colors, location }} />
-            case `ContentfulBlockForm`:
-              return <Form {...{ block, colors, location }} />
-            case `ContentfulBlockGallery`:
+          switch (block.contentType) {
+            case `section`:
+              return <Section {...{ block, location, locale }} />
+            case `blockFreeText`:
+              return <FreeText {...{ block, location }} />
+            case `blockForm`:
+              return <Form {...{ block, location }} />
+            case `blockGallery`:
               return <Gallery {...{ block }} />
-            case `ContentfulBlockReferences`:
-              return <References {...{ block, colors, location }} />
+            case `blockReferences`:
+              return <References {...{ block, location, locale }} />
             default:
               return null
           }
@@ -124,10 +113,10 @@ const Markup = ({
   </>
 )
 
-const Page = ({ data, location, path }) => (
+const Page = ({ data, locale, locales, location, path }) => (
   <View
     {...{
-      data: { data, location, path },
+      data: { data, locale, locales, location, path },
       useData: usePage,
       Markup,
     }}

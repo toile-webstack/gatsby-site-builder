@@ -6,33 +6,24 @@ const util = require('util')
 
 const { createPath } = require(`../../utils/utils.js`)
 
-const makeSrcSetContentful = ({ widths, baseSrc, aspectRatio }) => {
-  return widths
-    .map(w => `${baseSrc}&w=${w}&h=${w / aspectRatio} ${w}w`)
-    .join(', ')
-}
-
 const addFields = (contentType, fields, localesObj) => {
   const { all: locales, current: locale, default: defaultLocale } = localesObj
   switch (contentType) {
-    case 'collectionItem':
     case 'page': {
-      const name =
-        (fields.metadata && fields.metadata.name) || fields.path || fields.name
-      const slug = createPath(fields.path || fields.name)
+      const slug = createPath(fields.path)
       const pathShort = slug === `index` ? `/` : `/${slug}/`
       const pathLocalized =
         slug === `index` ? `/${locale}/` : `/${locale}/${slug}/`
       const path = locales.length > 1 ? pathLocalized : pathShort
-      return { ...fields, name, slug, pathShort, pathLocalized, path }
+      return { ...fields, slug, pathShort, pathLocalized, path }
     }
     case 'asset': {
       const {
         title,
+        fileName,
+        contentType: ct,
         file: {
-          fileName,
-          contentType: ct,
-          url: urlUnsafe,
+          url,
           details: {
             size,
             image: { width: naturalWidth, height: naturalHeight },
@@ -41,42 +32,30 @@ const addFields = (contentType, fields, localesObj) => {
       } = fields
 
       const aspectRatio = naturalWidth / naturalHeight
-      const url = `https:${urlUnsafe}?fit=crop&q=100`
-      const progJpeg = `${url}&fm=jpg&fl=progressive`
-      const src = ct === 'image/jpeg' ? progJpeg : url
-      const webp = `${url}&fm=webp`
+      const src = `https:${url}`
+      const webp = `https:${url}?fm=webp`
 
-      // TODO: max w should be dependent on naturalWidth
-      const widths = [250, 500, 750, 1000, 1250, 1500]
-      const srcSet = makeSrcSetContentful({ widths, baseSrc: src, aspectRatio })
-      const srcSetWebp = makeSrcSetContentful({
-        widths,
-        baseSrc: webp,
-        aspectRatio,
-      })
+      // { title: 'Brewery_JandrainJandrenouille',
+      //    file:
+      //      { url:
+      //     '//images.ctfassets.net/eeu0634yzxo7/5CofTmX6Wz6mbYfbcPynOK/7357a75d4b3da8045db11e99718e18b1/jbj.jpg',
+      //    details: { size: 111547, image: [Object] },
+      //    fileName: 'jbj.jpg',
+      //    contentType: 'image/jpeg' } }
 
-      const picture = {
-        sources: [
-          {
-            type: 'image/webp',
-            src: webp,
-            srcSet: srcSetWebp,
-            // don't forget sizes
-          },
-          {
-            type: contentType,
-            src,
-            srcSet,
-            // don't forget sizes
-          },
-        ],
-        img: {
-          type: contentType,
-          src,
-          srcSet,
-          // don't forget sizes
-        },
-      }
+      //   <picture>
+      //     <source srcset='paul_irish.jxr' type='image/vnd.ms-photo'>
+      //     <source srcset='paul_irish.jp2' type='image/jp2'>
+      //     <source srcset='paul_irish.webp' type='image/webp'>
+      //     <img src='paul_irish.jpg' alt='paul'>
+      // </picture>
+
+      // const i = (
+      //   <picture>
+      //     <source srcset="paul_irish.webp" type="image/webp" />
+      //     <img src="paul_irish.jpg" alt="paul" />
+      //   </picture>
+      // )
 
       return {
         name: title,
@@ -87,7 +66,6 @@ const addFields = (contentType, fields, localesObj) => {
         url: src,
         src,
         aspectRatio,
-        picture,
       }
     }
     default:
@@ -286,7 +264,6 @@ exports.createPages = async ({ actions }, { spaceId, accessToken, host }) => {
             cookie: cookieData,
             footer: footerData,
             locale,
-            locales,
           }
           const pageComponent = slash(pageTemplate)
 
@@ -299,7 +276,7 @@ exports.createPages = async ({ actions }, { spaceId, accessToken, host }) => {
             context,
           })
 
-          if (locales.length > 1 && code === defaultLocale) {
+          if (locales.length > 1 && locale === defaultLocale) {
             createRedirect({
               fromPath: page.pathShort,
               toPath: page.path,

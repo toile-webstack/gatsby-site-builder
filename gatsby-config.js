@@ -15,7 +15,12 @@ module.exports = {
     //     accessToken: process.env.contentfulAccessToken,
     //   },
     // },
-    `gatsby-plugin-layout`,
+    {
+      resolve: `gatsby-plugin-layout`,
+      options: {
+        component: require.resolve(`./src/Site/Layout`),
+      },
+    },
     {
       resolve: `gatsby-plugin-nprogress`,
       options: {

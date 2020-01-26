@@ -1,57 +1,92 @@
 import React from 'react'
-import { graphql } from 'gatsby'
+// import { graphql } from 'gatsby'
 import { For } from 'react-loops'
 
-import { mapStyle } from '../utils/processCss'
-// import { rhythm } from '../utils/typography'
-import {
-  addLayoutOptions,
-  // gridLayout,
-  // listItemStyle
-} from '../utils/computeGrid'
-import { internalJson, useColors } from '../utils'
+// import { mapStyle } from '../utils/processCss'
+// // import { rhythm } from '../utils/typography'
+// import {
+//   addLayoutOptions,
+//   // gridLayout,
+//   // listItemStyle
+// } from '../utils/computeGrid'
+// import { internalJson, useColors } from '../utils'
 
 import { FreeText, Form, Gallery, References } from '.'
-import { LSection } from '../t-layouts'
+// import { LSection } from '../t-layouts'
+import { Stack } from '../../libs/nuds-layout-primitives'
 
 const Section = ({
   block: section,
   location,
-  colors: colorsLib,
-  passCSS,
+  // colors: colorsLib,
+  // passCSS,
   className = '',
-  csss,
+  // csss,
   shortCodeMatchees,
   cookieButton,
+  locale,
+  locales,
 }) => {
   if (typeof section === `undefined` || !section) return null
 
-  const { options: optionsData, style: styleData, blocks } = section
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  const { options = {}, style, blocks } = section
 
-  const colors = useColors({ options, colorsLib })
-  const { isColored, classicCombo } = colors
-  const { id, name } = options
+  // const colors = useColors({ options, colorsLib })
+  // const { isColored, classicCombo } = colors
+  const { id, name, tag } = options
 
-  const parentMaxWidth = passCSS?.maxWidth || 1000
+  // const parentMaxWidth = passCSS?.maxWidth || 1000
 
-  const { layout, list } = addLayoutOptions(options, parentMaxWidth, blocks)
+  // const { layout, list } = addLayoutOptions(options, parentMaxWidth, blocks)
 
   return (
-    <LSection
+    <Stack
       {...{
         id,
         name,
+        as: tag,
         className: `block section ${className || ''}`,
         css: {
-          ...csss,
-          ...(isColored ? colors[classicCombo].style : {}),
+          // ...csss,
+          // ...(isColored ? colors[classicCombo].style : {}),
           ...style,
         },
       }}
     >
-      <div
+      <For
+        of={blocks}
+        as={block => {
+          const blockProps = {
+            key: block.id,
+            block,
+            // colors,
+            location,
+            // passCSS: itemStyle,
+          }
+
+          switch (block.contentType) {
+            case `blockFreeText`:
+              return (
+                <FreeText
+                  {...{
+                    ...blockProps,
+                    shortCodeMatchees,
+                    cookieButton,
+                  }}
+                />
+              )
+            case `blockForm`:
+              return <Form {...{ ...blockProps }} />
+            case `blockGallery`:
+              return <Gallery {...{ ...blockProps }} />
+            case `blockReferences`:
+              return <References {...{ ...blockProps, locale }} />
+            default:
+              return null
+          }
+        }}
+      />
+      {/* <div
         css={{
           alignItems: layout.align || `baseline`,
         }}
@@ -108,8 +143,8 @@ const Section = ({
               </div>
             )
           })}
-      </div>
-    </LSection>
+      </div> */}
+    </Stack>
   )
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 // import { graphql } from 'gatsby'
 
-import Page from '../structure/Page'
+import Page from '../Site/Page'
 
 const TemplatePage = ({
   // data: { contentfulPage: page } = {},
@@ -12,16 +12,13 @@ const TemplatePage = ({
     // settings: settingsData,
     page: pageData,
     locale: { code: locale },
+    locales,
   } = {},
 }) => {
   const page = JSON.parse(pageData)
-  // const { locale: pageLocale } = sys
-
-  console.log({ page })
-  return 'HOLA'
 
   if (!page.path) return null
-  return <Page {...{ data: page, location, path }} />
+  return <Page {...{ data: page, locale, locales, location, path }} />
 }
 
 export default TemplatePage
