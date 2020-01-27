@@ -4,12 +4,13 @@ import slugify from 'slugify'
 import axios from 'axios'
 // import qs from 'qs'
 import _ from 'lodash'
+import ReactMd from 'react-markdown/with-html'
 
-import { mapStyle } from '../utils/processCss'
+// import { mapStyle } from '../utils/processCss'
 // import { metadata as siteMetadata } from '../utils/siteSettings.json'
 // import { rhythm } from '../utils/typography'
 // import colors from "../utils/colors"
-import { internalJson, useColors } from '../utils'
+// import { internalJson, useColors } from '../utils'
 
 import Html from '../atoms/Html'
 
@@ -471,13 +472,10 @@ const useForm = ({
   // location,
   ...rest
 }) => {
-  const { options: optionsData, style: styleData, form: formData } = block
-  const form = internalJson(formData)
-  const options = internalJson(optionsData)
-  const style = mapStyle(internalJson(styleData))
+  const { options = {}, style, form } = block
 
-  const colors = useColors({ options, colorsLib })
-  const { isColored, classicCombo } = colors
+  // const colors = useColors({ options, colorsLib })
+  // const { isColored, classicCombo } = colors
   const { id, name } = options
 
   const formName = slugify(block.name.toLowerCase())
@@ -608,9 +606,9 @@ const useForm = ({
     style,
     id,
     // name,
-    colors,
-    isColored,
-    classicCombo,
+    // colors,
+    // isColored,
+    // classicCombo,
     formName,
     fields,
     successState,
@@ -819,48 +817,57 @@ const Markup = ({
   )
 
   const reactForm = (
-    <div>
-      <form
-        className={formName}
-        onSubmit={handleSubmit}
-        name={formName}
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
-      >
-        <input
-          css={{
-            // visibility: `hidden`,
-            position: `fixed`,
-            top: -9999,
-            left: -9999,
-            width: 1,
-            height: 1,
-          }}
-          type="text"
-          name="bot-field"
-          placeholder="Leave empty!"
-          key="bot-field"
-          value={formState[`bot-field`]}
-          onChange={fieldChange}
-        />
-        {reactFields}
-      </form>
-      {/* {this.props.block.form.after} */}
-    </div>
+    <form
+      className={formName}
+      onSubmit={handleSubmit}
+      name={formName}
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+    >
+      <input
+        css={{
+          // visibility: `hidden`,
+          position: `fixed`,
+          top: -9999,
+          left: -9999,
+          width: 1,
+          height: 1,
+        }}
+        type="text"
+        name="bot-field"
+        placeholder="Leave empty!"
+        key="bot-field"
+        value={formState[`bot-field`]}
+        onChange={fieldChange}
+      />
+      {reactFields}
+    </form>
   )
   const success = (
     <div className="formMessage success">
-      <Html html={successMessage.childMarkdownRemark.html} />
+      <ReactMd
+        {...{
+          source: successMessage,
+          escapeHtml: false,
+        }}
+      />
+      {/* <Html html={successMessage.childMarkdownRemark.html} /> */}
     </div>
   )
   const error = (
     <div className="formMessage error">
-      <Html html={errorMessage.childMarkdownRemark.html} />
+      <ReactMd
+        {...{
+          source: errorMessage,
+          escapeHtml: false,
+        }}
+      />
+      {/* <Html html={errorMessage.childMarkdownRemark.html} /> */}
     </div>
   )
 
   return form ? (
-    <div
+    <LBlockForm
       {...{
         id: idBlock,
         name: formName,
@@ -887,7 +894,7 @@ const Markup = ({
       {successState === ERROR && error}
       {successState === SUCCESS && success}
       {successState === PENDING && reactForm}
-    </div>
+    </LBlockForm>
   ) : null
 }
 

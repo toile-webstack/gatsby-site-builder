@@ -5,9 +5,10 @@ import ReactMd from 'react-markdown/with-html'
 // import { mapStyle } from '../utils/processCss'
 // import { internalJson, useColors } from '../utils'
 
-import Html from '../atoms/Html'
+// import Html from '../atoms/Html'
 
 import View from '../../libs/nuds-view-component'
+import { LBlockFreeText } from '../t-layouts'
 
 const useFreeText = ({ block, colors: colorsLib, ...rest }) => {
   // console.log(block)
@@ -41,14 +42,14 @@ const Markup = ({
   shortCodeMatchees,
   cookieButton,
 }) => (
-  <div
+  <LBlockFreeText
     {...{
       id,
       name,
       className: `block blockFreeText ${className || ''}`,
       css: {
         // ...(isColored ? colors[classicCombo].style : {}),
-        ...style,
+        // ...style,
         //
         // " a.button:hover": {
         //   ...this.colors[funkyContrastCombo].style,
@@ -71,7 +72,7 @@ const Markup = ({
       cookieButton({
         // style: colors[classicCombo].style
       })}
-  </div>
+  </LBlockFreeText>
 )
 
 const FreeText = ({ ...data }) => (

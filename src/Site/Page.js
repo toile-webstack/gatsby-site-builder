@@ -5,9 +5,11 @@ import { metadata as siteMetadata } from '../utils/siteSettings.json'
 
 import { Block, Section, FreeText, Form, Gallery, References } from '../blocks'
 
-import { SEO, Scripts } from '../atoms'
-import { mapStyle } from '../utils/processCss'
-import { colors as colorsLib, useColors, internalJson } from '../utils'
+// import { mapStyle } from '../utils/processCss'
+// import { colors as colorsLib, useColors, internalJson } from '../utils'
+// import { layoutStyles } from '../../libs/nuds-layout-primitives'
+import { LPage } from '../t-layouts'
+import Head from './Head'
 
 import View from '../../libs/nuds-view-component'
 
@@ -52,7 +54,7 @@ const Markup = ({
   location,
 }) => (
   <>
-    <SEO
+    <Head
       {...{
         lang: locale,
         name: siteMetadata.name,
@@ -61,55 +63,57 @@ const Markup = ({
         canonicalUrl: siteMetadata.url + path,
         // IDEA: use fullPath in sitePage fields for canonical url
         ogType: metadata.ogType,
+        //
+        scripts,
+        async: true,
+        dynamicOnly: true,
+        scriptsPrefix: pathData,
       }}
-    >
-      <Scripts
-        {...{
-          scripts,
-          async: true,
-          dynamicOnly: true,
-          idPrefix: pathData,
-        }}
-      />
-    </SEO>
-    <div
+    />
+    <LPage
       data-component="page"
-      css={{
-        // ...colors[classicCombo].style,
-        ...style,
-      }}
+      className="page"
+      css={
+        {
+          // ...colors[classicCombo].style,
+          // ...layoutStyles.stack({}),
+          // ...style,
+        }
+      }
     >
-      <For
-        of={blocks}
-        as={block => {
-          // switch (block.__typename) {
-          //   case `ContentfulSection`:
-          //   // return <Section {...{ block }} />
-          //   case `ContentfulBlockFreeText`:
-          //   case `ContentfulBlockForm`:
-          //   case `ContentfulBlockGallery`:
-          //   case `ContentfulBlockReferences`:
-          //     return <Block {...{ block }} />
-          //   default:
-          //     return null
-          // }
-          switch (block.contentType) {
-            case `section`:
-              return <Section {...{ block, location, locale }} />
-            case `blockFreeText`:
-              return <FreeText {...{ block, location }} />
-            case `blockForm`:
-              return <Form {...{ block, location }} />
-            case `blockGallery`:
-              return <Gallery {...{ block }} />
-            case `blockReferences`:
-              return <References {...{ block, location, locale }} />
-            default:
-              return null
-          }
-        }}
-      />
-    </div>
+      <div {...{ className: 'sections' }}>
+        <For
+          of={blocks}
+          as={block => {
+            // switch (block.__typename) {
+            //   case `ContentfulSection`:
+            //   // return <Section {...{ block }} />
+            //   case `ContentfulBlockFreeText`:
+            //   case `ContentfulBlockForm`:
+            //   case `ContentfulBlockGallery`:
+            //   case `ContentfulBlockReferences`:
+            //     return <Block {...{ block }} />
+            //   default:
+            //     return null
+            // }
+            switch (block.contentType) {
+              case `section`:
+                return <Section {...{ block, location, locale }} />
+              case `blockFreeText`:
+                return <FreeText {...{ block, location }} />
+              case `blockForm`:
+                return <Form {...{ block, location }} />
+              case `blockGallery`:
+                return <Gallery {...{ block }} />
+              case `blockReferences`:
+                return <References {...{ block, location, locale }} />
+              default:
+                return null
+            }
+          }}
+        />
+      </div>
+    </LPage>
   </>
 )
 

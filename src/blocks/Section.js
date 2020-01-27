@@ -12,8 +12,7 @@ import { For } from 'react-loops'
 // import { internalJson, useColors } from '../utils'
 
 import { FreeText, Form, Gallery, References } from '.'
-// import { LSection } from '../t-layouts'
-import { Stack } from '../../libs/nuds-layout-primitives'
+import { LSection } from '../t-layouts'
 
 const Section = ({
   block: section,
@@ -40,16 +39,16 @@ const Section = ({
   // const { layout, list } = addLayoutOptions(options, parentMaxWidth, blocks)
 
   return (
-    <Stack
+    <LSection
       {...{
         id,
         name,
         as: tag,
-        className: `block section ${className || ''}`,
+        className: `section ${className || ''}`,
         css: {
           // ...csss,
           // ...(isColored ? colors[classicCombo].style : {}),
-          ...style,
+          // ...style,
         },
       }}
     >
@@ -144,7 +143,7 @@ const Section = ({
             )
           })}
       </div> */}
-    </Stack>
+    </LSection>
   )
 }
 

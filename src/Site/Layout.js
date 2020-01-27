@@ -36,6 +36,8 @@ import CookieAlert from '../atoms/CookieAlert'
 
 import { SEO, Scripts } from '../atoms'
 import { LLayout } from '../t-layouts'
+import Head from './Head'
+import './reset.css'
 
 // TODO: Handle Contact page differently
 // siteMapping.push({
@@ -115,7 +117,7 @@ const DefaultLayout = ({
         ...style,
       }}
     >
-      <SEO
+      <Head
         {...{
           defer: false,
           defaultTitle: metadata.name,
@@ -130,6 +132,11 @@ const DefaultLayout = ({
           socialImage: socialImageUrl,
           // IDEA: use fullPath in sitePage fields for canonical url
           ogType: metadata.ogType || 'website',
+          //
+          scripts,
+          async: true,
+          dynamicOnly: true,
+          scriptsPrefix: 'layout',
         }}
       >
         {/* From HTML.js */}
@@ -138,15 +145,7 @@ const DefaultLayout = ({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* TODO: Check if what is up here is not already implemented */}
         {/* End from HTML.js */}
-        <Scripts
-          {...{
-            scripts,
-            async: true,
-            dynamicOnly: true,
-            idPrefix: 'layout',
-          }}
-        />
-      </SEO>
+      </Head>
 
       {isLandingPage ? null : (
         <MenuReel
@@ -161,7 +160,8 @@ const DefaultLayout = ({
       {/* {envIsDev && <ColorPalettesDemo />} */}
       <div className="layout-wrapper">
         {/* wrapper was useful for sidebar */}
-        <main className="layout-main">{children}</main>
+        {/* <main className="layout-main">{children}</main> */}
+        {children}
       </div>
       {isLandingPage ? null : <Footer section={footer} />}
       {!cookieAlert ? null : <CookieAlert section={cookieAlert} />}

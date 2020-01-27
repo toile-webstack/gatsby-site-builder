@@ -21,9 +21,8 @@ import Modal from '../atoms/Modal'
 // import LinkSimple from '../atoms/LinkSimple'
 import { LinkWrapper } from '../atoms/Link'
 
-// import { LBlockGallery } from '../t-layouts'
+import { LBlockGallery } from '../t-layouts'
 
-import { Box, Ratio, Grid } from '../../libs/nuds-layout-primitives'
 import View from '../../libs/nuds-view-component'
 import Image from '../atoms/Image'
 
@@ -216,7 +215,7 @@ const Markup = ({
   links,
 }) => {
   return (
-    <Grid
+    <LBlockGallery
       {...{
         id,
         name,
@@ -229,12 +228,10 @@ const Markup = ({
           // width: `100%`,
           // maxWidth: `1000px`,
           // margin: `0 auto`,
-
           // alignItems: layout.align || `baseline`,
-
           // ...passCSS,
           // ...(isColored ? colors[classicCombo].style : {}),
-          ...style,
+          // ...style,
           // " a.button:hover": {
           //   ...this.colors[funkyContrastCombo].style,
           //   borderColor: this.colors[classicCombo].border
@@ -253,7 +250,7 @@ const Markup = ({
         const to = links[imCount]
         return (
           <LinkWrapper
-            tag={Ratio}
+            // tag={Ratio}
             key={image.id}
             onClick={() => {
               if (options.popup) {
@@ -297,7 +294,7 @@ const Markup = ({
           </LinkWrapper>
         )
       })}
-    </Grid>
+    </LBlockGallery>
   )
 }
 

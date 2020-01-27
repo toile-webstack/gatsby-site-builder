@@ -1,5 +1,8 @@
 import React from 'react'
 // import Layout from './Layout'
+import Page from './Page'
+import Head from './Head'
+// import Page from './Page'
 import Section from './Section'
 
 // export { Layout }
@@ -15,13 +18,13 @@ import Section from './Section'
 //     </Markup>
 // }
 
-const Lay = ({ children }) => <div>{children}</div>
-
-const Site = () => {
+const Site = ({ page, locale, locales, location, path }) => {
   return (
-    <Lay>
-      <Section />
-      {/* <Head>
+    <>
+      <Head />
+      <Page {...{ data: page, locale, locales, location, path }}>
+        <Section />
+        {/* <Head>
         <Meta></Meta>
         <Scripts></Scripts>
       </Head>
@@ -40,7 +43,8 @@ const Site = () => {
         </Body>
       </Page>
       <Footer></Footer> */}
-    </Lay>
+      </Page>
+    </>
   )
 }
 
