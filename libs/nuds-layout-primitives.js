@@ -243,8 +243,10 @@ export const layoutStyles = {
     min = '250px', // A CSS length value representing x in minmax(min(x, 100%), 1fr)
     space = ['1rem', 'var(--s0, 1rem)'], // The space (grid-gap) between the grid children / cells
     applyAnyway = false,
-    flexboxInstead,
-    flexBasis,
+    useFlexbox = false,
+    flexBasis = null,
+    flexGrow,
+    justifyContent,
   } = {}) => {
     const gtc = {
       gridTemplateColumns: mapIfArray(
@@ -253,16 +255,19 @@ export const layoutStyles = {
       ),
     }
 
-    return flexboxInstead
+    return useFlexbox
       ? {
           overflow: 'hidden',
           [`> ${star}`]: {
             display: 'flex',
             flexWrap: 'wrap',
+            justifyContent: justifyContent || 'baseline', // NOTE: interesting?
             margin: mapIfArray(space, s => `calc(${s} / 2 * -1)`),
             [`> ${star}`]: {
               flex: `1 1`,
+              flexGrow: typeof flexGrow !== 'undefined' ? flexGrow : 1, // NOTE: interesting?
               flexBasis: flexBasis || min,
+              // maxWidth: `calc(${flexBasis || min} * 2)`, // NOTE: interesting?
               margin: mapIfArray(space, s => `calc(${s} / 2)`),
             },
           },
@@ -319,20 +324,24 @@ export const layoutStyles = {
 
   ratio: ({
     ratio = '16/9', // The element's aspect ratio
+    fit = 'cover', // Object-fit for images
   }) => ({
     position: 'relative',
     // '& > :first-child': {
     //   width: '100%',
     // },
-    '& > img': {
-      height: 'auto',
+    '& > img, & > picture > img': {
+      // height: 'auto',
+      height: '100%',
+      width: '100%',
+      objectFit: fit,
     },
     '&::before': {
       content: '""',
       display: 'block',
       paddingBottom: mapIfArray(ratio, r => {
-        const [num, den] = r.split('/')
-        return `calc(100% / (${den} / ${num}))`
+        const [num, den = 1] = `${r}`.split('/')
+        return `calc(100% / (${num} / ${den}))`
       }),
     },
     '& > :first-child': {
@@ -539,9 +548,11 @@ export const Grid = ({
   min = '250px',
   space = ['1rem', 'var(--s0, 1rem)'],
   applyAnyway = false,
-  flexboxInstead: fi = false,
+  useFlexbox: uf = false,
   flexboxFallback = false,
   flexBasis = null,
+  flexGrow,
+  justifyContent,
   children,
   css,
   as,
@@ -552,8 +563,8 @@ export const Grid = ({
     min,
   })
 
-  const flexboxInstead =
-    fi || (!applyAnyway && flexboxFallback && !supportsResizeObserver)
+  const useFlexbox =
+    uf || (!applyAnyway && flexboxFallback && !supportsResizeObserver)
 
   return jsx(
     as || 'div',
@@ -567,15 +578,17 @@ export const Grid = ({
             min,
             space,
             applyAnyway,
-            flexboxInstead,
+            useFlexbox,
             flexBasis,
+            flexGrow,
+            justifyContent,
           }),
         },
         css,
       ],
       ...props,
     },
-    flexboxInstead ? jsx('div', {}, children) : children
+    useFlexbox ? jsx('div', {}, children) : children
   )
   // return jsxHelper({
   //   layoutComp: 'grid',
@@ -596,11 +609,12 @@ export const Frame = ({ ratio, ...rest }) =>
     ...rest,
   })
 
-export const Ratio = ({ ratio, ...rest }) =>
+export const Ratio = ({ ratio, fit, ...rest }) =>
   jsxHelper({
     layoutComp: 'ratio',
     layoutProps: {
       ratio,
+      fit,
     },
     ...rest,
   })

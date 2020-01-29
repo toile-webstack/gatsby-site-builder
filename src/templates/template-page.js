@@ -1,7 +1,8 @@
 import React from 'react'
 // import { graphql } from 'gatsby'
 
-import Page from '../Site/Page'
+// import Page from '../Site/Page'
+import PageTree from '../components/PageTree'
 // import Site from '../Site'
 
 const TemplatePage = ({
@@ -10,17 +11,17 @@ const TemplatePage = ({
   // children,
   path,
   pageContext: {
-    // settings: settingsData,
-    page: pageData,
+    settings: settingsJson,
+    page: pageJson,
     locale: { code: locale },
     locales,
   } = {},
 }) => {
-  const page = JSON.parse(pageData)
+  const page = JSON.parse(pageJson)
+  const settings = JSON.parse(settingsJson)
 
-  if (!page.path) return null
-  return <Page {...{ data: page, locale, locales, location, path }} />
-  // return <Site {...{ page, locale, locales, location, path }} />
+  if (!page?.path) return null
+  return <PageTree {...{ page, settings, locale, locales, location, path }} />
 }
 
 export default TemplatePage
