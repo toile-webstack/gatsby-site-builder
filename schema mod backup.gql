@@ -1,0 +1,623 @@
+### Type definitions saved at 2019-12-19T20:00:50.575Z ###
+
+type ImageSharp implements Node @childOf(types: ["File"]) @dontInfer {
+  fixed(width: Int, height: Int, base64Width: Int, jpegProgressive: Boolean = true, pngCompressionSpeed: Int = 4, grayscale: Boolean = false, duotone: DuotoneGradient, traceSVG: Potrace, quality: Int, toFormat: ImageFormat = NO_CHANGE, toFormatBase64: ImageFormat = NO_CHANGE, cropFocus: ImageCropFocus = ATTENTION, fit: ImageFit = COVER, background: String = "rgba(0,0,0,1)", rotate: Int = 0, trim: Float = 0): ImageSharpFixed
+  resolutions(width: Int, height: Int, base64Width: Int, jpegProgressive: Boolean = true, pngCompressionSpeed: Int = 4, grayscale: Boolean = false, duotone: DuotoneGradient, traceSVG: Potrace, quality: Int, toFormat: ImageFormat = NO_CHANGE, toFormatBase64: ImageFormat = NO_CHANGE, cropFocus: ImageCropFocus = ATTENTION, fit: ImageFit = COVER, background: String = "rgba(0,0,0,1)", rotate: Int = 0, trim: Float = 0): ImageSharpResolutions @deprecated(reason: "Resolutions was deprecated in Gatsby v2. It's been renamed to \"fixed\" https://example.com/write-docs-and-fix-this-example-link")
+  fluid(
+    maxWidth: Int
+    maxHeight: Int
+    base64Width: Int
+    grayscale: Boolean = false
+    jpegProgressive: Boolean = true
+    pngCompressionSpeed: Int = 4
+    duotone: DuotoneGradient
+    traceSVG: Potrace
+    quality: Int
+    toFormat: ImageFormat = NO_CHANGE
+    toFormatBase64: ImageFormat = NO_CHANGE
+    cropFocus: ImageCropFocus = ATTENTION
+    fit: ImageFit = COVER
+    background: String = "rgba(0,0,0,1)"
+    rotate: Int = 0
+    trim: Float = 0
+    sizes: String = ""
+
+    """
+    A list of image widths to be generated. Example: [ 200, 340, 520, 890 ]
+    """
+    srcSetBreakpoints: [Int] = []
+  ): ImageSharpFluid
+  sizes(
+    maxWidth: Int
+    maxHeight: Int
+    base64Width: Int
+    grayscale: Boolean = false
+    jpegProgressive: Boolean = true
+    pngCompressionSpeed: Int = 4
+    duotone: DuotoneGradient
+    traceSVG: Potrace
+    quality: Int
+    toFormat: ImageFormat = NO_CHANGE
+    toFormatBase64: ImageFormat = NO_CHANGE
+    cropFocus: ImageCropFocus = ATTENTION
+    fit: ImageFit = COVER
+    background: String = "rgba(0,0,0,1)"
+    rotate: Int = 0
+    trim: Float = 0
+    sizes: String = ""
+
+    """
+    A list of image widths to be generated. Example: [ 200, 340, 520, 890 ]
+    """
+    srcSetBreakpoints: [Int] = []
+  ): ImageSharpSizes @deprecated(reason: "Sizes was deprecated in Gatsby v2. It's been renamed to \"fluid\" https://example.com/write-docs-and-fix-this-example-link")
+  original: ImageSharpOriginal
+  resize(width: Int, height: Int, quality: Int, jpegProgressive: Boolean = true, pngCompressionLevel: Int = 9, pngCompressionSpeed: Int = 4, grayscale: Boolean = false, duotone: DuotoneGradient, base64: Boolean = false, traceSVG: Potrace, toFormat: ImageFormat = NO_CHANGE, cropFocus: ImageCropFocus = ATTENTION, fit: ImageFit = COVER, background: String = "rgba(0,0,0,1)", rotate: Int = 0, trim: Float = 0): ImageSharpResize
+}
+
+type ImageSharpFixed {
+  base64: String
+  tracedSVG: String
+  aspectRatio: Float
+  width: Float
+  height: Float
+  src: String
+  srcSet: String
+  srcWebp: String
+  srcSetWebp: String
+  originalName: String
+}
+
+input DuotoneGradient {
+  highlight: String!
+  shadow: String!
+  opacity: Int
+}
+
+input Potrace {
+  turnPolicy: PotraceTurnPolicy
+  turdSize: Float
+  alphaMax: Float
+  optCurve: Boolean
+  optTolerance: Float
+  threshold: Int
+  blackOnWhite: Boolean
+  color: String
+  background: String
+}
+
+enum PotraceTurnPolicy {
+  TURNPOLICY_BLACK
+  TURNPOLICY_WHITE
+  TURNPOLICY_LEFT
+  TURNPOLICY_RIGHT
+  TURNPOLICY_MINORITY
+  TURNPOLICY_MAJORITY
+}
+
+enum ImageFormat {
+  NO_CHANGE
+  JPG
+  PNG
+  WEBP
+}
+
+enum ImageCropFocus {
+  CENTER
+  NORTH
+  NORTHEAST
+  EAST
+  SOUTHEAST
+  SOUTH
+  SOUTHWEST
+  WEST
+  NORTHWEST
+  ENTROPY
+  ATTENTION
+}
+
+enum ImageFit {
+  COVER
+  CONTAIN
+  FILL
+}
+
+type ImageSharpResolutions {
+  base64: String
+  tracedSVG: String
+  aspectRatio: Float
+  width: Float
+  height: Float
+  src: String
+  srcSet: String
+  srcWebp: String
+  srcSetWebp: String
+  originalName: String
+}
+
+type ImageSharpFluid {
+  base64: String
+  tracedSVG: String
+  aspectRatio: Float
+  src: String
+  srcSet: String
+  srcWebp: String
+  srcSetWebp: String
+  sizes: String
+  originalImg: String
+  originalName: String
+  presentationWidth: Int
+  presentationHeight: Int
+}
+
+type ImageSharpSizes {
+  base64: String
+  tracedSVG: String
+  aspectRatio: Float
+  src: String
+  srcSet: String
+  srcWebp: String
+  srcSetWebp: String
+  sizes: String
+  originalImg: String
+  originalName: String
+  presentationWidth: Int
+  presentationHeight: Int
+}
+
+type ImageSharpOriginal {
+  width: Float
+  height: Float
+  src: String
+}
+
+type ImageSharpResize {
+  src: String
+  tracedSVG: String
+  width: Int
+  height: Int
+  aspectRatio: Float
+  originalName: String
+}
+
+type MarkdownHeading {
+  value: String
+  depth: Int
+}
+
+enum MarkdownHeadingLevels {
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
+}
+
+enum MarkdownExcerptFormats {
+  PLAIN
+  HTML
+  MARKDOWN
+}
+
+type MarkdownWordCount {
+  paragraphs: Int
+  sentences: Int
+  words: Int
+}
+
+type MarkdownRemark implements Node @childOf(mimeTypes: ["text/markdown", "text/x-markdown"], types: [], many: false) @dontInfer {
+  frontmatter: MarkdownRemarkFrontmatter
+  excerpt: String
+  rawMarkdownBody: String
+}
+
+type MarkdownRemarkFrontmatter {
+  title: String
+}
+
+type ContentfulContentType implements Node @dontInfer {
+  name: String
+  displayField: String
+  description: String
+}
+
+type ContentfulSettings implements Node @dontInfer {
+  name: String
+  menu: [ContentfulPage] @link(by: "id", from: "menu___NODE")
+  favicon: ContentfulAsset @link(by: "id", from: "favicon___NODE")
+  facebookImage: ContentfulAsset @link(by: "id", from: "facebookImage___NODE")
+  scripts: [ContentfulScript] @link(by: "id", from: "scripts___NODE")
+  metadata: contentfulSettingsMetadataJsonNode @link(by: "id", from: "metadata___NODE")
+  colors: contentfulSettingsColorsJsonNode @link(by: "id", from: "colors___NODE")
+  fonts: contentfulSettingsFontsJsonNode @link(by: "id", from: "fonts___NODE")
+  contact: contentfulSettingsContactJsonNode @link(by: "id", from: "contact___NODE")
+  options: contentfulSettingsOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulSettingsStyleJsonNode @link(by: "id", from: "style___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  fields: ContentfulSettingsFields
+}
+
+type ContentfulPage implements Node @dontInfer {
+  path: String
+  blocks: [ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulSectionUnion] @link(by: "id", from: "blocks___NODE")
+  settings: [ContentfulSettings] @link(by: "id", from: "settings___NODE")
+  metadata: contentfulPageMetadataJsonNode @link(by: "id", from: "metadata___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  fields: ContentfulPageFields
+  block___references: [ContentfulBlockReferences] @link(by: "id", from: "block - references___NODE") @proxy(from: "block - references___NODE")
+  options: contentfulPageOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulPageStyleJsonNode @link(by: "id", from: "style___NODE")
+  scripts: [ContentfulScript] @link(by: "id", from: "scripts___NODE")
+}
+
+union ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulSectionUnion = ContentfulBlockForm | ContentfulBlockFreeText | ContentfulBlockGallery | ContentfulBlockReferences | ContentfulSection
+
+type contentfulPageMetadataJsonNode implements Node @dontInfer
+
+type ContentfulPageFields {
+  menuName: String
+  shortPath: String
+  localizedPath: String
+  locale: String
+}
+
+type ContentfulBlockReferences implements Node @dontInfer {
+  name: String
+  references: [ContentfulCollectionItemContentfulPageUnion] @link(by: "id", from: "references___NODE")
+  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
+  options: contentfulBlockReferencesOptionsJsonNode @link(by: "id", from: "options___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+  style: contentfulBlockReferencesStyleJsonNode @link(by: "id", from: "style___NODE")
+}
+
+union ContentfulCollectionItemContentfulPageUnion = ContentfulCollectionItem | ContentfulPage
+
+type ContentfulSection implements Node @dontInfer {
+  name: String
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+  style: contentfulSectionStyleJsonNode @link(by: "id", from: "style___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  blocks: [ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulCollectionItemUnion] @link(by: "id", from: "blocks___NODE")
+  options: contentfulSectionOptionsJsonNode @link(by: "id", from: "options___NODE")
+}
+
+type contentfulSectionStyleJsonNode implements Node @dontInfer
+
+union ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulCollectionItemUnion = ContentfulBlockForm | ContentfulBlockFreeText | ContentfulBlockGallery | ContentfulBlockReferences | ContentfulCollectionItem
+
+type contentfulSectionOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockReferencesOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockReferencesStyleJsonNode implements Node @dontInfer
+
+type contentfulPageOptionsJsonNode implements Node @dontInfer
+
+type contentfulPageStyleJsonNode implements Node @dontInfer
+
+type ContentfulScript implements Node @dontInfer {
+  name: String
+  src: String
+  type: String
+  charset: String
+  settings: [ContentfulSettings] @link(by: "id", from: "settings___NODE")
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+  collection_item: [ContentfulCollectionItem] @link(by: "id", from: "collection item___NODE") @proxy(from: "collection item___NODE")
+  content: contentfulScriptContentTextNode @link(by: "id", from: "content___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+}
+
+type ContentfulCollectionItem implements Node @dontInfer {
+  name: String
+  type: String
+  datePublished: Date @dateformat
+  dateLastEdit: Date @dateformat
+  author: String
+  categories: [String]
+  featuredImage: ContentfulAsset @link(by: "id", from: "featuredImage___NODE")
+  gallery: [ContentfulAsset] @link(by: "id", from: "gallery___NODE")
+  scripts: [ContentfulScript] @link(by: "id", from: "scripts___NODE")
+  block___references: [ContentfulBlockReferences] @link(by: "id", from: "block - references___NODE") @proxy(from: "block - references___NODE")
+  data: contentfulCollectionItemDataJsonNode @link(by: "id", from: "data___NODE")
+  content: contentfulCollectionItemContentTextNode @link(by: "id", from: "content___NODE")
+  metadata: contentfulCollectionItemMetadataJsonNode @link(by: "id", from: "metadata___NODE")
+  options: contentfulCollectionItemOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulCollectionItemStyleJsonNode @link(by: "id", from: "style___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  fields: ContentfulCollectionItemFields
+  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
+}
+
+type ContentfulAsset implements Node @dontInfer {
+  contentful_id: String
+  file: ContentfulAssetFile
+  title: String
+  description: String
+  node_locale: String
+}
+
+type ContentfulAssetFile {
+  url: String
+  details: ContentfulAssetFileDetails
+  fileName: String
+  contentType: String
+}
+
+type ContentfulAssetFileDetails {
+  size: Int
+  image: ContentfulAssetFileDetailsImage
+}
+
+type ContentfulAssetFileDetailsImage {
+  width: Int
+  height: Int
+}
+
+type contentfulCollectionItemDataJsonNode implements Node @dontInfer
+
+type contentfulCollectionItemContentTextNode implements Node @dontInfer {
+  content: String
+}
+
+type contentfulCollectionItemMetadataJsonNode implements Node @dontInfer
+
+type contentfulCollectionItemOptionsJsonNode implements Node @dontInfer
+
+type contentfulCollectionItemStyleJsonNode implements Node @dontInfer
+
+type ContentfulCollectionItemFields {
+  menuName: String
+  shortPath: String
+  localizedPath: String
+  locale: String
+}
+
+type contentfulScriptContentTextNode implements Node @dontInfer {
+  content: String
+}
+
+type contentfulSettingsMetadataJsonNode implements Node @dontInfer
+
+type contentfulSettingsColorsJsonNode implements Node @dontInfer {
+  palettes: [contentfulSettingsColorsJsonNodePalettes]
+  mainCombo: String
+  menuCombo: String
+  footerCombo: String
+}
+
+type contentfulSettingsColorsJsonNodePalettes {
+  name: String
+  neutral: String
+  primary: String
+  secondary: String
+}
+
+type contentfulSettingsFontsJsonNode implements Node @dontInfer {
+  body: [String]
+  header: [String]
+}
+
+type contentfulSettingsContactJsonNode implements Node @dontInfer {
+  name: String
+  email: String
+  phone: String
+  github: String
+  facebook: String
+  linkedin: String
+  instagram: String
+}
+
+type contentfulSettingsOptionsJsonNode implements Node @dontInfer
+
+type contentfulSettingsStyleJsonNode implements Node @dontInfer
+
+type ContentfulSettingsFields {
+  defaultLocale: String
+  locale: String
+}
+
+type ContentfulBlockFreeText implements Node @dontInfer {
+  name: String
+  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
+  main: contentfulBlockFreeTextMainTextNode @link(by: "id", from: "main___NODE")
+  options: contentfulBlockFreeTextOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulBlockFreeTextStyleJsonNode @link(by: "id", from: "style___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+}
+
+type contentfulBlockFreeTextMainTextNode implements Node @dontInfer {
+  main: String
+}
+
+type contentfulBlockFreeTextOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockFreeTextStyleJsonNode implements Node @dontInfer
+
+type ContentfulBlog implements Node @dontInfer {
+  name: String
+  datePublished: Date @dateformat
+  dateLastEdit: Date @dateformat
+  categories: [String]
+  featuredImage: ContentfulAsset @link(by: "id", from: "featuredImage___NODE")
+  gallery: [ContentfulAsset] @link(by: "id", from: "gallery___NODE")
+  content: contentfulBlogContentTextNode @link(by: "id", from: "content___NODE")
+  options: contentfulBlogOptionsJsonNode @link(by: "id", from: "options___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  metadata: contentfulBlogMetadataJsonNode @link(by: "id", from: "metadata___NODE")
+  style: contentfulBlogStyleJsonNode @link(by: "id", from: "style___NODE")
+}
+
+type contentfulBlogContentTextNode implements Node @dontInfer {
+  content: String
+}
+
+type contentfulBlogOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlogMetadataJsonNode implements Node @dontInfer
+
+type contentfulBlogStyleJsonNode implements Node @dontInfer
+
+type ContentfulBlockForm implements Node @dontInfer {
+  name: String
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+  form: contentfulBlockFormFormJsonNode @link(by: "id", from: "form___NODE")
+  successMessage: contentfulBlockFormSuccessMessageTextNode @link(by: "id", from: "successMessage___NODE")
+  errorMessage: contentfulBlockFormErrorMessageTextNode @link(by: "id", from: "errorMessage___NODE")
+  options: contentfulBlockFormOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulBlockFormStyleJsonNode @link(by: "id", from: "style___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
+}
+
+type contentfulBlockFormFormJsonNode implements Node @dontInfer {
+  formFields: [contentfulBlockFormFormJsonNodeFormFields]
+}
+
+type contentfulBlockFormFormJsonNodeFormFields {
+  name: String
+  rows: String
+  type: String
+  label: String
+  value: String
+  checked: String
+  required: String
+  placeholder: String
+  options: [contentfulBlockFormFormJsonNodeFormFieldsOptions]
+  text: String
+}
+
+type contentfulBlockFormFormJsonNodeFormFieldsOptions {
+  label: String
+  value: String
+  checked: String
+}
+
+type contentfulBlockFormSuccessMessageTextNode implements Node @dontInfer {
+  successMessage: String
+}
+
+type contentfulBlockFormErrorMessageTextNode implements Node @dontInfer {
+  errorMessage: String
+}
+
+type contentfulBlockFormOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockFormStyleJsonNode implements Node @dontInfer
+
+type ContentfulBlockGallery implements Node @dontInfer {
+  name: String
+  gallery: [ContentfulAsset] @link(by: "id", from: "gallery___NODE")
+  page: [ContentfulPage] @link(by: "id", from: "page___NODE")
+  section: [ContentfulSection] @link(by: "id", from: "section___NODE")
+  options: contentfulBlockGalleryOptionsJsonNode @link(by: "id", from: "options___NODE")
+  style: contentfulBlockGalleryStyleJsonNode @link(by: "id", from: "style___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+}
+
+type contentfulBlockGalleryOptionsJsonNode implements Node @dontInfer
+
+type contentfulBlockGalleryStyleJsonNode implements Node @dontInfer
+
+type ContentfulPartners implements Node @dontInfer {
+  name: String
+  featuredImage: ContentfulAsset @link(by: "id", from: "featuredImage___NODE")
+  gallery: [ContentfulAsset] @link(by: "id", from: "gallery___NODE")
+  content: contentfulPartnersContentTextNode @link(by: "id", from: "content___NODE")
+  options: contentfulPartnersOptionsJsonNode @link(by: "id", from: "options___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+}
+
+type contentfulPartnersContentTextNode implements Node @dontInfer {
+  content: String
+}
+
+type contentfulPartnersOptionsJsonNode implements Node @dontInfer
+
+type ContentfulTestimonials implements Node @dontInfer {
+  name: String
+  author: String
+  featuredImage: ContentfulAsset @link(by: "id", from: "featuredImage___NODE")
+  content: contentfulTestimonialsContentTextNode @link(by: "id", from: "content___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+  type: String
+  gallery: [ContentfulAsset] @link(by: "id", from: "gallery___NODE")
+  options: contentfulTestimonialsOptionsJsonNode @link(by: "id", from: "options___NODE")
+}
+
+type contentfulTestimonialsContentTextNode implements Node @dontInfer {
+  content: String
+}
+
+type contentfulTestimonialsOptionsJsonNode implements Node @dontInfer
+
+type ContentfulEvent implements Node @dontInfer {
+  name: String
+  datePublished: Date @dateformat
+  categories: [String]
+  featuredImage: ContentfulAsset @link(by: "id", from: "featuredImage___NODE")
+  gallery: [ContentfulAsset] @link(by: "id", from: "gallery___NODE")
+  content: contentfulEventContentTextNode @link(by: "id", from: "content___NODE")
+  options: contentfulEventOptionsJsonNode @link(by: "id", from: "options___NODE")
+  spaceId: String
+  contentful_id: String
+  createdAt: Date @dateformat
+  updatedAt: Date @dateformat
+  node_locale: String
+}
+
+type contentfulEventContentTextNode implements Node @dontInfer {
+  content: String
+}
+
+type contentfulEventOptionsJsonNode implements Node @dontInfer

@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Img from 'gatsby-image'
+import For from 'react-loops'
 // import 'moment/locale/fr'
 
 import { rhythm } from '../utils/typography'
@@ -10,11 +11,11 @@ import { rhythm } from '../utils/typography'
 //   listItemStyle,
 // } from '../utils/computeGrid'
 
+import { Section, FreeText, Form, Gallery, References } from '../blocks'
+
 import Html from '../atoms/Html'
 
 import { metadata as siteMetadata } from '../utils/siteSettings.json'
-
-import { Gallery } from '../blocks'
 
 import { SEO, Scripts } from '../atoms'
 import { mapStyle } from '../utils/processCss'
@@ -66,7 +67,22 @@ const ItemPageTemplate = ({
   // const isSSR = typeof window === 'undefined'
   // const isLandingPage = options.isLandingPage || /\/landing\//.test(path)
 
-  const { lang, hideFeaturedImage, hideTitle, hideDate, hideGallery } = options
+  const {
+    lang,
+    hideFeaturedImage,
+    hideTitle,
+    hideDate,
+    hideGallery,
+    hideCategories,
+    blocksOnly,
+  } = options
+  const showFeaturedImage =
+    !blocksOnly && !hideFeaturedImage && collectionItem.featuredImage
+  const showTitle = !blocksOnly && !hideTitle
+  const showDate = !blocksOnly && !hideDate
+  const showGallery = !blocksOnly && !hideGallery && collectionItem.gallery
+  const showCategories = !hideCategories
+  const showContent = !blocksOnly && collectionItem?.content
 
   const galleryOptions = options.gallery || {}
   galleryOptions.layout = galleryOptions.layout || {}
@@ -121,91 +137,124 @@ const ItemPageTemplate = ({
           ...style,
         }}
       >
-        <div
-          css={{
-            display: `flex`,
-            flexFlow: `column`,
-            alignItems: `flex-start`,
-            ' .gatsby-image-wrapper': {
-              width: `100%`,
-            },
-          }}
-        >
-          {collectionItem.featuredImage && !hideFeaturedImage && (
-            <Img
-              css={{
-                // width: `1000px`,
-                // maxWidth: `400px`,
-                maxHeight: `300px`,
-              }}
-              title={collectionItem.featuredImage.title}
-              sizes={collectionItem.featuredImage.fluid}
-            />
-          )}
-          <h1
-            css={{
-              marginBottom: 0,
-            }}
-          >
-            {collectionItem.name}
-          </h1>
-          <div
-            {...{
-              css: {
-                '& time': {
-                  // ...scale(-0.2),
-                  // lineHeight: rhythm(1 / 2),
-                  // marginBottom: rhythm(1 / 2),
-                },
-                '& .eventdates-time, & .eventdates-chevron': {
-                  color: colors[funkyCombo].body,
-                },
-              },
-            }}
-          >
-            <EventDates
-              {...{
-                locale: pageLocale,
-                start: datePublished,
-                end: dateLastEdit,
-              }}
-            />
-          </div>
-          <hr
-            css={{
-              width: `100%`,
-              height: 2,
-              background: colors[funkyCombo].border,
-              // margin: `${rhythm(2)}`
-            }}
-          />
+        {(showFeaturedImage || showTitle || showDate || showCategories) && (
           <div
             css={{
               display: `flex`,
-              flexFlow: `row wrap`,
+              flexFlow: `column`,
+              alignItems: `flex-start`,
+              ' .gatsby-image-wrapper': {
+                width: `100%`,
+              },
             }}
           >
-            {categories.map(({ label: cat, raw }) => {
-              return (
-                <div
-                  key={raw}
-                  css={{
-                    margin: `${rhythm(1 / 4)} ${rhythm(1 / 8)}`,
-                    padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
-                    ...colors[funkyContrastCombo].style,
+            {showFeaturedImage && (
+              <Img
+                css={{
+                  // width: `1000px`,
+                  // maxWidth: `400px`,
+                  maxHeight: `300px`,
+                }}
+                title={collectionItem.featuredImage.title}
+                sizes={collectionItem.featuredImage.fluid}
+              />
+            )}
+            {showTitle && (
+              <h1
+                css={{
+                  marginBottom: 0,
+                }}
+              >
+                {collectionItem.name}
+              </h1>
+            )}
+            {showDate && (
+              <div
+                {...{
+                  css: {
+                    '& time': {
+                      // ...scale(-0.2),
+                      // lineHeight: rhythm(1 / 2),
+                      // marginBottom: rhythm(1 / 2),
+                    },
+                    '& .eventdates-time, & .eventdates-chevron': {
+                      color: colors[funkyCombo].body,
+                    },
+                  },
+                }}
+              >
+                <EventDates
+                  {...{
+                    locale: pageLocale,
+                    start: datePublished,
+                    end: dateLastEdit,
                   }}
-                >
-                  {cat}
-                </div>
-              )
-            })}
+                />
+              </div>
+            )}
+            {(showFeaturedImage || showTitle || showDate || showCategories) && (
+              <hr
+                css={{
+                  width: `100%`,
+                  height: 2,
+                  background: colors[funkyCombo].border,
+                  // margin: `${rhythm(2)}`
+                }}
+              />
+            )}
+            {showCategories && (
+              <div
+                css={{
+                  display: `flex`,
+                  flexFlow: `row wrap`,
+                }}
+              >
+                {categories.map(({ label: cat, raw }) => {
+                  return (
+                    <div
+                      key={raw}
+                      css={{
+                        margin: `${rhythm(1 / 4)} ${rhythm(1 / 8)}`,
+                        padding: `${rhythm(1 / 8)} ${rhythm(1 / 4)}`,
+                        ...colors[funkyContrastCombo].style,
+                      }}
+                    >
+                      {cat}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
-        </div>
-        <Html
-          html={collectionItem?.content?.childMarkdownRemark?.html}
-          className="collectionItem--content"
-        />
-        {collectionItem.gallery && !hideGallery && (
+        )}
+        {showContent && (
+          <Html
+            html={collectionItem?.content?.childMarkdownRemark?.html}
+            className="collectionItem--content"
+          />
+        )}
+        {collectionItem?.blocks && (
+          <For
+            of={collectionItem?.blocks}
+            as={block => {
+              switch (block.__typename) {
+                case `ContentfulSection`:
+                  return <Section {...{ block, colors, location }} />
+                case `ContentfulBlockFreeText`:
+                  return <FreeText {...{ block, colors, location }} />
+                case `ContentfulBlockForm`:
+                  return <Form {...{ block, colors, location }} />
+                case `ContentfulBlockGallery`:
+                  return <Gallery {...{ block, colors, location }} />
+                case `ContentfulBlockReferences`:
+                  return <References {...{ block, colors, location }} />
+                default:
+                  return null
+              }
+            }}
+          />
+        )}
+        {showGallery && (
           <Gallery
             block={blockGallery}
             colors={colors}
@@ -252,6 +301,13 @@ export const itemPageQuery = graphql`
           id
           html
         }
+      }
+      blocks {
+        ...BlockFreeText
+        ...BlockForm
+        ...BlockGallery
+        ...BlockReferences
+        ...Section
       }
       gallery {
         id
