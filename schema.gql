@@ -371,11 +371,7 @@ type ContentfulPage implements Node @derivedTypes @dontInfer {
 
 union ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesContentfulSectionUnion = ContentfulBlockForm | ContentfulBlockFreeText | ContentfulBlockGallery | ContentfulBlockReferences | ContentfulSection
 
-type contentfulPageMetadataJsonNode implements Node @dontInfer {
-  title: String
-  description: String
-  name: String
-}
+type contentfulPageMetadataJsonNode implements Node @dontInfer
 
 type ContentfulPageSys @derivedTypes {
   revision: Int
@@ -435,20 +431,7 @@ type ContentfulSection implements Node @derivedTypes @dontInfer {
 
 union ContentfulBlockFormContentfulBlockFreeTextContentfulBlockGalleryContentfulBlockReferencesUnion = ContentfulBlockForm | ContentfulBlockFreeText | ContentfulBlockGallery | ContentfulBlockReferences
 
-type contentfulSectionOptionsJsonNode implements Node @derivedTypes @dontInfer {
-  colorCombo: String
-  colorPalettes: [Int]
-  layout: contentfulSectionOptionsJsonNodeLayout
-  columns: [String]
-  rows: Int
-  align: String
-}
-
-type contentfulSectionOptionsJsonNodeLayout {
-  columns: [String]
-  align: String
-  rows: Int
-}
+type contentfulSectionOptionsJsonNode implements Node @derivedTypes @dontInfer
 
 type ContentfulSectionSys @derivedTypes {
   revision: Int
@@ -466,75 +449,7 @@ type ContentfulSectionSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulSectionStyleJsonNode implements Node @derivedTypes @dontInfer {
-  _xdiv: contentfulSectionStyleJsonNode_xdiv @proxy(from: "& div")
-  minHeight: String
-  background: String
-  backgroundSize: String
-  display: String
-  zIndex: Int
-  _xbefore: contentfulSectionStyleJsonNode_xbefore @proxy(from: "&:before")
-  position: String
-  _xxxdiv: contentfulSectionStyleJsonNode_xxxdiv @proxy(from: "& > div")
-  _xdivxxxdiv: contentfulSectionStyleJsonNode_xdivxxxdiv @proxy(from: "> div > div")
-  _xdivxxxdivxbefore: contentfulSectionStyleJsonNode_xdivxxxdivxbefore @proxy(from: "> div > div:before")
-  _xdivxxxdivxfirstxchild: contentfulSectionStyleJsonNode_xdivxxxdivxfirstxchild @proxy(from: "> div > div:first-child")
-  _xdivxxxdivxfirstxchildxbefore: contentfulSectionStyleJsonNode_xdivxxxdivxfirstxchildxbefore @proxy(from: "> div > div:first-child:before")
-  _xblockReferencesxxxdiv: contentfulSectionStyleJsonNode_xblockReferencesxxxdiv @proxy(from: " .blockReferences > div")
-  height: String
-  textAlign: String
-  margin: String
-  padding: String
-}
-
-type contentfulSectionStyleJsonNode_xdiv {
-  background: String
-}
-
-type contentfulSectionStyleJsonNode_xbefore {
-  top: Int
-  left: Int
-  right: Int
-  height: String
-  content: String
-  display: String
-  position: String
-  transform: String
-  background: String
-  transformOrigin: String
-  bottom: Int
-}
-
-type contentfulSectionStyleJsonNode_xxxdiv {
-  backgroundColor: String
-}
-
-type contentfulSectionStyleJsonNode_xdivxxxdiv {
-  position: String
-}
-
-type contentfulSectionStyleJsonNode_xdivxxxdivxbefore {
-  top: Int
-  left: Int
-  right: Int
-  bottom: Int
-  zIndex: String
-  content: String
-  position: String
-  background: String
-}
-
-type contentfulSectionStyleJsonNode_xdivxxxdivxfirstxchild {
-  position: String
-}
-
-type contentfulSectionStyleJsonNode_xdivxxxdivxfirstxchildxbefore {
-  position: String
-}
-
-type contentfulSectionStyleJsonNode_xblockReferencesxxxdiv {
-  paddingTop: String
-}
+type contentfulSectionStyleJsonNode implements Node @derivedTypes @dontInfer
 
 type ContentfulCollectionItem implements Node @derivedTypes @dontInfer {
   name: String
@@ -570,19 +485,7 @@ type contentfulCollectionItemContentTextNode implements Node @dontInfer {
 
 type contentfulCollectionItemMetadataJsonNode implements Node @dontInfer
 
-type contentfulCollectionItemOptionsJsonNode implements Node @derivedTypes @dontInfer {
-  noPage: Boolean
-  showGallery: Boolean
-  lang: String
-  gallery: contentfulCollectionItemOptionsJsonNodeGallery
-  linkTo: String
-}
-
-type contentfulCollectionItemOptionsJsonNodeGallery {
-  popup: Boolean
-  shape: String
-  columns: [String]
-}
+type contentfulCollectionItemOptionsJsonNode implements Node @derivedTypes @dontInfer
 
 type contentfulCollectionItemStyleJsonNode implements Node @dontInfer
 
@@ -609,24 +512,7 @@ type ContentfulCollectionItemFields {
   locale: String
 }
 
-type contentfulBlockReferencesOptionsJsonNode implements Node @derivedTypes @dontInfer {
-  layout: contentfulBlockReferencesOptionsJsonNodeLayout
-  hideCategories: Boolean
-  linkTo: String
-  linkToPage: Boolean
-  colorCombo: String
-}
-
-type contentfulBlockReferencesOptionsJsonNodeLayout @derivedTypes {
-  name: String
-  shape: String
-  children: contentfulBlockReferencesOptionsJsonNodeLayoutChildren
-  columns: [String]
-}
-
-type contentfulBlockReferencesOptionsJsonNodeLayoutChildren {
-  columns: [String]
-}
+type contentfulBlockReferencesOptionsJsonNode implements Node @derivedTypes @dontInfer
 
 type ContentfulBlockReferencesSys @derivedTypes {
   revision: Int
@@ -644,175 +530,23 @@ type ContentfulBlockReferencesSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulBlockReferencesStyleJsonNode implements Node @derivedTypes @dontInfer {
-  _ximg: contentfulBlockReferencesStyleJsonNode_ximg @proxy(from: "& img")
-  svg: contentfulBlockReferencesStyleJsonNodeSvg
-}
+type contentfulBlockReferencesStyleJsonNode implements Node @derivedTypes @dontInfer
 
-type contentfulBlockReferencesStyleJsonNode_ximg {
-  objectFit: String
-}
+type contentfulPageOptionsJsonNode implements Node @dontInfer
 
-type contentfulBlockReferencesStyleJsonNodeSvg {
-  scale: String
-}
+type contentfulPageStyleJsonNode implements Node @derivedTypes @dontInfer
 
-type contentfulPageOptionsJsonNode implements Node @dontInfer {
-  colorCombo: String
-  colorPalettes: [Int]
-}
+type contentfulSettingsMetadataJsonNode implements Node @dontInfer
 
-type contentfulPageStyleJsonNode implements Node @derivedTypes @dontInfer {
-  textAlign: String
-  _xh: contentfulPageStyleJsonNode_xh @proxy(from: "& h")
-  _xxcolumn: contentfulPageStyleJsonNode_xxcolumn @proxy(from: "& .column")
-  _xxsection: contentfulPageStyleJsonNode_xxsection @proxy(from: "& .section")
-  _xxfeaturesxtech: contentfulPageStyleJsonNode_xxfeaturesxtech @proxy(from: "& .features-tech")
-  _blockquote: contentfulPageStyleJsonNode_blockquote @proxy(from: " blockquote")
-}
+type contentfulSettingsColorsJsonNode implements Node @derivedTypes @dontInfer
 
-type contentfulPageStyleJsonNode_xh @derivedTypes {
-  scale: Float
-  _media_only_screen_and__min_width_880px_: contentfulPageStyleJsonNode_xh_media_only_screen_and__min_width_880px_ @proxy(from: "@media only screen and (min-width:880px)")
-}
+type contentfulSettingsFontsJsonNode implements Node @dontInfer
 
-type contentfulPageStyleJsonNode_xh_media_only_screen_and__min_width_880px_ {
-  scale: Float
-}
+type contentfulSettingsContactJsonNode implements Node @dontInfer
 
-type contentfulPageStyleJsonNode_xxcolumn {
-  zIndex: Int
-}
+type contentfulSettingsOptionsJsonNode implements Node @derivedTypes @dontInfer
 
-type contentfulPageStyleJsonNode_xxsection @derivedTypes {
-  _xxxdiv: contentfulPageStyleJsonNode_xxsection_xxxdiv @proxy(from: "& > div")
-  paddingTop: String
-  _xxcolumnxfirstxchild: contentfulPageStyleJsonNode_xxsection_xxcolumnxfirstxchild @proxy(from: "& .column:first-child")
-}
-
-type contentfulPageStyleJsonNode_xxsection_xxxdiv {
-  position: String
-}
-
-type contentfulPageStyleJsonNode_xxsection_xxcolumnxfirstxchild @derivedTypes {
-  top: String
-  left: String
-  zIndex: Int
-  padding: Int
-  position: String
-  _media_only_screen_and__min_width_880px_: contentfulPageStyleJsonNode_xxsection_xxcolumnxfirstxchild_media_only_screen_and__min_width_880px_ @proxy(from: "@media only screen and (min-width:880px)")
-}
-
-type contentfulPageStyleJsonNode_xxsection_xxcolumnxfirstxchild_media_only_screen_and__min_width_880px_ {
-  top: String
-}
-
-type contentfulPageStyleJsonNode_xxfeaturesxtech {
-  color: String
-  padding: String
-  borderColor: String
-  borderStyle: String
-  borderWidth: String
-}
-
-type contentfulPageStyleJsonNode_blockquote {
-  scale: String
-  paddingLeft: String
-  borderLeftStyle: String
-  borderLeftWidth: String
-}
-
-type contentfulSettingsMetadataJsonNode implements Node @dontInfer {
-  url: String
-  name: String
-  title: String
-  description: String
-}
-
-type contentfulSettingsColorsJsonNode implements Node @derivedTypes @dontInfer {
-  palettes: [contentfulSettingsColorsJsonNodePalettes]
-  mainCombo: String
-  menuCombo: String
-  footerCombo: String
-}
-
-type contentfulSettingsColorsJsonNodePalettes {
-  name: String
-  neutral: String
-  primary: String
-  secondary: String
-}
-
-type contentfulSettingsFontsJsonNode implements Node @dontInfer {
-  body: [String]
-  header: [String]
-}
-
-type contentfulSettingsContactJsonNode implements Node @dontInfer {
-  name: String
-  email: String
-  phone: String
-  github: String
-  facebook: String
-  linkedin: String
-  instagram: String
-}
-
-type contentfulSettingsOptionsJsonNode implements Node @derivedTypes @dontInfer {
-  typography: contentfulSettingsOptionsJsonNodeTypography
-}
-
-type contentfulSettingsOptionsJsonNodeTypography @derivedTypes {
-  scaleRatio: Int
-  googleFonts: [contentfulSettingsOptionsJsonNodeTypographyGoogleFonts]
-  baseFontSize: String
-}
-
-type contentfulSettingsOptionsJsonNodeTypographyGoogleFonts {
-  name: String
-  styles: [String]
-}
-
-type contentfulSettingsStyleJsonNode implements Node @derivedTypes @dontInfer {
-  h2: contentfulSettingsStyleJsonNodeH2
-  ul: contentfulSettingsStyleJsonNodeUl
-  body__: contentfulSettingsStyleJsonNodeBody__ @proxy(from: "body *")
-  _xtargetxbefore: contentfulSettingsStyleJsonNode_xtargetxbefore @proxy(from: "*:target:before")
-  _media_only_screen_and__max_width_768px_: contentfulSettingsStyleJsonNode_media_only_screen_and__max_width_768px_ @proxy(from: "@media only screen and (max-width:768px)")
-}
-
-type contentfulSettingsStyleJsonNodeH2 @derivedTypes {
-  scale: Float
-  _media_only_screen_and__min_width_880px_: contentfulSettingsStyleJsonNodeH2_media_only_screen_and__min_width_880px_ @proxy(from: "@media only screen and (min-width:880px)")
-}
-
-type contentfulSettingsStyleJsonNodeH2_media_only_screen_and__min_width_880px_ {
-  scale: Float
-}
-
-type contentfulSettingsStyleJsonNodeUl {
-  listStyleType: String
-}
-
-type contentfulSettingsStyleJsonNodeBody__ {
-  textTransform: String
-}
-
-type contentfulSettingsStyleJsonNode_xtargetxbefore {
-  height: String
-  content: String
-  display: String
-  marginTop: String
-  visibility: String
-}
-
-type contentfulSettingsStyleJsonNode_media_only_screen_and__max_width_768px_ @derivedTypes {
-  html: contentfulSettingsStyleJsonNode_media_only_screen_and__max_width_768px_Html
-}
-
-type contentfulSettingsStyleJsonNode_media_only_screen_and__max_width_768px_Html {
-  fontSize: String
-}
+type contentfulSettingsStyleJsonNode implements Node @derivedTypes @dontInfer
 
 type ContentfulSettingsSys @derivedTypes {
   revision: Int
@@ -851,15 +585,7 @@ type ContentfulScriptSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulEventOptionsJsonNode implements Node @derivedTypes @dontInfer {
-  gallery: contentfulEventOptionsJsonNodeGallery
-}
-
-type contentfulEventOptionsJsonNodeGallery {
-  popup: Boolean
-  shape: String
-  columns: [String]
-}
+type contentfulEventOptionsJsonNode implements Node @derivedTypes @dontInfer
 
 type contentfulEventContentTextNode implements Node @dontInfer {
   content: String
@@ -897,9 +623,7 @@ type ContentfulEventSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulTestimonialsOptionsJsonNode implements Node @dontInfer {
-  showGallery: Boolean
-}
+type contentfulTestimonialsOptionsJsonNode implements Node @dontInfer
 
 type contentfulTestimonialsContentTextNode implements Node @dontInfer {
   content: String
@@ -937,9 +661,7 @@ type ContentfulTestimonialsSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulPartnersOptionsJsonNode implements Node @dontInfer {
-  linkTo: String
-}
+type contentfulPartnersOptionsJsonNode implements Node @dontInfer
 
 type contentfulPartnersContentTextNode implements Node @dontInfer {
   content: String
@@ -975,46 +697,9 @@ type ContentfulPartnersSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulBlockGalleryStyleJsonNode implements Node @derivedTypes @dontInfer {
-  _div: contentfulBlockGalleryStyleJsonNode_div @proxy(from: " div")
-  paddingTop: String
-  padding: Int
-  _image: contentfulBlockGalleryStyleJsonNode_image @proxy(from: ".image")
-  _xximage: contentfulBlockGalleryStyleJsonNode_xximage @proxy(from: "& .image")
-  _ximage: contentfulBlockGalleryStyleJsonNode_ximage @proxy(from: " .image")
-  maxWidth: String
-}
+type contentfulBlockGalleryStyleJsonNode implements Node @derivedTypes @dontInfer
 
-type contentfulBlockGalleryStyleJsonNode_div {
-  paddingTop: String
-}
-
-type contentfulBlockGalleryStyleJsonNode_image {
-  height: String
-  borderRadius: String
-}
-
-type contentfulBlockGalleryStyleJsonNode_xximage {
-  height: String
-  objectFit: String
-}
-
-type contentfulBlockGalleryStyleJsonNode_ximage {
-  maxHeight: String
-}
-
-type contentfulBlockGalleryOptionsJsonNode implements Node @derivedTypes @dontInfer {
-  columns: [String]
-  popup: Boolean
-  shape: String
-  colorCombo: String
-  layout: contentfulBlockGalleryOptionsJsonNodeLayout
-}
-
-type contentfulBlockGalleryOptionsJsonNodeLayout {
-  shape: String
-  columns: [String]
-}
+type contentfulBlockGalleryOptionsJsonNode implements Node @derivedTypes @dontInfer
 
 type ContentfulBlockGallery implements Node @derivedTypes @dontInfer {
   name: String
@@ -1048,27 +733,9 @@ type ContentfulBlockGallerySysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulBlockFormOptionsJsonNode implements Node @dontInfer {
-  colorCombo: String
-  colorPalettes: [Int]
-}
+type contentfulBlockFormOptionsJsonNode implements Node @dontInfer
 
-type contentfulBlockFormStyleJsonNode implements Node @derivedTypes @dontInfer {
-  borderStyle: String
-  borderWidth: String
-  _formMessage: contentfulBlockFormStyleJsonNode_formMessage @proxy(from: ".formMessage")
-  _xxformMessage: contentfulBlockFormStyleJsonNode_xxformMessage @proxy(from: "& .formMessage")
-}
-
-type contentfulBlockFormStyleJsonNode_formMessage {
-  fontSize: String
-  textAlign: String
-}
-
-type contentfulBlockFormStyleJsonNode_xxformMessage {
-  fontSize: String
-  textAlign: String
-}
+type contentfulBlockFormStyleJsonNode implements Node @derivedTypes @dontInfer
 
 type contentfulBlockFormErrorMessageTextNode implements Node @dontInfer {
   errorMessage: String
@@ -1078,28 +745,7 @@ type contentfulBlockFormSuccessMessageTextNode implements Node @dontInfer {
   successMessage: String
 }
 
-type contentfulBlockFormFormJsonNode implements Node @derivedTypes @dontInfer {
-  formFields: [contentfulBlockFormFormJsonNodeFormFields]
-}
-
-type contentfulBlockFormFormJsonNodeFormFields @derivedTypes {
-  name: String
-  rows: String
-  type: String
-  label: String
-  value: String
-  checked: String
-  required: String
-  placeholder: String
-  options: [contentfulBlockFormFormJsonNodeFormFieldsOptions]
-  text: String
-}
-
-type contentfulBlockFormFormJsonNodeFormFieldsOptions {
-  label: String
-  value: String
-  checked: String
-}
+type contentfulBlockFormFormJsonNode implements Node @derivedTypes @dontInfer
 
 type ContentfulBlockForm implements Node @derivedTypes @dontInfer {
   name: String
@@ -1135,23 +781,11 @@ type ContentfulBlockFormSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulBlogStyleJsonNode implements Node @dontInfer {
-  none: String
-}
+type contentfulBlogStyleJsonNode implements Node @dontInfer
 
-type contentfulBlogMetadataJsonNode implements Node @dontInfer {
-  none: String
-}
+type contentfulBlogMetadataJsonNode implements Node @dontInfer
 
-type contentfulBlogOptionsJsonNode implements Node @derivedTypes @dontInfer {
-  gallery: contentfulBlogOptionsJsonNodeGallery
-  none: String
-}
-
-type contentfulBlogOptionsJsonNodeGallery {
-  showTitle: Boolean
-  showDescription: Boolean
-}
+type contentfulBlogOptionsJsonNode implements Node @derivedTypes @dontInfer
 
 type contentfulBlogContentTextNode implements Node @dontInfer {
   content: String
@@ -1192,249 +826,9 @@ type ContentfulBlogSysContentTypeSys {
   contentful_id: String
 }
 
-type contentfulBlockFreeTextOptionsJsonNode implements Node @dontInfer {
-  colorCombo: String
-  colorPalettes: [Int]
-  colorCombooooo: String
-  colorPalettesssss: [Int]
-}
+type contentfulBlockFreeTextOptionsJsonNode implements Node @dontInfer
 
-type contentfulBlockFreeTextStyleJsonNode implements Node @derivedTypes @dontInfer {
-  _xa: contentfulBlockFreeTextStyleJsonNode_xa @proxy(from: "& a")
-  _xli: contentfulBlockFreeTextStyleJsonNode_xli @proxy(from: "& li")
-  _xul: contentfulBlockFreeTextStyleJsonNode_xul @proxy(from: "& ul")
-  color: String
-  maxWidth: String
-  textAlign: String
-  paddingLeft: Int
-  paddingRight: Int
-  _xxexportxicon: contentfulBlockFreeTextStyleJsonNode_xxexportxicon @proxy(from: "& .export.icon")
-  h1: contentfulBlockFreeTextStyleJsonNodeH1
-  _xxxdiv: contentfulBlockFreeTextStyleJsonNode_xxxdiv @proxy(from: "& > div")
-  _xh1: contentfulBlockFreeTextStyleJsonNode_xh1 @proxy(from: "& h1")
-  fontSize: String
-  _xstrong: contentfulBlockFreeTextStyleJsonNode_xstrong @proxy(from: "& strong")
-  backgroundColor: String
-  _xform: contentfulBlockFreeTextStyleJsonNode_xform @proxy(from: "& form")
-  _p__input: contentfulBlockFreeTextStyleJsonNode_p__input @proxy(from: " p, input")
-  border: String
-  borderTop: String
-  _xspan: contentfulBlockFreeTextStyleJsonNode_xspan @proxy(from: "& span")
-  _xbefore: contentfulBlockFreeTextStyleJsonNode_xbefore @proxy(from: "&:before")
-  position: String
-  borderBottom: String
-  _xxceleryxbutton: contentfulBlockFreeTextStyleJsonNode_xxceleryxbutton @proxy(from: "& .celery-button")
-  _xafter: contentfulBlockFreeTextStyleJsonNode_xafter @proxy(from: "&:after")
-  overflow: String
-  _xbeforexxxxafter: contentfulBlockFreeTextStyleJsonNode_xbeforexxxxafter @proxy(from: "&:before, &:after")
-  scale: String
-  _xsmall: contentfulBlockFreeTextStyleJsonNode_xsmall @proxy(from: "& small")
-  _subtitle: contentfulBlockFreeTextStyleJsonNode_subtitle @proxy(from: ".subtitle")
-  minHeight: String
-  paddingBottom: String
-  padding: String
-  _ximg: contentfulBlockFreeTextStyleJsonNode_ximg @proxy(from: "& img")
-  _xdiv: contentfulBlockFreeTextStyleJsonNode_xdiv @proxy(from: "> div")
-  _th__td: contentfulBlockFreeTextStyleJsonNode_th__td @proxy(from: " th, td")
-  _tr_nth_child_even_: contentfulBlockFreeTextStyleJsonNode_tr_nth_child_even_ @proxy(from: " tr:nth-child(even)")
-  _th_last_child__td_last_child: contentfulBlockFreeTextStyleJsonNode_th_last_child__td_last_child @proxy(from: " th:last-child, td:last-child")
-  _th_first_child__td_first_child: contentfulBlockFreeTextStyleJsonNode_th_first_child__td_first_child @proxy(from: " th:first-child, td:first-child")
-  _xh3: contentfulBlockFreeTextStyleJsonNode_xh3 @proxy(from: "& h3")
-  fontFamily: String
-  fontWeight: String
-  iframe: contentfulBlockFreeTextStyleJsonNodeIframe
-  span: contentfulBlockFreeTextStyleJsonNodeSpan
-  marginTop: String
-  marginBottom: String
-  _xh2: contentfulBlockFreeTextStyleJsonNode_xh2 @proxy(from: "& h2")
-  background: String
-  paddingTop: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xa {
-  padding: String
-  textDecoration: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xli {
-  color: String
-  scale: Float
-  margin: Int
-  display: String
-  textAlign: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xul {
-  margin: Int
-  padding: Int
-  listStyle: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xxexportxicon @derivedTypes {
-  color: String
-  width: String
-  _after: contentfulBlockFreeTextStyleJsonNode_xxexportxicon_after @proxy(from: ":after")
-  border: String
-  height: String
-  _before: contentfulBlockFreeTextStyleJsonNode_xxexportxicon_before @proxy(from: ":before")
-  position: String
-  marginTop: String
-  marginLeft: String
-  borderRadius: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xxexportxicon_after {
-  top: String
-  left: String
-  width: String
-  height: String
-  content: String
-  position: String
-  borderTop: String
-  transform: String
-  borderRight: String
-  WebkitTransform: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xxexportxicon_before {
-  top: String
-  left: String
-  width: String
-  height: String
-  content: String
-  position: String
-  borderLeft: String
-  borderRight: String
-  backgroundColor: String
-}
-
-type contentfulBlockFreeTextStyleJsonNodeH1 {
-  scale: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xxxdiv {
-  paddingBottom: Int
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xh1 {
-  textAlign: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xstrong {
-  scale: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xform {
-  margin: String
-  maxWidth: Int
-}
-
-type contentfulBlockFreeTextStyleJsonNode_p__input {
-  marginTop: String
-  marginBottom: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xspan {
-  scale: String
-  fontWeight: String
-  color: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xbefore {
-  top: Int
-  left: Int
-  right: Int
-  bottom: Int
-  zIndex: String
-  content: String
-  position: String
-  background: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xxceleryxbutton {
-  colorrrr: String
-  borderColorrrr: String
-  color: String
-  borderColor: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xafter {
-  width: String
-  height: String
-  margin: String
-  display: String
-  transform: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xbeforexxxxafter {
-  top: Int
-  left: Int
-  right: Int
-  bottom: Int
-  zIndex: String
-  content: String
-  position: String
-  background: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xsmall {
-  color: String
-  fontStyle: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_subtitle {
-  color: String
-  scale: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_ximg {
-  float: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xdiv {
-  display: String
-  flexDirection: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_th__td {
-  borderWidth: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_tr_nth_child_even_ {
-  color: String
-  backgroundColor: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_th_last_child__td_last_child {
-  textAlign: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_th_first_child__td_first_child {
-  textAlign: String
-  verticalAlign: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xh3 @derivedTypes {
-  span: contentfulBlockFreeTextStyleJsonNode_xh3Span
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xh3Span {
-  scale: String
-  fontWeight: String
-}
-
-type contentfulBlockFreeTextStyleJsonNodeIframe {
-  maxWidth: String
-}
-
-type contentfulBlockFreeTextStyleJsonNodeSpan {
-  scale: String
-  lineHeight: String
-}
-
-type contentfulBlockFreeTextStyleJsonNode_xh2 {
-  fontSize: String
-}
+type contentfulBlockFreeTextStyleJsonNode implements Node @derivedTypes @dontInfer
 
 type contentfulBlockFreeTextMainTextNode implements Node @dontInfer {
   main: String
