@@ -126,7 +126,7 @@ const ItemPageTemplate = ({
           //   color: `inherit`,
           //   marginBottom: 0
           // }
-          '> div': {
+          '> div:not(.section)': {
             width: `100%`,
             maxWidth: `1000px`,
             margin: `auto`,
