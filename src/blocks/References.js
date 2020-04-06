@@ -278,7 +278,7 @@ const References = ({
   const { layout, list } = addLayoutOptions(
     options,
     parentMaxWidth,
-    block.references.filter(ref => showRef(ref.categories))
+    block.references.filter(ref => showRef(ref.categories || []))
   )
   const carouselDisplay = mode === `carousel`
 
