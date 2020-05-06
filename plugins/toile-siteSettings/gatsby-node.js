@@ -18,8 +18,8 @@ const internalJson = require(`../../src/utils/internalJson.js`)
 
 const destFile = 'src/utils/siteSettings.json'
 
-let defaultLocale = ''
-let locales = []
+let globalDefaultLocale = ''
+let globalLocales = []
 
 // ADD DEFAULT LOCALE AND LOCALES ARRAY IN EACH SETTINGS NODE
 exports.onCreateNode = ({ node, actions }) => {
@@ -31,19 +31,19 @@ exports.onCreateNode = ({ node, actions }) => {
     if (node.id.match(node.node_locale)) {
     } else {
       // set defaultLocale as self node_locale
-      defaultLocale = locale
+      globalDefaultLocale = locale
     }
     createNodeField({
       node,
       name: `defaultLocale`,
-      value: defaultLocale,
+      value: globalDefaultLocale,
     })
     createNodeField({
       node,
       name: `locale`,
       value: locale,
     })
-    locales.push(locale)
+    globalLocales.push(locale)
   }
 }
 
@@ -251,7 +251,8 @@ exports.createPagesStatefully = ({ graphql, actions }) => {
         locales.forEach(locale => {
           // first line in menu is the locale
           menu[locale] = []
-          settingsByLocale[locale].menu.forEach((menuEntry, i) => {
+          const localeMenu = settingsByLocale[locale].menu || []
+          localeMenu.forEach((menuEntry, i) => {
             const {
               menuName,
               shortPath,
