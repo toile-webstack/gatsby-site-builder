@@ -104,7 +104,7 @@ module.exports = {
       },
     },
     // `gatsby-plugin-netlify-cache`,
-    `gatsby-plugin-remove-fingerprints`,
+    // `gatsby-plugin-remove-fingerprints`,
     `gatsby-plugin-netlify`,
   ],
 }
