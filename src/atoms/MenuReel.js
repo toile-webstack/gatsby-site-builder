@@ -178,8 +178,18 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
               },
             },
           },
+          ' .menu--logo-name': {
+            flexShrink: '1 !important',
+            ...layoutStyles.reel({
+              noBar: true,
+            }),
+            ...lateralShadowStyles,
+          },
+          ' .menu--mobile-button': {
+            flexShrink: 0,
+          },
           // LATERAL STACKS
-          ' .menu--langs, .menu--logo-name': {
+          ' .menu--langs, .menu--logo-name__link': {
             ...layoutStyles.stack({
               horizontal: true,
               space: [rhythm(1 / 4), '0.6ch'],
@@ -231,11 +241,11 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
           }}
         >
           <div className="menu--wrapper-top">
-            <li>
+            <li className="menu--logo-name">
               <Link
                 {...{
                   to: '/',
-                  className: 'menu--logo-name',
+                  className: 'menu--logo-name__link',
                   onClick: closeMenu,
                   onFocus: openMenu,
                 }}
@@ -243,6 +253,7 @@ const MenuReel = ({ icon, name, menu, currentLocale, location }) => {
                 <img
                   src={icon}
                   alt={`${name} icon`}
+                  className="menu--logo"
                   css={{
                     maxHeight: rhythm(1),
                     // maxWidth: rhythm(1),
