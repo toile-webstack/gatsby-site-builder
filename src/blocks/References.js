@@ -19,6 +19,51 @@ import CollectionItem from './references/CollectionItem'
 import PageReference from './references/PageReference'
 import { LBlockReferences } from '../t-layouts'
 
+import GoogleMapReact from 'google-map-react'
+
+const GoogleApiKay = process.env.GATSBY_googleApiKey
+
+const mapProps = {
+  center: {
+    lat: 50.85,
+    lng: 4.353,
+  },
+  zoom: 14,
+}
+
+const Map = props => {
+  return (
+    // Important! Always set the container height explicitly
+    <div
+      style={{ height: '100vh', width: '100%' }}
+      css={{
+        '.gm-style div': {
+          '-webkit-transform': 'scale(1.002)',
+          WebkitTransform: 'scale(1.002)',
+          webkitTransform: 'scale(1.002)',
+        },
+        img: {
+          padding: '0 !important',
+        },
+      }}
+    >
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: GoogleApiKay }}
+        defaultCenter={mapProps.center}
+        defaultZoom={mapProps.zoom}
+      >
+        {/* <p
+          style={{ width: '100px' }}
+          lat={50.84491139376305}
+          lng={4.356018818589164}
+        >
+          Mont des arts
+        </p> */}
+      </GoogleMapReact>
+    </div>
+  )
+}
+
 const ColumnWrapper = ({ maxWidth, children, className }) => (
   <div
     className={`column ${className || ''}`}
@@ -281,6 +326,7 @@ const References = ({
     block.references.filter(ref => showRef(ref.categories || []))
   )
   const carouselDisplay = mode === `carousel`
+  const mapDisplay = mode === `map`
 
   const inner =
     list.length < 1 ? (
@@ -409,7 +455,10 @@ const References = ({
           ...style,
         }}
       >
-        {carouselDisplay ? <Carousel>{inner}</Carousel> : inner}
+        {carouselDisplay ? <Carousel>{inner}</Carousel> : null}
+        {/* {mapDisplay ? <Map>{inner}</Map> : null} */}
+        {mapDisplay ? <Map /> : null}
+        {!carouselDisplay && !mapDisplay ? inner : null}
       </LBlockReferences>
     </div>
   )
