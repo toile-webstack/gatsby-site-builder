@@ -31,19 +31,16 @@ const mapProps = {
   zoom: 14,
 }
 
-const Map = props => {
+const Map = ({ children }) => {
   return (
     // Important! Always set the container height explicitly
     <div
-      style={{ height: '100vh', width: '100%' }}
       css={{
-        '.gm-style div': {
-          '-webkit-transform': 'scale(1.002)',
-          WebkitTransform: 'scale(1.002)',
-          webkitTransform: 'scale(1.002)',
-        },
-        img: {
-          padding: '0 !important',
+        height: '100vh',
+        width: '100%',
+        '& img': {
+          maxWidth: `none`,
+          maxHeight: `none`,
         },
       }}
     >
@@ -52,13 +49,7 @@ const Map = props => {
         defaultCenter={mapProps.center}
         defaultZoom={mapProps.zoom}
       >
-        {/* <p
-          style={{ width: '100px' }}
-          lat={50.84491139376305}
-          lng={4.356018818589164}
-        >
-          Mont des arts
-        </p> */}
+        {children}
       </GoogleMapReact>
     </div>
   )
@@ -456,8 +447,7 @@ const References = ({
         }}
       >
         {carouselDisplay ? <Carousel>{inner}</Carousel> : null}
-        {/* {mapDisplay ? <Map>{inner}</Map> : null} */}
-        {mapDisplay ? <Map /> : null}
+        {mapDisplay ? <Map>{inner}</Map> : null}
         {!carouselDisplay && !mapDisplay ? inner : null}
       </LBlockReferences>
     </div>

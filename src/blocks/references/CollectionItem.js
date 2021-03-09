@@ -12,6 +12,7 @@ import ClassicRowListEntry from './collectionItems/ClassicRowListEntry'
 import TestimonialListEntry from './collectionItems/TestimonialListEntry'
 import EventListEntry from './collectionItems/EventListEntry'
 import ImgUnderListEntry from './collectionItems/ImgUnderListEntry'
+import MapSimpleListEntry from './collectionItems/MapSimpleListEntry'
 
 const CollectionItem = ({
   collectionItem,
@@ -56,6 +57,8 @@ const CollectionItem = ({
       return <EventListEntry {...propsToPass} />
     case 'imgUnder':
       return <ImgUnderListEntry {...propsToPass} />
+    case 'mapSimple':
+      return <MapSimpleListEntry {...propsToPass} />
     case ``:
     case `default`:
       return <DefaultListEntry {...propsToPass} />

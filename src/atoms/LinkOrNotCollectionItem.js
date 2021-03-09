@@ -19,6 +19,8 @@ const LinkOrNotCollectionItem = ({
   const externalLink = optionsData && optionsData.linkTo
   const { lang } = optionsData
 
+  const { props: userProps } = blockOptionsData
+
   const css = {
     display: `flex`,
     flexFlow: `row wrap`,
@@ -57,6 +59,7 @@ const LinkOrNotCollectionItem = ({
           rel="nofollow noopener noreferrer"
           className="collectionItem stylishLink"
           css={css}
+          {...userProps}
         >
           {children}
         </a>
@@ -67,6 +70,7 @@ const LinkOrNotCollectionItem = ({
           {...{ ...(lang && { lang }) }}
           className="collectionItem"
           css={css}
+          {...userProps}
         >
           {children}
         </div>
@@ -79,6 +83,7 @@ const LinkOrNotCollectionItem = ({
           to={internalLink}
           className="collectionItem stylishLink"
           css={css}
+          {...userProps}
         >
           {children}
         </Link>
