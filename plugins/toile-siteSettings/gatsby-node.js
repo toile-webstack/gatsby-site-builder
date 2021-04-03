@@ -109,8 +109,8 @@ exports.createPagesStatefully = ({ graphql, actions }) => {
                   favicon {
                     id
                     resize(
-                      width: 32
-                      height: 32
+                      width: 64
+                      height: 64
                       quality: 100
                       toFormat: PNG
                       resizingBehavior: PAD

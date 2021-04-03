@@ -142,7 +142,13 @@ class Menu extends React.Component {
               height: 32,
             }}
           >
-            <img src={this.props.icon} />
+            <img
+              src={this.props.icon}
+              css={{
+                maxWidth: 32,
+                maxHeight: 32,
+              }}
+            />
           </Link>
           <Link className="unstyledLink menuName" to={homepageLink}>
             <h4
