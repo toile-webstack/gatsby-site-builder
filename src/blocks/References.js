@@ -365,8 +365,8 @@ const References = ({
               {...{
                 key,
                 maxWidth: itemStyle.maxWidth,
-                lat: lat || location.lat,
-                lng: lng || location.lon,
+                lat: lat || location?.lat,
+                lng: lng || location?.lon,
                 ...wrapperProps,
               }}
             >
