@@ -23,7 +23,8 @@ import GoogleMapReact from 'google-map-react'
 
 const GoogleApiKay = process.env.GATSBY_googleApiKey
 
-const mapProps = {
+// default center is Brussels
+const mapOptionsDefault = {
   center: {
     lat: 50.85,
     lng: 4.353,
@@ -31,12 +32,18 @@ const mapProps = {
   zoom: 14,
 }
 
-const Map = ({ children }) => {
+const Map = ({ mapOptions, children }) => {
+  const lat = mapOptions?.center?.lat || mapOptionsDefault.center.lat
+  const lng = mapOptions?.center?.lng || mapOptionsDefault.center.lng
+  const defaultCenter = { lat, lng }
+  const defaultZoom = mapOptions?.zoom || mapOptionsDefault.zoom
+  const height = '68.81vh'
+
   return (
     // Important! Always set the container height explicitly
     <div
       css={{
-        height: '100vh',
+        height,
         width: '100%',
         '& img': {
           maxWidth: `none`,
@@ -46,8 +53,8 @@ const Map = ({ children }) => {
     >
       <GoogleMapReact
         bootstrapURLKeys={{ key: GoogleApiKay }}
-        defaultCenter={mapProps.center}
-        defaultZoom={mapProps.zoom}
+        defaultCenter={defaultCenter}
+        defaultZoom={defaultZoom}
       >
         {children}
       </GoogleMapReact>
@@ -118,7 +125,11 @@ const References = ({
     hideCategories,
     mode,
     categories: { families: catFamiliesOptions, showQueryString } = {},
+    map: mapOptions,
   } = options
+
+  // handle cards opening and closing in map mode
+  const [mapElementSelected, selectMapElem] = useState(null)
 
   // CATEGORIES
   const categories = useMemo(() => {
@@ -324,43 +335,44 @@ const References = ({
       <div>{mNoMatch}</div>
     ) : (
       list.map(column => {
-        const { itemStyle, imageStyle } = column[0]
+        const { itemStyle, imageStyle, location } = column[0]
 
         return column.map((reference, key) => {
-          switch (reference.__typename) {
-            case `ContentfulPage`:
-              return (
-                <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
-                  <PageReference
-                    {...{
-                      key,
-                      page: reference,
-                      colors,
-                      location,
-                      layout,
-                      blockOptionsData: options,
-                      passCSS: imageStyle,
-                    }}
-                  />
-                </ColumnWrapper>
-              )
-            default:
-              return (
-                <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
-                  <CollectionItem
-                    {...{
-                      key,
-                      collectionItem: reference,
-                      colors,
-                      location,
-                      layout,
-                      blockOptionsData: options,
-                      passCSS: imageStyle,
-                    }}
-                  />
-                </ColumnWrapper>
-              )
+          const ColItemOrPageRefComp =
+            reference.__typename === `ContentfulPage`
+              ? PageReference
+              : CollectionItem
+          const colItemOrPageRefCompProps = {
+            key,
+            page: reference, // only used for PageReference comp
+            collectionItem: reference, // only used for CollectionItem comp
+            colors,
+            location,
+            layout,
+            blockOptionsData: options,
+            passCSS: imageStyle,
+            mapElementSelected, // Only used with map mode
+            selectMapElem, // Only used with map mode
           }
+
+          const wrapperPropsContent = reference?.options?.internal?.content
+          const { wrapperProps, lat, lng } = wrapperPropsContent
+            ? JSON.parse(wrapperPropsContent)
+            : {}
+
+          return (
+            <ColumnWrapper
+              {...{
+                key,
+                maxWidth: itemStyle.maxWidth,
+                lat: lat || location.lat,
+                lng: lng || location.lon,
+                ...wrapperProps,
+              }}
+            >
+              <ColItemOrPageRefComp {...colItemOrPageRefCompProps} />
+            </ColumnWrapper>
+          )
         })
       })
     )
@@ -447,7 +459,7 @@ const References = ({
         }}
       >
         {carouselDisplay ? <Carousel>{inner}</Carousel> : null}
-        {mapDisplay ? <Map>{inner}</Map> : null}
+        {mapDisplay ? <Map {...{ mapOptions }}>{inner}</Map> : null}
         {!carouselDisplay && !mapDisplay ? inner : null}
       </LBlockReferences>
     </div>

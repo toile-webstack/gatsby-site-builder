@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import * as MdIcons from 'react-icons/md'
 import { Link } from 'gatsby'
 import Img from 'gatsby-image'
 import Moment from 'react-moment'
@@ -22,9 +23,20 @@ export default ({
   blockOptionsData,
   optionsData,
   passCSS,
+  mapElementSelected,
+  selectMapElem,
 }) => {
+  // handle card opening and closing
+  const currentId = collectionItem.id
+  const isSelected = mapElementSelected === currentId
+  const toggleOpen = e => {
+    e.stopPropagation()
+    selectMapElem(isSelected ? null : currentId)
+  }
+
   const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
   const image = collectionItem.featuredImage
+  const { excerpt, html } = collectionItem?.content?.childMarkdownRemark || {}
 
   // image, name and time in the 1st column
   const layoutList = [{}]
@@ -47,12 +59,26 @@ export default ({
   const inner = (
     <div
       css={{
-        padding: `0 ${rhythm(1 / 4)}`,
-        width: 'auto',
+        // padding: `0 ${rhythm(1 / 4)}`,
+        width: '100%',
       }}
     >
-      {/* {collectionItem.name} */}
-      <Html html={collectionItem?.content?.childMarkdownRemark?.html} />
+      <p
+        {...{
+          css: {
+            fontSize: '0.8rem',
+          },
+        }}
+      >
+        <strong>{collectionItem.name}</strong>
+      </p>
+      <Html
+        html={excerpt}
+        passCSS={{
+          fontSize: '0.7rem',
+          fontWeight: 'normal',
+        }}
+      />
     </div>
   )
   // copied from default entry
@@ -99,15 +125,57 @@ export default ({
   //   </div>
   // )
 
+  // chose icon from this list: https://react-icons.github.io/react-icons/icons?name=md
+  const icon = optionsData?.icon || blockOptionsData?.map?.icons || 'MdPlace'
+  const IconComp = MdIcons[icon] || MdIcons.MdPlace
+  // Translate Y only if we don't use the MdPlace icon
+  const shouldTranslateY = IconComp !== MdIcons.MdPlace
+
+  // // should we link to somewhere. An option on the block allows us to avoid that
+  // const linkTo = blockOptionsData?.linkTo
+  // const doNotLink = linkTo === `none`
+
   return (
-    <LinkOrNotCollectionItem
-      blockOptionsData={blockOptionsData}
-      optionsData={optionsData}
-      collectionItem={collectionItem}
-      colors={colors}
+    <div
+      {...{
+        css: {
+          position: 'absolute',
+          bottom: 0,
+          zIndex: 10,
+          width: '500px',
+        },
+      }}
     >
-      {inner}
-    </LinkOrNotCollectionItem>
+      <IconComp
+        onClick={toggleOpen}
+        css={{
+          fontSize: rhythm(1.5),
+          textAlign: `right`,
+          cursor: `pointer`,
+          color: colors[colors.classicCombo].body,
+          transform: `translateX(-50%)${
+            shouldTranslateY ? ' translateY(50%)' : ''
+          }`,
+          ':hover': {
+            color: colors[colors.classicCombo].linkHover,
+          },
+        }}
+      />
+      {isSelected ? (
+        <LinkOrNotCollectionItem
+          blockOptionsData={blockOptionsData}
+          optionsData={optionsData}
+          collectionItem={collectionItem}
+          colors={colors}
+          passCSS={{
+            position: 'absolute',
+            padding: `${rhythm(1 / 2)} ${rhythm(1 / 2)} ${rhythm(1 / 4)}`,
+          }}
+        >
+          {inner}
+        </LinkOrNotCollectionItem>
+      ) : null}
+    </div>
   )
   // (
   //   <Link

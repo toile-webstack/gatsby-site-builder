@@ -454,7 +454,6 @@ type contentfulSectionStyleJsonNode implements Node @derivedTypes @dontInfer
 type ContentfulCollectionItem implements Node @derivedTypes @dontInfer {
   name: String
   type: String
-  location: ContentfulCollectionItemLocation
   datePublished: Date @dateformat
   dateLastEdit: Date @dateformat
   author: String
@@ -476,11 +475,6 @@ type ContentfulCollectionItem implements Node @derivedTypes @dontInfer {
   sys: ContentfulCollectionItemSys
   node_locale: String
   fields: ContentfulCollectionItemFields
-}
-
-type ContentfulCollectionItemLocation {
-  lat: Float
-  lon: Float
 }
 
 type contentfulCollectionItemDataJsonNode implements Node @dontInfer
