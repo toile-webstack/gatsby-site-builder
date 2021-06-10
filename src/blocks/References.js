@@ -32,12 +32,26 @@ const mapOptionsDefault = {
   zoom: 14,
 }
 
-const Map = ({ mapOptions, children }) => {
+const Map = ({ mapOptions, mapElementSelected, children }) => {
   const lat = mapOptions?.center?.lat || mapOptionsDefault.center.lat
   const lng = mapOptions?.center?.lng || mapOptionsDefault.center.lng
   const defaultCenter = { lat, lng }
   const defaultZoom = mapOptions?.zoom || mapOptionsDefault.zoom
   const height = '68.81vh'
+
+  const [zoom, setZoom] = useState(null)
+  const [center, setCenter] = useState([lat, lng])
+
+  const onMapChange = changed => {
+    // console.log(changed)
+    // changed == { center, zoom, bounds, marginBounds, size }
+    setCenter(changed.center)
+    setZoom(changed.zoom)
+  }
+  const onChildClick = (childId, { lat: childLat, lng: childLng, ...rest }) => {
+    // we don't center when closing the card
+    if (childId !== mapElementSelected) setCenter([childLat, childLng])
+  }
 
   return (
     // Important! Always set the container height explicitly
@@ -55,6 +69,10 @@ const Map = ({ mapOptions, children }) => {
         bootstrapURLKeys={{ key: GoogleApiKay }}
         defaultCenter={defaultCenter}
         defaultZoom={defaultZoom}
+        center={center}
+        zoom={zoom}
+        onChange={onMapChange}
+        onChildClick={onChildClick}
       >
         {children}
       </GoogleMapReact>
@@ -335,7 +353,7 @@ const References = ({
       <div>{mNoMatch}</div>
     ) : (
       list.map(column => {
-        const { itemStyle, imageStyle, location } = column[0]
+        const { id, itemStyle, imageStyle, location } = column[0]
 
         return column.map((reference, key) => {
           const ColItemOrPageRefComp =
@@ -343,7 +361,7 @@ const References = ({
               ? PageReference
               : CollectionItem
           const colItemOrPageRefCompProps = {
-            key,
+            key: id,
             page: reference, // only used for PageReference comp
             collectionItem: reference, // only used for CollectionItem comp
             colors,
@@ -355,19 +373,13 @@ const References = ({
             selectMapElem, // Only used with map mode
           }
 
-          const wrapperPropsContent = reference?.options?.internal?.content
-          const { wrapperProps, lat, lng } = wrapperPropsContent
-            ? JSON.parse(wrapperPropsContent)
-            : {}
-
           return (
             <ColumnWrapper
               {...{
-                key,
-                maxWidth: itemStyle.maxWidth,
-                lat: lat || location?.lat,
-                lng: lng || location?.lon,
-                ...wrapperProps,
+                key: id,
+                // maxWidth: itemStyle.maxWidth,
+                lat: location?.lat,
+                lng: location?.lon,
               }}
             >
               <ColItemOrPageRefComp {...colItemOrPageRefCompProps} />
@@ -458,8 +470,10 @@ const References = ({
           ...style,
         }}
       >
+        {mapDisplay ? (
+          <Map {...{ mapOptions, mapElementSelected }}>{inner}</Map>
+        ) : null}
         {carouselDisplay ? <Carousel>{inner}</Carousel> : null}
-        {mapDisplay ? <Map {...{ mapOptions }}>{inner}</Map> : null}
         {!carouselDisplay && !mapDisplay ? inner : null}
       </LBlockReferences>
     </div>

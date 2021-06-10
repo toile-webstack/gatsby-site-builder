@@ -15,6 +15,8 @@ import {
 import LinkOrNotCollectionItem from '../../../atoms/LinkOrNotCollectionItem'
 import Html from '../../../atoms/Html'
 
+const MdClose = MdIcons.MdClose
+
 export default ({
   collectionItem,
   colors,
@@ -30,7 +32,7 @@ export default ({
   const currentId = collectionItem.id
   const isSelected = mapElementSelected === currentId
   const toggleOpen = e => {
-    e.stopPropagation()
+    // e.stopPropagation()
     selectMapElem(isSelected ? null : currentId)
   }
 
@@ -61,8 +63,20 @@ export default ({
       css={{
         // padding: `0 ${rhythm(1 / 4)}`,
         width: '100%',
+        position: 'relative',
       }}
     >
+      <MdClose
+        css={{
+          position: 'absolute',
+          top: rhythm(-0.3),
+          right: rhythm(-0.3),
+          // fontSize: '1rem',
+          fontSize: rhythm(0.8),
+          cursor: 'pointer',
+        }}
+        onClick={toggleOpen}
+      />
       <p
         {...{
           css: {
@@ -73,7 +87,7 @@ export default ({
         <strong>{collectionItem.name}</strong>
       </p>
       <Html
-        html={excerpt}
+        html={html}
         passCSS={{
           fontSize: '0.7rem',
           fontWeight: 'normal',
@@ -141,8 +155,9 @@ export default ({
         css: {
           position: 'absolute',
           bottom: 0,
-          zIndex: 10,
+          zIndex: 10 + isSelected, // necessary to avoid other icons poping over the card
           width: '500px',
+          maxWidth: '70vw',
         },
       }}
     >
@@ -169,7 +184,17 @@ export default ({
           colors={colors}
           passCSS={{
             position: 'absolute',
+            top: shouldTranslateY ? rhythm(2) : rhythm(1.5),
+            left: 0,
+            transform: `translateX(-50%)`,
             padding: `${rhythm(1 / 2)} ${rhythm(1 / 2)} ${rhythm(1 / 4)}`,
+            boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+            // cursor: 'auto',
+            '& > a:last-of-type': {
+              display: 'inline-block',
+              marginTop: rhythm(0.25),
+              fontSize: 'inherit',
+            },
           }}
         >
           {inner}

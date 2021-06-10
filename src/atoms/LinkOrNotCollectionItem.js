@@ -13,7 +13,7 @@ const LinkOrNotCollectionItem = ({
 }) => {
   const { classicCombo, funkyCombo } = colors
 
-  const linkTo = blockOptionsData && blockOptionsData.linkTo
+  const { linkTo, linkText, linkInNewTab } = blockOptionsData || {}
   const internalLink = collectionItem.path
 
   const externalLink = optionsData && optionsData.linkTo
@@ -21,10 +21,7 @@ const LinkOrNotCollectionItem = ({
 
   const { props: userProps } = blockOptionsData
 
-  const css = {
-    display: `flex`,
-    flexFlow: `row wrap`,
-    justifyContent: `center`,
+  const cssBlock = {
     textAlign: `left`,
     ' h2, h3, h4, h5, h6': {
       // color: `inherit`,
@@ -40,25 +37,52 @@ const LinkOrNotCollectionItem = ({
     padding: `${rhythm(1)} 0`,
 
     ...colors[classicCombo].style,
-    ':hover': {
-      ...colors[linkTo === `none` ? classicCombo : funkyCombo].style,
-      color: `${colors[linkTo === `none` ? classicCombo : funkyCombo].body}!important`,
-    },
     ...passCSS,
     // ...colors[classicCombo].style,
     // ...styleData
   }
 
+  const cssBlockLink = {
+    display: `flex`,
+    flexFlow: `row wrap`,
+    justifyContent: `center`,
+    ...cssBlock,
+    ':hover': {
+      ...colors[linkTo === `none` ? classicCombo : funkyCombo].style,
+      color: `${colors[linkTo === `none` ? classicCombo : funkyCombo].body}!important`,
+    },
+  }
+  const cssLinkInBlock = {
+    ...colors[linkTo === `none` ? classicCombo : funkyCombo].style,
+  }
+
   switch (linkTo) {
     case `external`:
-      return (
+      return linkText ? (
+        <div className="collectionItem" css={cssBlock}>
+          {children}
+          <a
+            {...{ ...(lang && { lang }) }}
+            href={externalLink}
+            // target="_blank"
+            {...{ ...(linkInNewTab === false ? {} : { target: '_blank' }) }}
+            rel="nofollow noopener noreferrer"
+            // className="stylishLink"
+            css={cssLinkInBlock}
+            {...userProps}
+          >
+            {linkText}
+          </a>
+        </div>
+      ) : (
         <a
           {...{ ...(lang && { lang }) }}
           href={externalLink}
-          target="_blank"
+          // target="_blank"
+          {...{ ...(linkInNewTab === false ? {} : { target: '_blank' }) }}
           rel="nofollow noopener noreferrer"
           className="collectionItem stylishLink"
-          css={css}
+          css={cssBlockLink}
           {...userProps}
         >
           {children}
@@ -69,7 +93,7 @@ const LinkOrNotCollectionItem = ({
         <div
           {...{ ...(lang && { lang }) }}
           className="collectionItem"
-          css={css}
+          css={cssBlock}
           {...userProps}
         >
           {children}
@@ -77,16 +101,39 @@ const LinkOrNotCollectionItem = ({
       )
     case `page`:
     default:
-      return (
-        <Link
-          {...{ ...(lang && { lang }) }}
-          to={internalLink}
-          className="collectionItem stylishLink"
-          css={css}
-          {...userProps}
-        >
+      const LinkComp = localProps =>
+        linkInNewTab ? (
+          <a
+            // className="stylishLink"
+            {...{
+              href: internalLink,
+              ...(lang && { lang }),
+              ...(linkInNewTab === false ? {} : { target: '_blank' }),
+              rel: 'nofollow noopener noreferrer',
+              ...localProps,
+              ...userProps,
+            }}
+          ></a>
+        ) : (
+          <Link
+            {...{
+              to: internalLink,
+              ...(lang && { lang }),
+              ...localProps,
+              ...userProps,
+            }}
+          ></Link>
+        )
+
+      return linkText ? (
+        <div className="collectionItem" css={cssBlock}>
           {children}
-        </Link>
+          <LinkComp css={cssLinkInBlock}>{linkText}</LinkComp>
+        </div>
+      ) : (
+        <LinkComp className="collectionItem stylishLink" css={cssBlockLink}>
+          {children}
+        </LinkComp>
       )
   }
 }

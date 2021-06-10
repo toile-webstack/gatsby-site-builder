@@ -75,6 +75,7 @@ const ItemPageTemplate = ({
     hideDate,
     hideGallery,
     hideCategories,
+    hideContent,
     blocksOnly,
   } = options
   const showFeaturedImage =
@@ -83,7 +84,7 @@ const ItemPageTemplate = ({
   const showDate = !blocksOnly && !hideDate
   const showGallery = !blocksOnly && !hideGallery && collectionItem.gallery
   const showCategories = !hideCategories
-  const showContent = !blocksOnly && collectionItem?.content
+  const showContent = !blocksOnly && !hideContent && collectionItem?.content
 
   const galleryOptions = options.gallery || {}
   galleryOptions.layout = galleryOptions.layout || {}
