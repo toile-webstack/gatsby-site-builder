@@ -377,7 +377,7 @@ const References = ({
             <ColumnWrapper
               {...{
                 key: id,
-                // maxWidth: itemStyle.maxWidth,
+                maxWidth: itemStyle.maxWidth,
                 lat: location?.lat,
                 lng: location?.lon,
               }}
