@@ -19,6 +19,67 @@ import CollectionItem from './references/CollectionItem'
 import PageReference from './references/PageReference'
 import { LBlockReferences } from '../t-layouts'
 
+import GoogleMapReact from 'google-map-react'
+
+const GoogleApiKay = process.env.GATSBY_googleApiKey
+
+// default center is Brussels
+const mapOptionsDefault = {
+  center: {
+    lat: 50.85,
+    lng: 4.353,
+  },
+  zoom: 14,
+}
+
+const Map = ({ mapOptions, mapElementSelected, children }) => {
+  const lat = mapOptions?.center?.lat || mapOptionsDefault.center.lat
+  const lng = mapOptions?.center?.lng || mapOptionsDefault.center.lng
+  const defaultCenter = { lat, lng }
+  const defaultZoom = mapOptions?.zoom || mapOptionsDefault.zoom
+  const height = '68.81vh'
+
+  const [zoom, setZoom] = useState(null)
+  const [center, setCenter] = useState([lat, lng])
+
+  const onMapChange = changed => {
+    // console.log(changed)
+    // changed == { center, zoom, bounds, marginBounds, size }
+    setCenter(changed.center)
+    setZoom(changed.zoom)
+  }
+  const onChildClick = (childId, { lat: childLat, lng: childLng, ...rest }) => {
+    // we don't center when closing the card
+    if (childId !== mapElementSelected) setCenter([childLat, childLng])
+  }
+
+  return (
+    // Important! Always set the container height explicitly
+    <div
+      css={{
+        height,
+        width: '100%',
+        '& img': {
+          maxWidth: `none`,
+          maxHeight: `none`,
+        },
+      }}
+    >
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: GoogleApiKay }}
+        defaultCenter={defaultCenter}
+        defaultZoom={defaultZoom}
+        center={center}
+        zoom={zoom}
+        onChange={onMapChange}
+        onChildClick={onChildClick}
+      >
+        {children}
+      </GoogleMapReact>
+    </div>
+  )
+}
+
 const ColumnWrapper = ({ maxWidth, children, className }) => (
   <div
     className={`column ${className || ''}`}
@@ -82,7 +143,11 @@ const References = ({
     hideCategories,
     mode,
     categories: { families: catFamiliesOptions, showQueryString } = {},
+    map: mapOptions,
   } = options
+
+  // handle cards opening and closing in map mode
+  const [mapElementSelected, selectMapElem] = useState(null)
 
   // CATEGORIES
   const categories = useMemo(() => {
@@ -281,49 +346,45 @@ const References = ({
     block.references.filter(ref => showRef(ref.categories || []))
   )
   const carouselDisplay = mode === `carousel`
+  const mapDisplay = mode === `map`
 
   const inner =
     list.length < 1 ? (
       <div>{mNoMatch}</div>
     ) : (
       list.map(column => {
-        const { itemStyle, imageStyle } = column[0]
+        const { id, itemStyle, imageStyle, location } = column[0]
 
         return column.map((reference, key) => {
-          switch (reference.__typename) {
-            case `ContentfulPage`:
-              return (
-                <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
-                  <PageReference
-                    {...{
-                      key,
-                      page: reference,
-                      colors,
-                      location,
-                      layout,
-                      blockOptionsData: options,
-                      passCSS: imageStyle,
-                    }}
-                  />
-                </ColumnWrapper>
-              )
-            default:
-              return (
-                <ColumnWrapper {...{ key, maxWidth: itemStyle.maxWidth }}>
-                  <CollectionItem
-                    {...{
-                      key,
-                      collectionItem: reference,
-                      colors,
-                      location,
-                      layout,
-                      blockOptionsData: options,
-                      passCSS: imageStyle,
-                    }}
-                  />
-                </ColumnWrapper>
-              )
+          const ColItemOrPageRefComp =
+            reference.__typename === `ContentfulPage`
+              ? PageReference
+              : CollectionItem
+          const colItemOrPageRefCompProps = {
+            key: id,
+            page: reference, // only used for PageReference comp
+            collectionItem: reference, // only used for CollectionItem comp
+            colors,
+            location,
+            layout,
+            blockOptionsData: options,
+            passCSS: imageStyle,
+            mapElementSelected, // Only used with map mode
+            selectMapElem, // Only used with map mode
           }
+
+          return (
+            <ColumnWrapper
+              {...{
+                key: id,
+                maxWidth: itemStyle.maxWidth,
+                lat: location?.lat,
+                lng: location?.lon,
+              }}
+            >
+              <ColItemOrPageRefComp {...colItemOrPageRefCompProps} />
+            </ColumnWrapper>
+          )
         })
       })
     )
@@ -409,7 +470,11 @@ const References = ({
           ...style,
         }}
       >
-        {carouselDisplay ? <Carousel>{inner}</Carousel> : inner}
+        {mapDisplay ? (
+          <Map {...{ mapOptions, mapElementSelected }}>{inner}</Map>
+        ) : null}
+        {carouselDisplay ? <Carousel>{inner}</Carousel> : null}
+        {!carouselDisplay && !mapDisplay ? inner : null}
       </LBlockReferences>
     </div>
   )
