@@ -98,13 +98,15 @@ class Footer extends React.Component {
               },
             }}
             shortCodeMatchees={{
-              'social-icons': <SocialIcons key="1" contact={contact} />,
+              'social-icons': (
+                <SocialIcons key="shortCoded1" contact={contact} />
+              ),
               'contact-infos': (
                 <ContactInfos
-                  {...{ key: '2', name: contact.name, email, phone }}
+                  {...{ key: 'shortCoded2', name: contact.name, email, phone }}
                 />
               ),
-              attribution: <Attribution key="3" />,
+              attribution: <Attribution key="shortCoded3" />,
             }}
           />
         ) : (
