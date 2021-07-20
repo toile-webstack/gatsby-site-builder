@@ -109,6 +109,7 @@ const Form = ({
   const [formState, setFormState] = useState(defaultFormState)
 
   const fieldChange = e => {
+    e.persist()
     if (e.target.type === `checkbox`) {
       setFormState(prev => ({
         ...prev,
