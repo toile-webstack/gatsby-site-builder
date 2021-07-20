@@ -48,6 +48,7 @@ export default ({
       css={{
         padding: `0 ${rhythm(1 / 2)}`,
         width: '100%',
+        // ...imageStyle, // mess things up
       }}
     >
       <Img
