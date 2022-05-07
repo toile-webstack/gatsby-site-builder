@@ -39,8 +39,13 @@ const ItemPageTemplate = ({
     scripts,
     node_locale: pageLocale,
     categories: categoriesRaw,
+    featuredImage,
+    name,
     datePublished,
     dateLastEdit,
+    author,
+    gallery,
+    content,
   } = collectionItem
 
   // TODO: Page Metadata. Watch out for duplicates. Use the same canonical url
@@ -73,18 +78,19 @@ const ItemPageTemplate = ({
     hideFeaturedImage,
     hideTitle,
     hideDate,
+    hideAuthor,
     hideGallery,
     hideCategories,
     hideContent,
     blocksOnly,
   } = options
-  const showFeaturedImage =
-    !blocksOnly && !hideFeaturedImage && collectionItem.featuredImage
+  const showFeaturedImage = !blocksOnly && !hideFeaturedImage && featuredImage
   const showTitle = !blocksOnly && !hideTitle
   const showDate = !blocksOnly && !hideDate
-  const showGallery = !blocksOnly && !hideGallery && collectionItem.gallery
+  const showAuthor = !blocksOnly && !hideAuthor && author
+  const showGallery = !blocksOnly && !hideGallery && gallery
   const showCategories = !hideCategories
-  const showContent = !blocksOnly && !hideContent && collectionItem?.content
+  const showContent = !blocksOnly && !hideContent && content
 
   const galleryOptions = options.gallery || {}
   galleryOptions.layout = galleryOptions.layout || {}
@@ -92,7 +98,7 @@ const ItemPageTemplate = ({
     galleryOptions.columns || ['1/3']
 
   const blockGallery = {
-    gallery: collectionItem.gallery,
+    gallery,
     options: galleryOptions,
     style: {},
   }
@@ -104,7 +110,7 @@ const ItemPageTemplate = ({
         {...{
           lang: lang || pageLocale,
           name: siteMetadata.name,
-          title: collectionItem.name,
+          title: name,
           description: metadata.description,
           canonicalUrl: siteMetadata.url + path,
           // IDEA: use fullPath in sitePage fields for canonical url
@@ -157,8 +163,8 @@ const ItemPageTemplate = ({
                   // maxWidth: `400px`,
                   maxHeight: `300px`,
                 }}
-                title={collectionItem.featuredImage.title}
-                sizes={collectionItem.featuredImage.fluid}
+                title={featuredImage.title}
+                sizes={featuredImage.fluid}
               />
             )}
             {showTitle && (
@@ -167,31 +173,43 @@ const ItemPageTemplate = ({
                   marginBottom: 0,
                 }}
               >
-                {collectionItem.name}
+                {name}
               </h1>
             )}
-            {showDate && (
+            {(showDate || showAuthor) && (
               <div
-                {...{
-                  css: {
-                    '& time': {
-                      // ...scale(-0.2),
-                      // lineHeight: rhythm(1 / 2),
-                      // marginBottom: rhythm(1 / 2),
-                    },
-                    '& .eventdates-time, & .eventdates-chevron': {
-                      color: colors[funkyCombo].body,
-                    },
+                css={{
+                  // ...colors[funkyCombo].style,
+                  // ...scale(-0.2),
+                  // // lineHeight: rhythm(1 / 2),
+                  // fontWeight: "normal",
+                  '& > * + *': {
+                    marginLeft: '0.5em',
                   },
                 }}
               >
-                <EventDates
-                  {...{
-                    locale: pageLocale,
-                    start: datePublished,
-                    end: dateLastEdit,
-                  }}
-                />
+                {showAuthor && <span>{author}</span>}
+                {showDate && showAuthor && <span>-</span>}
+                {showDate && (
+                  <span
+                    {...{
+                      css: {
+                        '& time': {},
+                        '& .eventdates-time, & .eventdates-chevron': {
+                          color: colors[funkyCombo].body,
+                        },
+                      },
+                    }}
+                  >
+                    <EventDates
+                      {...{
+                        locale: pageLocale,
+                        start: datePublished,
+                        end: dateLastEdit,
+                      }}
+                    />
+                  </span>
+                )}
               </div>
             )}
             {(showFeaturedImage || showTitle || showDate || showCategories) && (
@@ -291,6 +309,7 @@ export const itemPageQuery = graphql`
       }
       datePublished
       dateLastEdit
+      author
       data {
         internal {
           content

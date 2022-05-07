@@ -24,6 +24,7 @@ export default ({
 }) => {
   const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
   const image = collectionItem.featuredImage
+  const { name, datePublished, author } = collectionItem
 
   // image, name and time in the 1st column
   const layoutList = [{}]
@@ -60,29 +61,38 @@ export default ({
           height: `200px`,
         }}
       />
-      <h3 key="title">{collectionItem.name}</h3>
-      {collectionItem.momentPublished && (
-        <Moment
-          key="date"
-          locale={collectionItem.fields.locale}
-          format="Do MMM YYYY"
+      <h3 key="title">{name}</h3>
+      {(datePublished || author) && (
+        <div
           css={{
+            ...colors[funkyCombo].style,
             ...scale(-0.2),
-            lineHeight: rhythm(1 / 2),
-            // marginBottom: rhythm(1 / 2),
-            // padding: rhythm(1 / 2),
+            // lineHeight: rhythm(1 / 2),
+            fontWeight: 'normal',
+            '& > * + *': {
+              marginLeft: '0.5em',
+            },
           }}
         >
-          {collectionItem.datePublished}
-        </Moment>
-
-        // <h6
-        //   css={{
-        //     lineHeight: rhythm(1 / 3),
-        //   }}
-        // >
-        //   {collectionItem.momentPublished}
-        // </h6>
+          {author && <span>{author}</span>}
+          {datePublished && author && <span>-</span>}
+          {datePublished && (
+            <Moment
+              locale={collectionItem.fields.locale}
+              format="Do MMM YYYY"
+              css={
+                {
+                  // ...scale(-0.2),
+                  // lineHeight: rhythm(1 / 2),
+                  // marginBottom: rhythm(1 / 2),
+                  // padding: rhythm(1 / 2),
+                }
+              }
+            >
+              {datePublished}
+            </Moment>
+          )}
+        </div>
       )}
     </div>
   )
