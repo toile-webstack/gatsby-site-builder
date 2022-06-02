@@ -25,6 +25,10 @@ export default ({
   const { classicCombo, contrastCombo, funkyCombo, funkyContrastCombo } = colors
   const image = collectionItem.featuredImage
   const { name, datePublished, author } = collectionItem
+  const { showDatePublished: _showDatePublished, showAuthor: _showAuthor } =
+    blockOptionsData.layout || {}
+  const showDatePublished = _showDatePublished && datePublished
+  const showAuthor = _showAuthor && author
 
   // image, name and time in the 1st column
   const layoutList = [{}]
@@ -62,7 +66,7 @@ export default ({
         }}
       />
       <h3 key="title">{name}</h3>
-      {(datePublished || author) && (
+      {(showDatePublished || showAuthor) && (
         <div
           css={{
             ...colors[funkyCombo].style,
@@ -74,9 +78,9 @@ export default ({
             },
           }}
         >
-          {author && <span>{author}</span>}
-          {datePublished && author && <span>-</span>}
-          {datePublished && (
+          {showAuthor && <span>{author}</span>}
+          {showDatePublished && showAuthor && <span>-</span>}
+          {showDatePublished && (
             <Moment
               locale={collectionItem.fields.locale}
               format="Do MMM YYYY"
