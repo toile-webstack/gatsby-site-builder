@@ -148,6 +148,10 @@ const References = ({
     map: mapOptions,
   } = options
 
+  const filterSearchOn = Array.isArray(searchBar?.on) ? searchBar.on : ['name']
+  const searchOnName = filterSearchOn.find(n => n === 'name')
+  const searchOnContent = filterSearchOn.find(n => n === 'content')
+
   // handle cards opening and closing in map mode
   const [mapElementSelected, selectMapElem] = useState(null)
 
@@ -342,8 +346,13 @@ const References = ({
   }
 
   const showRefIfSearch = ref => {
-    // console.log(ref)
-    return !!ref.name.toLowerCase().match(stateSearch.toLowerCase())
+    const currentName = (searchOnName && ref.name.toLowerCase()) || ''
+    const currentContent =
+      (searchOnContent &&
+        ref.content?.childMarkdownRemark?.html?.toLowerCase()) ||
+      ''
+    const currentState = stateSearch.toLowerCase()
+    return !!(currentName + currentContent).match(currentState)
   }
 
   const parentMaxWidth = passCSS?.maxWidth || 1000
