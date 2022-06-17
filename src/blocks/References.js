@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { graphql } from 'gatsby'
 import qs from 'qs'
-
+// import { MdOutlineSearch } from 'react-icons/md'
 import { navigate } from '@reach/router'
 
 import Carousel from '../atoms/Carousel'
@@ -141,6 +141,8 @@ const References = ({
     id,
     name,
     hideCategories,
+    searchBar,
+    showSearchBar,
     mode,
     categories: { families: catFamiliesOptions, showQueryString } = {},
     map: mapOptions,
@@ -214,6 +216,8 @@ const References = ({
 
   // Declare state when categories are empty
   const [stateCategories, setCatState] = useState({ ...categories.byFamilyObj })
+  // initial state for search bar
+  const [stateSearch, setStateSearch] = useState('')
 
   // Compare current querry string and state and sync
   useEffect(() => {
@@ -337,13 +341,20 @@ const References = ({
     return showByFamily.every(bool => bool)
   }
 
+  const showRefIfSearch = ref => {
+    // console.log(ref)
+    return !!ref.name.toLowerCase().match(stateSearch.toLowerCase())
+  }
+
   const parentMaxWidth = passCSS?.maxWidth || 1000
 
   // let layout = gridLayout(this.optionsData, parentMaxWidth, block.references)
   const { layout, list } = addLayoutOptions(
     options,
     parentMaxWidth,
-    block.references.filter(ref => showRef(ref.categories || []))
+    block.references
+      .filter(ref => showRef(ref.categories || []))
+      .filter(showRefIfSearch)
   )
   const carouselDisplay = mode === `carousel`
   const mapDisplay = mode === `map`
@@ -407,6 +418,47 @@ const References = ({
         },
       }}
     >
+      {(showSearchBar === true || searchBar) && (
+        <div
+          css={{
+            width: 500,
+            maxWidth: '100%',
+            margin: 'auto',
+            padding: rhythm(1 / 2),
+          }}
+        >
+          {/* <MdOutlineSearch
+            size={rhythm(1.2)}
+            css={{ height: rhythm(1.2) }}
+            className=""
+          /> */}
+          {searchBar?.placeholder && (
+            <label
+              htmlFor={`searchbar-${id}`}
+              css={{
+                position: 'absolute',
+                left: '-10000px',
+                top: 'auto',
+                width: 1,
+                height: 1,
+                overflow: 'hidden',
+              }}
+            >
+              {searchBar?.placeholder || ''}
+            </label>
+          )}
+          <input
+            id={`searchbar-${id}`}
+            name="search"
+            type="text"
+            placeholder={searchBar?.placeholder || ''}
+            value={stateSearch}
+            onChange={e => {
+              setStateSearch(e.target.value)
+            }}
+          />
+        </div>
+      )}
       {categories.show &&
         categories.families.map((family, i) => {
           const familyCats = stateCategories[family]
