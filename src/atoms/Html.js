@@ -35,7 +35,6 @@ const ProtectedEmail = ({ children: innerRaw, ...attrs }) => {
       }}
     />
   )
-
   // Old buggy implementation
   // const win = typeof window !== 'undefined'
   // return win ? <a {...attrs}>{children}</a> : <a> </a>
