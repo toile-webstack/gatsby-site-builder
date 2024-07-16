@@ -263,6 +263,9 @@ const options = {
       iframe: {
         maxWidth: '100%',
       },
+      "a[href^='mailto:'] b": {
+        display: 'none',
+      },
       ...style,
     }
   },

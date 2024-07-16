@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import parse from 'html-react-parser'
+import obfuscateEmail from '../utils/emailObfuscate'
 
 import {
   // replaceShortCodes,
@@ -10,10 +11,34 @@ import {
 
 // import useRerenderOnHydrate from '../utils/useRerenderOnHydrate'
 
-const ProtectedEmail = ({ children, ...attrs }) => {
+const ProtectedEmail = ({ children: innerRaw, ...attrs }) => {
   // const win = useRerenderOnHydrate()
-  const win = typeof window !== 'undefined'
-  return win ? <a {...attrs}>{children}</a> : <a> </a>
+  // TODO: account for query params in href
+  const email = attrs.href.replace('mailto:', '')
+  const { href, inner: innerComputed } = obfuscateEmail(email)
+  const inner = innerRaw === email ? innerComputed : innerRaw
+  const attributes = {
+    target: '_blank',
+    ...attrs,
+    href,
+  }
+  const attributesStr = Object.entries(attrs).reduce((accu, [key, val]) => {
+    return `${accu} ${key}="${val}"`
+  }, '')
+  const element = `<a ${attributesStr}>${inner}</a>`
+
+  return (
+    <span
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: element,
+      }}
+    />
+  )
+
+  // Old buggy implementation
+  // const win = typeof window !== 'undefined'
+  // return win ? <a {...attrs}>{children}</a> : <a> </a>
 }
 
 export default ({ html: htmlInput, passCSS, shortCodeMatchees, ...rest }) => {
