@@ -1,5 +1,6 @@
 import React from 'react'
 import Moment from 'react-moment'
+import 'moment/locale/fr'
 
 const EventDates = ({ start, end, locale, showTime }) => {
   const [startDate, startTime] = start?.split('T') || []
