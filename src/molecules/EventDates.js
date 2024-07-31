@@ -1,13 +1,18 @@
 import React from 'react'
 import Moment from 'react-moment'
 
-const EventDates = ({ start, end, locale }) => {
+const EventDates = ({ start, end, locale, showTime }) => {
   const [startDate, startTime] = start?.split('T') || []
   const [endDate, endTime] = end?.split('T') || []
 
   const showEnd = endDate && endDate !== startDate
-  const showStartTime = startTime && startTime !== '00:00'
-  const showEndTime = endTime && endTime !== '00:00'
+  let showStartTime = startTime && !/00:00/.test(startTime)
+  let showEndTime = endTime && !/00:00/.test(endTime)
+
+  if (showTime) {
+    showStartTime = !!startTime
+    showEndTime = !!endTime
+  }
 
   return !start ? null : (
     <>
