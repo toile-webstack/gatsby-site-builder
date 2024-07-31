@@ -41,8 +41,8 @@ const ItemPageTemplate = ({
     categories: categoriesRaw,
     featuredImage,
     name,
-    datePublished,
-    dateLastEdit,
+    datePublished: datePublishedRaw,
+    dateLastEdit: dateLastEditRaw,
     author,
     gallery,
     content,
@@ -78,6 +78,7 @@ const ItemPageTemplate = ({
     hideFeaturedImage,
     hideTitle,
     hideDate,
+    showTime,
     hideAuthor,
     hideGallery,
     hideCategories,
@@ -91,6 +92,28 @@ const ItemPageTemplate = ({
   const showGallery = !blocksOnly && !hideGallery && gallery
   const showCategories = !hideCategories
   const showContent = !blocksOnly && !hideContent && content
+
+  let datePublished = datePublishedRaw
+  let dateLastEdit = dateLastEditRaw
+  switch (showTime) {
+    // If showTime is true, leave datePublishedRaw as is
+    case true:
+      break
+    // If showTime is false, remove time even if it is not midnight
+    case false:
+      // NOTE: && allows to assign the raw value if it is nullish (null or undefined) and only replace if value is not nullish
+      datePublished = datePublishedRaw && datePublishedRaw.replace(/T.+$/, '')
+      dateLastEdit = dateLastEditRaw && dateLastEditRaw.replace(/T.+$/, '')
+      break
+    // If showTime is undefined, remove time if it is midnight
+    case undefined:
+    default:
+      datePublished =
+        datePublishedRaw && datePublishedRaw.replace(/T00:00.+$/, '')
+      dateLastEdit = dateLastEditRaw && dateLastEditRaw.replace(/T00:00.+$/, '')
+      // datePublished = datePublishedRaw (/T00:00/.test(datePublishedRaw) ? new Date(new Date().toDateString()))
+      break
+  }
 
   const galleryOptions = options.gallery || {}
   galleryOptions.layout = galleryOptions.layout || {}
