@@ -8,6 +8,7 @@ import { addLayoutOptions } from '../../../utils/computeGrid'
 
 import Html from '../../../atoms/Html'
 import LinkOrNotCollectionItem from '../../../atoms/LinkOrNotCollectionItem'
+import EventDates from '../../../molecules/EventDates'
 
 export default ({
   collectionItem,
@@ -73,9 +74,7 @@ export default ({
         {collectionItem.name}
       </h4>
       {collectionItem.datePublished && (
-        <Moment
-          locale={collectionItem.fields.locale}
-          format="Do MMM YYYY"
+        <p
           css={{
             ...scale(-0.2),
             lineHeight: rhythm(1 / 2),
@@ -83,17 +82,28 @@ export default ({
             // padding: rhythm(1 / 2),
           }}
         >
-          {collectionItem.datePublished}
-        </Moment>
+          <EventDates
+            {...{
+              locale: collectionItem.fields.locale,
+              start: collectionItem.datePublished,
+              end: collectionItem.dateLastEdit,
+              // showTime,
+            }}
+          />
+        </p>
 
-        // <small
+        // <Moment
+        //   locale={collectionItem.fields.locale}
+        //   format="Do MMM YYYY"
         //   css={{
-        //     lineHeight: rhythm(1 / 3),
+        //     ...scale(-0.2),
+        //     lineHeight: rhythm(1 / 2),
         //     marginBottom: rhythm(1 / 2),
+        //     // padding: rhythm(1 / 2),
         //   }}
         // >
-        //   {collectionItem.momentPublished}
-        // </small>
+        //   {collectionItem.datePublished}
+        // </Moment>
       )}
       {/* <p>{excerpt}</p> */}
       <hr
