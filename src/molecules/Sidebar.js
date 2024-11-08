@@ -68,20 +68,28 @@ class Sidebar extends React.Component {
         >
           {contact.facebook && (
             <a
-              href={`https://www.facebook.com/${contact.facebook}/`}
+              href={contact.facebook}
               target="_blank"
-              rel="me noopener"
+              rel="me noopener noreferrer"
             >
               <FaFacebookSquare />
             </a>
           )}
           {contact.instagram && (
-            <a href={contact.instagram} target="_blank" rel="me noopener">
+            <a
+              href={contact.instagram}
+              target="_blank"
+              rel="me noopener noreferrer"
+            >
               <FaInstagram />
             </a>
           )}
           {contact.youtube && (
-            <a href={contact.youtube} target="_blank" rel="me noopener">
+            <a
+              href={contact.youtube}
+              target="_blank"
+              rel="me noopener noreferrer"
+            >
               <FaYoutubeSquare />
             </a>
           )}

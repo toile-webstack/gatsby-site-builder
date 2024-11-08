@@ -60,19 +60,28 @@ export default () => {
       >
         {contact.facebook && (
           <a
-            href={`https://www.facebook.com/${contact.facebook}/`}
+            href={contact.facebook}
             target="_blank"
+            rel="me noopener noreferrer"
           >
             <FaFacebookSquare />
           </a>
         )}
         {contact.linkedin && (
-          <a href={contact.linkedin} target="_blank">
+          <a
+            href={contact.linkedin}
+            target="_blank"
+            rel="me noopener noreferrer"
+          >
             <FaLinkedinSquare />
           </a>
         )}
         {contact.instagram && (
-          <a href={contact.instagram} target="_blank">
+          <a
+            href={contact.instagram}
+            target="_blank"
+            rel="me noopener noreferrer"
+          >
             <FaInstagram />
           </a>
         )}

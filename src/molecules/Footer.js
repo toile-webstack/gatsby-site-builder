@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'development') {
   contact.name = contact.name || 'Moa Alphonse Bertelan de la Longue Adresse'
   contact.phone = contact.phone || '0000/000.000'
   contact.email = contact.email || 'alphonse.bertelan@ohlalongueadressemail.com'
-  contact.facebook = contact.facebook || 'monchat'
+  contact.facebook = contact.facebook || 'https://www.facebook.com/'
   contact.linkedin = contact.linkedin || 'https://www.linkedin.com/'
   contact.instagram = contact.instagram || 'https://www.instagram.com/'
   contact.twitter = contact.twitter || 'https://twitter.com/'

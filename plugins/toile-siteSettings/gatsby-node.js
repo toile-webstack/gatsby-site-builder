@@ -224,6 +224,9 @@ exports.createPagesStatefully = ({ graphql, actions }) => {
           : ['Open Sans']
         // contact infos
         contact = JSON.parse(contact.internal.content)
+        if (contact.facebook && !/facebook.com/.test(contact.facebook)) {
+          contact.facebook = `https://www.facebook.com/${contact.facebook}/`
+        }
         // Options
         options = JSON.parse(options.internal.content)
         const { typography } = options
