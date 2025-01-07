@@ -1,4 +1,5 @@
-const tinycolor = require('tinycolor2')
+import tinycolor from 'tinycolor2'
+// const tinycolor = require('tinycolor2')
 const { colors } = require('./siteSettings.json')
 
 const initialColors = colors
